@@ -22,7 +22,7 @@
   --a-rgb:91,103,241; --b-rgb:247,111,163;
 
   --bg:#f4f5fa; --paper:#fff; --soft:#f2f3f8; --ink:#1d2030; --ink2:#4c5167; --muted:#70758a; --line:#e8e9f1;
-  --glass:rgba(255,255,255,.84); --at:var(--seal-ink);
+  --glass:rgba(255,255,255,.93); --at:var(--seal-ink);
   --shadow:0 1px 2px rgba(29,32,48,.04),0 10px 28px rgba(29,32,48,.07);
   --wood:#238f5f; --fire:#dc4c41; --earth:#ad761d; --metal:#68738e; --water:#2c77cc;
 
@@ -43,14 +43,14 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
   --bg:#0f1017; --paper:#191b26; --soft:#242735; --ink:#eef0f8; --ink2:#c3c7d8; --muted:#8e94aa; --line:#2b2e3f;
-  --glass:rgba(25,27,38,.84); --at:var(--seal-lite);
+  --glass:rgba(25,27,38,.93); --at:var(--seal-lite);
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
   --wood:#5fcf9c; --fire:#ff8479; --earth:#e3b057; --metal:#aab3c9; --water:#6eb0f5;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#0f1017; --paper:#191b26; --soft:#242735; --ink:#eef0f8; --ink2:#c3c7d8; --muted:#8e94aa; --line:#2b2e3f;
-  --glass:rgba(25,27,38,.84); --at:var(--seal-lite);
+  --glass:rgba(25,27,38,.93); --at:var(--seal-lite);
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
   --wood:#5fcf9c; --fire:#ff8479; --earth:#e3b057; --metal:#aab3c9; --water:#6eb0f5;
 }
@@ -121,7 +121,9 @@ select{padding-right:32px;text-overflow:ellipsis;background-repeat:no-repeat;bac
 input:focus-visible,select:focus-visible{border-color:var(--seal);background-color:var(--paper);box-shadow:0 0 0 3px rgba(var(--a-rgb),.18)}
 input:disabled{opacity:.4}
 input::-webkit-date-and-time-value{text-align:left}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.row.dt{grid-template-columns:1.25fr 1fr} /* 生日比时间长，多给一点宽度 */
+@media (max-width:359px){input,select{padding-left:10px;padding-right:10px}select{padding-right:28px}}
 .saved{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
 /* "时间不知道"开关 */
 label.chk{flex-direction:row;align-items:center;gap:8px;height:44px;align-self:end;font-size:14px;color:var(--ink2);cursor:pointer}
@@ -325,7 +327,7 @@ details.dict dd{margin:0;color:var(--ink2)}
         <label>称呼<input id="nameS" value="我（示例）"></label>
         <label>性别<select id="genS"><option value="M">男</option><option value="F" selected>女</option></select></label>
       </div>
-      <div class="row">
+      <div class="row dt">
         <label>公历生日<input type="date" id="dateS" value="1998-06-12" min="1901-01-01" max="2099-12-31"></label>
         <label>出生时间（当地钟表）<input type="time" id="timeS" value="08:30"></label>
       </div>
@@ -378,7 +380,7 @@ details.dict dd{margin:0;color:var(--ink2)}
         <h2><span class="dot"></span>男方<span class="tag">乾造</span></h2>
         <label>从已保存的人中选<select id="savedM" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
         <label>称呼<input id="nameM" value="阿明（示例）"></label>
-        <div class="row">
+        <div class="row dt">
           <label>公历生日<input type="date" id="dateM" value="1995-08-16" min="1901-01-01" max="2099-12-31"></label>
           <label>出生时间（当地钟表）<input type="time" id="timeM" value="11:40"></label>
         </div>
@@ -392,7 +394,7 @@ details.dict dd{margin:0;color:var(--ink2)}
         <h2><span class="dot"></span>女方<span class="tag">坤造</span></h2>
         <label>从已保存的人中选<select id="savedF" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
         <label>称呼<input id="nameF" value="小雅（示例）"></label>
-        <div class="row">
+        <div class="row dt">
           <label>公历生日<input type="date" id="dateF" value="1997-03-22" min="1901-01-01" max="2099-12-31"></label>
           <label>出生时间（当地钟表）<input type="time" id="timeF" value="18:20"></label>
         </div>
