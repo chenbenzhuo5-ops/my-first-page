@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>对盘 · 八字 × 星座</title>
-<meta name="description" content="先看清自己，再决定要不要上头。八字排盘、星座解读、合婚配对，仅供娱乐。">
+<meta name="description" content="对盘：融合东方八字命理与西方占星体系的关系洞察工具。真太阳时排盘、日月与上升星座解读、理想型推演、双人合盘，仅供娱乐。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="对盘 · 八字 × 星座">
-<meta property="og:description" content="先看清自己，再决定要不要上头。">
+<meta property="og:description" content="观己，知人，而后动心。融合东方八字命理与西方占星体系的关系洞察工具。">
 <meta name="theme-color" content="#f4f5fa" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1017" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235b67f1'/%3E%3Ccircle cx='25' cy='32' r='15' fill='%23fff' fill-opacity='.95'/%3E%3Ccircle cx='39' cy='32' r='15' fill='%23f76fa3' fill-opacity='.9'/%3E%3C/svg%3E">
@@ -27,7 +27,7 @@
   --wood:#238f5f; --fire:#dc4c41; --earth:#ad761d; --metal:#68738e; --water:#2c77cc;
 
   --grad:linear-gradient(135deg,var(--seal),var(--seal-2));
-  --grad-hero:linear-gradient(120deg,var(--seal) 0%,var(--seal-2) 58%,var(--b) 118%);
+  --grad-hero:linear-gradient(60deg,var(--seal) 0%,var(--seal-2) 55%,var(--b) 115%);
   --grad-text:linear-gradient(100deg,var(--at),var(--seal-2) 55%,var(--b));
   --display:"Songti SC","Noto Serif SC","Noto Serif CJK SC","Source Han Serif SC","Source Han Serif CN","STSong","SimSun",serif;
   --body:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans","Noto Sans SC","Noto Sans CJK SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
@@ -75,22 +75,25 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 
 /* ---------- 顶部品牌区 ---------- */
 .mast{position:relative;isolation:isolate;overflow:hidden;border-radius:26px;padding:18px 18px 20px;color:#fff;
-  background:var(--grad-hero);box-shadow:0 14px 32px rgba(var(--a-rgb),.3)}
+  background:linear-gradient(to top,rgba(18,16,58,.24),rgba(18,16,58,0) 64%),var(--grad-hero);box-shadow:0 14px 32px rgba(var(--a-rgb),.3)}
 .mast::before,.mast::after{content:"";position:absolute;z-index:-1;width:176px;height:176px;border-radius:50%;background:rgba(255,255,255,.14)}
-.mast::before{right:54px;bottom:-62px}
-.mast::after{right:-58px;bottom:-34px}
-.mast h1{margin:0;font:900 46px/1.05 var(--display);letter-spacing:.12em}
-.mast .kind{display:inline-block;margin-top:10px;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.2);font-size:12px;font-weight:600;letter-spacing:.08em}
-.mast .slogan{margin:10px 0 0;font-size:14px;font-weight:600}
-.mast .hint{margin:2px 0 0;font-size:12px;opacity:.85}
-.mast .mascot{position:absolute;right:12px;bottom:8px;width:104px;animation:bob 3.2s ease-in-out infinite}
+.mast::before{right:54px;top:-84px}
+.mast::after{right:-58px;top:-36px}
+.mast h1{margin:0;line-height:0}
+.mast h1 svg{display:block;height:44px;width:auto}
+.mast .kind{display:inline-block;margin-top:12px;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.2);font-size:12px;font-weight:600;letter-spacing:.08em}
+.mast .slogan{margin:18px 0 0;font-size:17px;line-height:1.4;font-weight:700;letter-spacing:.08em}
+.mast .intro{margin:6px 0 0;font-size:13px;line-height:1.75;opacity:.95}
+.mast .intro span{display:block;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance} /* 两句各占一段；只在标点处换行，不把词拆开 */
+.mast .mascot{position:absolute;right:14px;top:48px;width:84px;animation:bob 3.2s ease-in-out infinite}
 .mast,.sc-top{--m-body:#fff;--m-ink:#262a45;--m-tail:#fff;--m-heart:#ffd166}
-.mascot svg,.brand svg{display:block;width:100%;height:auto}
+.mascot svg{display:block;width:100%;height:auto}
 @keyframes bob{50%{transform:translateY(-5px) rotate(-3deg)}}
 .palette{position:absolute;top:12px;right:12px;display:flex;gap:7px;padding:5px 6px;border-radius:99px;background:rgba(255,255,255,.24)}
 .palette button{width:22px;height:22px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.95);transition:transform .15s}
 .palette button[aria-pressed="true"]{transform:scale(1.18);box-shadow:0 0 0 2px rgba(255,255,255,.55),0 2px 6px rgba(0,0,0,.2)}
-@media (max-width:359px){.mast h1{font-size:40px}.mast .slogan{font-size:13px}.palette{gap:5px}.palette button{width:18px;height:18px}.mast .mascot{width:76px}}
+@media (max-width:343px){.mast .intro span{word-break:normal}} /* 特别窄的屏幕放不下整句，恢复普通换行 */
+@media (max-width:359px){.mast h1 svg{height:40px}.mast .slogan{font-size:15px}.palette{gap:5px}.palette button{width:18px;height:18px}.mast .mascot{width:74px}}
 
 /* ---------- 标签页 ---------- */
 .tabs{position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;border-radius:18px;
@@ -271,8 +274,9 @@ details.dict dd{margin:0;color:var(--ink2)}
 .sc-top::before{right:44px;top:-64px}
 .sc-top::after{right:-52px;top:-30px}
 .sc-card .brand{display:flex;align-items:center;justify-content:space-between}
-.sc-card .brand svg{width:62px}
-.sc-card .wm{display:flex;align-items:center;gap:8px;font:900 24px/1 var(--display);letter-spacing:.12em}
+.sc-card .brand .mascot{width:62px}
+.sc-card .wm{display:flex;align-items:center;gap:10px}
+.sc-card .wm svg{display:block;height:22px;width:auto}
 .sc-card .wm i{padding:0 9px;border-radius:99px;background:rgba(255,255,255,.22);font:600 11px/1.9 var(--body);letter-spacing:.08em}
 .sc-card h4{margin:8px 0 0;font:900 28px/1.25 var(--display);text-align:center;text-wrap:balance;overflow-wrap:anywhere}
 .sc-card .gz4{position:relative;margin-top:-44px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -305,11 +309,12 @@ details.dict dd{margin:0;color:var(--ink2)}
       <button type="button" id="pal-mint" title="薄荷绿" aria-label="配色：薄荷绿" style="background:linear-gradient(135deg,#16957a,#7fdcb9)"></button>
       <button type="button" id="pal-taro" title="香芋紫" aria-label="配色：香芋紫" style="background:linear-gradient(135deg,#8b6fe8,#f0a3d8)"></button>
     </div>
-    <h1>对盘</h1>
+    <!-- 字标是画好的矢量轮廓（字形取自 Noto Serif CJK SC Bold，SIL OFL 1.1 授权），所以在任何手机上都长得一样 -->
+    <h1 id="wordmark"><svg viewBox="0 0 1025 470" role="img" aria-label="对盘"><path fill="currentColor" d="M226 186 222 190C248 220 259 266 264 295C307 344 372 233 226 186ZM428 83 400 126V25C412 23 417 18 418 11L342 4V126H214L218 141H342V394C342 400 338 403 329 403C316 403 250 400 250 400V406C280 411 294 418 304 427C313 436 316 450 318 470C390 462 400 439 400 398V141H463C470 141 475 138 476 133C460 114 428 83 428 83ZM40 128 33 132C65 167 93 212 115 258C88 328 50 393 0 443L6 448C64 411 107 364 140 312C148 334 154 354 158 370C184 437 246 396 212 320C202 298 188 275 171 253C194 200 209 145 218 92C230 90 236 88 239 83L186 35L156 67H11L16 82H160C154 123 144 166 132 208C106 180 75 154 40 128ZM740 82 736 85C752 98 768 124 772 145C820 176 861 83 740 82ZM981 398 959 434H953V328C961 327 966 324 968 321L917 282L891 309H676L616 286C677 258 699 216 705 170H876V225C876 232 874 234 866 234L816 232C820 211 800 183 735 178L731 182C748 197 766 224 768 248C788 262 806 254 814 240C834 244 842 249 850 256C856 264 859 277 860 294C925 288 934 268 934 231V170H1012C1018 170 1024 168 1025 162C1006 143 974 114 974 114L944 156H934V83C944 81 952 77 954 72L896 30L870 60H768L812 28C823 26 830 22 832 14L748 0L740 60H716L651 36V142L650 156H556L560 170H650C645 220 624 266 563 299L567 304C584 299 600 294 614 287V434H556L560 448H1008C1014 448 1019 446 1020 440C1007 424 981 398 981 398ZM707 74H876V156H706L707 142ZM896 324V434H856V324ZM670 324H710V434H670ZM803 324V434H762V324Z"/></svg></h1>
     <span class="kind">八字 × 星座</span>
-    <p class="slogan">先看清自己，再决定要不要上头</p>
-    <p class="hint">下面是示例，换成真实信息再测</p>
     <div class="mascot" id="mascot" aria-hidden="true"></div>
+    <p class="slogan">观己，知人，而后动心。</p>
+    <p class="intro"><span>融合东方命理与西方占星体系的关系洞察工具。</span><span>真太阳时排定四柱，天文历算推演日月与上升，集命盘解读、理想型推演与双人合盘于一体。</span></p>
   </header>
 
   <nav class="tabs" aria-label="功能"><a href="#self" id="tabSelf">我的命盘</a><a href="#match" id="tabMatch">理想另一半</a><a href="#pair" id="tabPair">合婚配对</a></nav>
@@ -322,6 +327,7 @@ details.dict dd{margin:0;color:var(--ink2)}
     </section>
     <section class="card">
       <div class="card-h"><h2>我的生辰</h2><button type="button" class="mini" id="saveS">保存这个人</button></div>
+      <p class="note">现在填的是示例，换成真实信息再测。生辰只在你的设备上计算，不会上传。</p>
       <div class="saved"><label>已保存的人<select id="savedS"><option value="">— 选一个人填进来 —</option></select></label><button type="button" class="mini ghost" id="delS">删除</button></div>
       <div class="row">
         <label>称呼<input id="nameS" value="我（示例）"></label>
@@ -731,6 +737,8 @@ const $=id=>document.getElementById(id);
 // 吉祥物：页面顶部和上头卡共用这一份
 const MASCOT=`<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--m-tail,var(--seal))" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--m-body,var(--paper))" stroke="var(--m-ink,var(--ink))" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><circle cx="61" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--m-ink,var(--ink))" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--b)" opacity=".6"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--b)" opacity=".6"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--m-heart,var(--b))"/></svg>`;
 $("mascot").innerHTML=MASCOT;
+// 字标「对盘」：直接取页面顶部那一份，上头卡里共用
+const WORDMARK=$("wordmark").innerHTML;
 // 把一长串解读按小标题拆成一张张卡片；tail 为 true 时，最后那句说明放在卡片外面
 function cards(html,tail){
   let note="";
@@ -997,7 +1005,7 @@ function findMatch(){
 }
 function scoreCard(html){$("cardSlot").innerHTML=`<div class="sc-card">${html}<div class="foot">对盘 · 八字 × 星座 · 仅供娱乐</div></div>`;$("overlay").hidden=false;}
 $("overlay").addEventListener("click",e=>{ if(!e.target.closest(".sc-card")) $("overlay").hidden=true; });
-const cardTop=(kind,title)=>`<div class="sc-top"><div class="brand"><span class="wm">对盘<i>${kind}</i></span><span>${MASCOT}</span></div><h4>${title}</h4></div>`;
+const cardTop=(kind,title)=>`<div class="sc-top"><div class="brand"><span class="wm">${WORDMARK}<i>${kind}</i></span><span class="mascot">${MASCOT}</span></div><h4>${title}</h4></div>`;
 $("shareSelf").addEventListener("click",()=>{
   const o=read("S"); if(!o) return; const dm=o.P[2][0], sun=signOf(o.sun), moon=signOf(o.moon);
   const nm=($("nameS").value.trim()||"我").replace(/（示例）/,"");
