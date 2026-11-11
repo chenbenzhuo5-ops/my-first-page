@@ -358,6 +358,7 @@ details.dict dd{margin:0;color:var(--ink2)}
           <label>对方比我小<select id="younger"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
           <label>对方比我大<select id="older"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
         </div>
+        <p class="note">两个都选 0 就是自由搭配：不限年龄，直接列出分数最高的十个生日。</p>
         <button type="button" class="go" id="findBtn">帮我找真命天子/天女</button>
       </section>
       <div class="reading" id="matchOut"></div>
@@ -956,10 +957,14 @@ function findMatch(){
   const me=read("S"); if(!me) return;
   const g=$("genS").value, yg=Number($("younger").value), og=Number($("older").value);
   const [by,bm,bd]=$("dateS").value.split("-").map(Number);
-  const start=Date.UTC(by-og,bm-1,bd), end=Date.UTC(by+yg,bm-1,bd);
+  const free=yg===0&&og===0, FREE=12; // 上下都选 0：自由搭配，不限年龄。范围取上下各一轮生肖（12 岁）
+  const now=new Date(), today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()), adult=Date.UTC(now.getFullYear()-18,now.getMonth(),now.getDate());
+  const meAdult=Date.UTC(by,bm-1,bd)<=adult;
+  const start=Date.UTC(by-(free?FREE:og),bm-1,bd), end=Math.min(today,Date.UTC(by+(free?FREE:yg),bm-1,bd)); // 不会推荐还没出生的日期
   const all=[], bySign={}, byYear={}, byEl={};
   const acc=(o,k,v,lab)=>{(o[k]=o[k]||{sum:0,n:0,lab}).sum+=v;o[k].n++;};
   for(let t=start;t<=end;t+=864e5){
+    if(free&&meAdult&&t>adult) break; // 自由搭配时只看已经成年的人
     const D=new Date(t), y=D.getUTCFullYear(), m=D.getUTCMonth()+1, d=D.getUTCDate();
     const p=person(y,m,d,me.city);
     const [M,F]=g==="M"?[me,p]:[p,me];
@@ -969,6 +974,7 @@ function findMatch(){
     const yb=p.P[0][1], Y=((y-4)%12+12)%12===yb?y:y-1; acc(byYear,Y,s,SX[yb]);
     acc(byEl,el(p.P[2][0]),s);
   }
+  if(!all.length){ $("matchOut").innerHTML='<section class="blk"><p>这个范围里没有可以推荐的生日，换个范围试试。</p></section>'; return; }
   const avg=o=>Object.entries(o).map(([k,v])=>({k:Number(k),a:v.sum/v.n,lab:v.lab})).sort((a,b)=>b.a-a.a);
   // 生肖和我相冲、相害的年份和生日不进推荐（传统合婚的忌讳），只在说明里提一句
   const myYb=me.P[0][1], clash=yb=>{const r=rel(myYb,yb);return r==="chong"||r==="hai";};
@@ -980,7 +986,7 @@ function findMatch(){
   const signs=avg(bySign); let els=avg(byEl);
   all.sort((a,b)=>b.s-a.s);
   let pool=all.filter(x=>!clash(x.p.P[0][1])); if(!pool.length) pool=all;
-  const top=pool.slice(0,6);
+  const top=pool.slice(0,free?10:6);
   const ec=[0,0,0,0,0]; pool.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
   els.sort((a,b)=>ec[b.k]-ec[a.k]);
   const who=g==="M"?"她":"他";
@@ -990,7 +996,7 @@ function findMatch(){
    <p class="note">分数是这个星座期间出生的所有人和你合婚的平均分。最不配的是${XZ[signs[signs.length-1].k]}座（${Math.round(signs[signs.length-1].a)}分）。</p>
    <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"} · ${YREL[rel(myYb,x.yb)]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
    <p class="note">按农历生肖年（立春到立春）统计。和你生肖相冲、相害的年份和生日不列入推荐${skipped.length?`：${skipped.map(x=>`${x.k}年属${x.lab}（${YREL[rel(myYb,x.yb)].slice(2)}）`).join("、")}平均分也不低，但没有列入`:""}。</p>
-   <h3>最配的具体生日</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>
+   <h3>${free?"分数最高的十个生日":"最配的具体生日"}</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>${free?`<p class="note">两个都选了 0，按自由搭配来找：不限年龄，范围是比你大 ${FREE} 岁到小 ${FREE} 岁之间${meAdult?"、已经成年":""}的人。</p>`:""}
    <h3>你的理想型画像（心动前先对照）</h3>
    <p>${who}最好是<b>${WX[els[0].k]}日主</b>的人（${DMTYPE.filter((_,i)=>el(i)===els[0].k).join("或")}型），性格上${DAYMASTER[els[0].k*2].split("：")[1].replace(/。$/,"")}。星座上优先找${lastMatch.signs.join("、")}座，年份上${years[0].k}年属${years[0].lab}的人和你最有缘。</p>
    <p class="note">具体生日按中午出生估算，没算时柱和上升星座，真遇到了可以去"合婚配对"里填准确时间再算一次。</p>`);
