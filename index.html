@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>陈本灼 · 个人介绍</title>
+  <style>
+    :root {
+      --bg: #f2f8f7;
+      --card: #ffffff;
+      --text: #1f3b3a;
+      --muted: #5b7573;
+      --accent: #2bb3a3;
+      --accent-soft: #e3f5f2;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: linear-gradient(160deg, #e8f6f3 0%, #eef4fb 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                   "Microsoft YaHei", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card);
+      border-radius: 20px;
+      padding: 36px 28px;
+      box-shadow: 0 10px 30px rgba(43, 179, 163, 0.12);
+      text-align: center;
+    }
+
+    .avatar {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4fd1c1, #6aa8f0);
+      color: #fff;
+      font-size: 36px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .intro {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .hobbies {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hobbies li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--accent-soft);
+      border-radius: 12px;
+      text-align: left;
+      font-size: 16px;
+    }
+
+    .hobbies .icon { font-size: 22px; }
+
+    footer {
+      margin-top: 28px;
+      font-size: 13px;
+      color: #9ab0ae;
+    }
+
+    @media (max-width: 380px) {
+      .card { padding: 28px 20px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="avatar" aria-hidden="true">陈</div>
+    <h1>陈本灼</h1>
+    <p class="intro">你好！我是陈本灼，一个热爱生活、喜欢探索新事物的人，很高兴认识你。</p>
+
+    <h2>我的兴趣爱好</h2>
+    <ul class="hobbies">
+      <li><span class="icon">📚</span>阅读</li>
+      <li><span class="icon">🎵</span>听音乐</li>
+      <li><span class="icon">🏃</span>跑步运动</li>
+    </ul>
+
+    <footer>© 2026 陈本灼</footer>
+  </main>
+</body>
+</html>
