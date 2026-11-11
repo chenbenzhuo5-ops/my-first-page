@@ -92,6 +92,28 @@
 
     .hobbies .icon { font-size: 22px; }
 
+    .tools-title { margin-top: 28px; }
+
+    .tool {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4fd1c1, #6aa8f0);
+      color: #fff;
+      text-decoration: none;
+      text-align: left;
+      box-shadow: 0 6px 16px rgba(79, 160, 200, 0.25);
+      transition: transform .15s;
+    }
+    .tool:active { transform: scale(.98); }
+    .tool .icon { font-size: 24px; }
+    .tool-text { flex: 1; display: flex; flex-direction: column; line-height: 1.4; }
+    .tool-text b { font-size: 16px; }
+    .tool-text small { font-size: 12px; opacity: .9; }
+    .tool .arrow { font-size: 24px; opacity: .8; }
+
     footer {
       margin-top: 28px;
       font-size: 13px;
@@ -116,6 +138,13 @@
       <li><span class="icon">🎵</span>听音乐</li>
       <li><span class="icon">🏃</span>跑步运动</li>
     </ul>
+
+    <h2 class="tools-title">我做的小工具</h2>
+    <a class="tool" href="bazi.html">
+      <span class="icon">🔮</span>
+      <span class="tool-text"><b>心动气象台</b><small>八字 × 星座 · 命盘与合婚配对</small></span>
+      <span class="arrow">›</span>
+    </a>
 
     <footer>© 2026 陈本灼</footer>
   </main>
