@@ -41,11 +41,11 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--brand);outline-offs
   box-shadow:0 14px 32px rgba(var(--a-rgb),.28)}
 .mast .who{font-size:13px;font-weight:600;letter-spacing:.1em;opacity:.9}
 .mast h1{margin:2px 0 0;font-size:30px;line-height:1.25;font-weight:800;letter-spacing:.04em}
-.mast .sub{margin:8px 0 0;max-width:15.5em;font-size:13px;line-height:1.7;opacity:.95}
+.mast .sub{margin:8px 0 0;max-width:12.4em;font-size:13px;line-height:1.7;opacity:.95}
 .mast .demo{display:inline-block;margin-bottom:10px;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.2);font-size:12px;font-weight:600;letter-spacing:.06em}
-.mast .ship{position:absolute;z-index:-1;right:-6px;bottom:-2px;width:190px;opacity:.96}
+.mast .ship{position:absolute;z-index:-1;right:-6px;bottom:-2px;width:170px;opacity:.96}
 .mast .ship svg{display:block;width:100%;height:auto}
-@media (max-width:359px){.mast h1{font-size:26px}.mast .ship{width:150px}.mast .sub{max-width:13.5em}}
+@media (max-width:359px){.mast h1{font-size:26px}.mast .ship{width:138px}.mast .sub{max-width:11em}}
 
 /* ---------- 卡片 ---------- */
 .card{background:var(--paper);border-radius:22px;padding:18px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -193,6 +193,7 @@ input[type=checkbox]:focus-visible{box-shadow:0 0 0 3px rgba(var(--a-rgb),.25)}
       </div>
     </div>
     <div class="total" id="total"></div>
+    <p class="note" id="fx" hidden></p>
     <ul class="lines" id="lines"></ul>
     <p class="tip" id="tip" hidden></p>
     <div class="btns"><a class="wa" id="wa" target="_blank" rel="noopener">WhatsApp 询价</a><button type="button" class="alt" id="copy">复制询价内容</button></div>
@@ -346,6 +347,10 @@ function render() {
   $("total").className = "total" + (ready ? "" : " none");
   $("total").innerHTML = ready ? `<i>${CUR[state.cur].sym}</i>${total.toLocaleString("en-US")}` : (r ? "请先填写货物的尺寸和件数" : "这条航线暂时没有参考价，请直接询价");
   $("lines").innerHTML = L.map(x => `<li><span><b>${x[0]}</b><small>${x[1]}</small></span><span class="amt">${show(conv(x[2]))}</span></li>`).join("");
+  // 换了币种就说明是怎么换算的，免得和明细里的美元单价对不上
+  const curName = { CNY: "人民币", IDR: "印尼盾" }[state.cur];
+  $("fx").hidden = !(ready && curName);
+  if (curName) $("fx").textContent = `价格表按美元计，这里按 1 美元 = ${fix(CONFIG.rates[state.cur])} ${curName}换算（示例汇率）。`;
 
   // 拼箱时顺手比一下整柜，快赶上一个 20 尺柜的价钱就提醒
   let tip = "";
