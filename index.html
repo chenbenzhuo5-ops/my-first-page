@@ -3,189 +3,321 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>心动气象台</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<title>对盘 · 八字 × 星座</title>
+<meta name="description" content="对盘：融合东方八字命理与西方占星体系的关系洞察工具。真太阳时排盘、日月与上升星座解读、理想型推演、双人合盘，仅供娱乐。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="对盘 · 八字 × 星座">
+<meta property="og:description" content="观己，知人，而后动心。融合东方八字命理与西方占星体系的关系洞察工具。">
+<meta name="theme-color" content="#f4f5fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1017" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233b55e6'/%3E%3Ccircle cx='25' cy='32' r='15' fill='%23fff' fill-opacity='.95'/%3E%3Ccircle cx='39' cy='32' r='15' fill='%23ffcf5c' fill-opacity='.95'/%3E%3C/svg%3E">
 <style>
-/* 布局：两张"庚帖"并列（手机上叠放），下方是合婚批语：总分、八字细项、星盘细项、相处建议 */
+/* ============ 对盘 · 界面样式 ============
+   全站固定一套蓝色，男女通用。颜色都集中在下面的 :root 里：
+   --seal 主色（靛蓝），--seal-2 渐变的另一头（亮蓝），--b 更亮的湖蓝，--gold 只用在小爱心上 */
 :root{
-  --bg:#f4f4f3; --paper:#ffffff; --ink:#3d3d3d; --muted:#8b8b8b; --line:#e4e4e2;
-  --seal:#4a4a4a; --onseal:#ffffff; --gold:#a88b5d; --soft:#efefed;
-  --wood:#6f9a80; --fire:#c27c72; --earth:#b59660; --metal:#8f96a0; --water:#6f8cab;
-  --display:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",sans-serif;
-  --body:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
-}
-:root[data-palette="haze"]{--bg:#f1f3f4; --paper:#fafbfb; --ink:#4a5560; --muted:#8a949d; --line:#dde3e7; --seal:#7c94a8; --gold:#b39a72; --soft:#eef1f3}
-:root[data-palette="blue"]{--bg:#eef4fa; --paper:#ffffff; --ink:#34465c; --muted:#75879b; --line:#d6e3ef; --seal:#6c9bcf; --gold:#c79a52; --soft:#e6eff8}
-:root[data-palette="pink"]{--bg:#faf3f4; --paper:#ffffff; --ink:#4d3a40; --muted:#94808a; --line:#efdde2; --seal:#d98a9e; --gold:#c39a6b; --soft:#f8eaee}
-:root[data-palette="mint"]{--bg:#f1f6f3; --paper:#ffffff; --ink:#36483f; --muted:#7d8f86; --line:#d9e6df; --seal:#6fae94; --gold:#b89a62; --soft:#e7f1ec}
-:root[data-palette="taro"]{--bg:#f5f3f8; --paper:#ffffff; --ink:#433b52; --muted:#8a8297; --line:#e3ddeb; --seal:#9b88c4; --gold:#c2a06a; --soft:#eeeaf5}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#1f1f1f; --paper:#292929; --ink:#e4e4e4; --muted:#9c9c9c; --line:#3b3b3b;
-  --seal:#d6d6d6; --onseal:#1f1f1f; --gold:#c8ad80; --soft:#323232;
-  --wood:#8fb59c; --fire:#cf968d; --earth:#c9ad7c; --metal:#a8aeb7; --water:#90a9c4; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#1f1f1f; --paper:#292929; --ink:#e4e4e4; --muted:#9c9c9c; --line:#3b3b3b;
-  --seal:#d6d6d6; --onseal:#1f1f1f; --gold:#c8ad80; --soft:#323232;
-  --wood:#8fb59c; --fire:#cf968d; --earth:#c9ad7c; --metal:#a8aeb7; --water:#90a9c4; color-scheme:dark}
-body{background:var(--bg);background-image:radial-gradient(var(--line) 1px,transparent 1.1px);background-size:22px 22px;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7}
-.wrap{max-width:760px;margin:0 auto;padding-block:20px 40px;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:flex;flex-direction:column;gap:20px}
-header{display:flex;align-items:center;gap:14px}
-.mascot{flex:none;line-height:0;animation:bob 3s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-4px) rotate(-3deg)}}
-@media (prefers-reduced-motion:reduce){.mascot{animation:none}}
-h1{font-family:var(--display);font-weight:400;font-size:34px;margin:0;letter-spacing:.04em;color:var(--seal);text-wrap:balance}
-.sub{color:var(--muted);font-size:13px;margin:0}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:620px){.pair{grid-template-columns:1fr}}
-.card{background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.card h2{margin:0;font-family:var(--display);font-weight:400;font-size:20px;display:flex;align-items:center;gap:8px}
-.tag{font-family:var(--body);font-size:12px;color:var(--onseal);background:var(--seal);border-radius:999px;padding:0 8px}
-label{font-size:12px;color:var(--muted);letter-spacing:.05em;display:flex;flex-direction:column;gap:4px;min-width:0}
-input,select{font:inherit;color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0;width:100%;box-sizing:border-box}
-input[type=checkbox]{width:auto}
-label.chk{flex-direction:row;align-items:center;gap:6px}
-input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tbl{display:grid;grid-template-columns:auto repeat(4,1fr);gap:2px 4px;text-align:center;align-items:center}
-.tbl .rh{font-size:11px;color:var(--muted);text-align:left;white-space:nowrap}
-.tbl .h{font-size:11px;color:var(--muted);letter-spacing:.1em}
-.tbl .ss{font-size:12px;color:var(--gold)}
-.tbl .gz{font-family:var(--display);font-size:26px;line-height:1.15}
-.tbl .ny{font-size:11px;color:var(--muted)}
-.na{color:var(--line)}
-.el-0{color:var(--wood)}.el-1{color:var(--fire)}.el-2{color:var(--earth)}.el-3{color:var(--metal)}.el-4{color:var(--water)}
-.wxbars{display:flex;flex-direction:column;gap:3px;font-size:12px}
-.wxbars div{display:grid;grid-template-columns:1.5em 1fr 2.2em;gap:6px;align-items:center}
-.wxbars i{display:block;height:6px;border-radius:3px;background:currentColor;opacity:.75}
-.wxbars span:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
-.facts{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
-.facts span{border:1px solid var(--line);border-radius:999px;padding:1px 9px}
-.meta{font-size:12px;color:var(--muted);margin:0}
-button.go{font-family:var(--display);font-size:20px;letter-spacing:.1em;color:var(--onseal);background:var(--seal);border:none;border-radius:999px;padding:12px;cursor:pointer;transition:transform .1s}
-button.go:active,button.alt:active{transform:translateY(1px)}
-.result{background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:20px 16px;display:flex;flex-direction:column;gap:14px}
-.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-.num{font-family:var(--display);font-size:64px;line-height:1;color:var(--seal);font-variant-numeric:tabular-nums}
-.verdict{font-family:var(--display);font-size:26px}
-.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--seal));transition:width .6s}
-@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.split div{border:2px solid var(--line);border-radius:14px;padding:8px 12px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.split b{font-family:var(--display);font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
-.split small{color:var(--muted);font-size:12px}
-.sect{font-family:var(--display);font-size:18px;margin:6px 0 -6px;color:var(--gold)}
-ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-ul.items li{display:grid;grid-template-columns:4.5em 1fr auto;gap:10px;align-items:start;border-top:1px dashed var(--line);padding-top:8px}
-.k{font-size:12px;color:var(--muted);padding-top:2px}
-.pts{font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
-.pos{color:var(--wood)}.neg{color:var(--fire)}.zero{color:var(--muted)}
-ul.tips{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
-.note{font-size:12px;color:var(--muted);margin:0}
-.summary{margin:0}
-.palette{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
-.palette button{width:24px;height:24px;border-radius:50%;border:2px solid var(--paper);box-shadow:0 0 0 1.5px var(--line);cursor:pointer;padding:0}
-.palette button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:4px}
-.tabs a{text-align:center;padding:8px 4px;border-radius:999px;color:var(--muted);text-decoration:none;font-family:var(--display);font-size:17px;white-space:nowrap}
-.tabs a[aria-current="page"]{background:var(--seal);color:var(--onseal)}
-.reading{display:flex;flex-direction:column;gap:6px}
-.reading h3{margin:6px 0 0;font-family:var(--display);font-weight:400;font-size:18px;color:var(--gold)}
-.reading p{margin:0}
-.reading dl{margin:0;display:grid;grid-template-columns:4.5em 1fr;gap:6px 10px}
-.reading dt{font-size:12px;color:var(--muted);padding-top:3px}
-.reading dd{margin:0}
-.swatch{display:inline-block;width:.9em;height:.9em;border-radius:50%;vertical-align:-1px;margin-right:3px;border:1px solid var(--line)}
-.yun{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-@media (max-width:480px){.yun{grid-template-columns:repeat(2,1fr)}}
-.yun div{border:2px solid var(--line);border-radius:14px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.yun div.now{border-color:var(--seal);box-shadow:inset 0 0 0 1px var(--seal)}
-.yun b{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.1}
-.yun small{font-size:11px;color:var(--muted)}
-.yun em{font-style:normal;font-size:12px}
-.good{color:var(--wood)}.bad{color:var(--fire)}
-details.dict{background:var(--paper);border:1.5px dashed var(--line);border-radius:22px;padding:10px 16px}
-details.dict summary{cursor:pointer;font-family:var(--display);font-size:18px;color:var(--gold)}
-details.dict dl{margin:8px 0 0;display:grid;grid-template-columns:5em 1fr;gap:6px 10px;font-size:14px}
-details.dict dt{color:var(--muted)}
-details.dict dd{margin:0}
-.tbl .cg{font-size:11px;color:var(--muted);letter-spacing:.05em}
-.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (max-width:420px){.btns{grid-template-columns:1fr}}
-.rank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-.rank li{display:grid;grid-template-columns:1.6em 1fr auto;gap:8px;align-items:center;border-top:1px dashed var(--line);padding-top:6px}
-.rank .no{font-family:var(--display);font-size:20px;color:var(--seal);text-align:center}
-.rank .sc{font-variant-numeric:tabular-nums;font-family:var(--display);font-size:20px}
-.rank small{color:var(--muted);font-size:12px}
-.overlay{position:fixed;inset:0;z-index:50;background:rgba(10,14,15,.72);display:flex;align-items:center;justify-content:center;
-  padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow:auto}
-.overlay p.hint{color:#fff;font-size:13px;text-align:center;margin:10px 0 0}
-.overlay .box{display:flex;flex-direction:column;align-items:center;max-height:100%}
-.sc-card{width:min(360px,100%);aspect-ratio:3/4.6;max-width:100%;box-sizing:border-box;border-radius:28px;overflow:hidden;position:relative;
-  background:var(--bg);background-image:radial-gradient(var(--line) 1.4px,transparent 1.5px);background-size:20px 20px;color:var(--ink);border:1.5px solid var(--line);
-  padding:20px 20px;display:flex;flex-direction:column;gap:10px;font-family:var(--body)}
-.sc-card .brand{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:15px;color:var(--seal)}
-.sc-card .brand svg{width:56px;height:46px}
-.sc-card h4{margin:0;font-family:var(--display);font-weight:400;font-size:28px;text-align:center;line-height:1.2;text-wrap:balance}
-.sc-card .big{font-family:var(--display);font-size:76px;color:var(--seal);text-align:center;line-height:1;text-shadow:none}
-.sc-card .mid{font-family:var(--display);font-size:24px;text-align:center;color:var(--ink);background:var(--soft);border:1.5px solid var(--line);border-radius:999px;align-self:center;padding:0 16px}
-.sc-card .gz4{display:flex;justify-content:center;gap:12px;font-family:var(--display);font-size:28px;line-height:1.1;text-align:center}
-.sc-card .gz4>div{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:4px 8px}
-.sc-card .gz4 small{display:block;font-family:var(--body);font-size:10px;color:var(--muted)}
-.sc-card ul{margin:0;padding:10px 12px;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:13px;line-height:1.55;background:var(--paper);border:1.5px dashed var(--line);border-radius:16px}
-.sc-card ul li::before{content:"♥ ";color:var(--seal);font-size:11px}
-.sc-card .foot{margin-top:auto;text-align:center;font-size:11px;color:var(--muted);letter-spacing:.06em}
-.sc-card .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:12px}
-.sc-card .chips span{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
-.guide{background:var(--soft);border:1.5px dashed var(--seal);border-radius:18px;padding:12px 16px;display:flex;flex-direction:column;gap:4px;font-size:14px}
-.guide ol{margin:0;padding-left:1.3em}
-.guide .x{align-self:flex-end;font:inherit;font-size:13px;background:var(--seal);color:var(--onseal);border:none;border-radius:999px;padding:4px 14px;cursor:pointer}
-.saved{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:end}
-button.mini{font:inherit;font-size:13px;background:var(--seal);color:var(--onseal);border:none;border-radius:999px;padding:8px 12px;cursor:pointer;white-space:nowrap}
-button.mini.ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line)}
-.hero{display:flex;flex-direction:column;gap:6px;text-align:center;padding:4px 0 10px;border-bottom:1.5px dashed var(--line)}
-.hero .lbl{font-family:var(--display);font-size:30px;color:var(--seal);line-height:1.2}
-.hero .one{color:var(--ink)}
-.hero q{color:var(--muted);font-size:14px}
-.today{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:var(--soft);border-radius:16px;padding:12px}
-.today .ring{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:26px;color:var(--seal);background:conic-gradient(var(--seal) calc(var(--v)*1%),var(--line) 0);position:relative}
-.today .ring span{background:var(--soft);width:58px;height:58px;border-radius:50%;display:grid;place-items:center}
-.today small{color:var(--muted);font-size:12px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:6px 16px;border-radius:999px;font-size:13px;z-index:60}
-button.alt{font:inherit;font-family:var(--display);font-size:18px;color:var(--ink);background:var(--soft);border:1.5px solid var(--line);border-radius:999px;padding:10px;cursor:pointer}
-</style>
+  color-scheme:light;
+  --seal:#3b55e6; --seal-2:#2a7de1; --b:#1fa2e8;
+  --seal-ink:#2f47cc; --seal-lite:#9db1ff;
+  --a-rgb:59,85,230; --b-rgb:31,162,232;
+  --gold:#ffcf5c; --gold-ink:#dd9f1f;
 
+  --bg:#f4f5fa; --paper:#fff; --soft:#f2f3f8; --ink:#1d2030; --ink2:#4c5167; --muted:#70758a; --line:#e8e9f1;
+  --glass:rgba(255,255,255,.93); --at:var(--seal-ink);
+  --shadow:0 1px 2px rgba(29,32,48,.04),0 10px 28px rgba(29,32,48,.07);
+  --wood:#238f5f; --fire:#dc4c41; --earth:#ad761d; --metal:#68738e; --water:#2c77cc;
+
+  --grad:linear-gradient(135deg,var(--seal),var(--seal-2));
+  --grad-hero:linear-gradient(60deg,var(--seal) 0%,var(--seal-2) 55%,var(--b) 115%);
+  --grad-text:linear-gradient(100deg,var(--at),var(--seal-2) 55%,var(--b));
+  --display:"Songti SC","Noto Serif SC","Noto Serif CJK SC","Source Han Serif SC","Source Han Serif CN","STSong","SimSun",serif;
+  --body:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans","Noto Sans SC","Noto Sans CJK SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+  --num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Noto Sans CJK SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+}
+/* 深色模式（跟随手机系统设置；第二段是给能手动切换深浅色的环境用的，内容相同） */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0f1017; --paper:#191b26; --soft:#242735; --ink:#eef0f8; --ink2:#c3c7d8; --muted:#8e94aa; --line:#2b2e3f;
+  --glass:rgba(25,27,38,.93); --at:var(--seal-lite); --gold-ink:#ffcf5c;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
+  --wood:#5fcf9c; --fire:#ff8479; --earth:#e3b057; --metal:#aab3c9; --water:#6eb0f5;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f1017; --paper:#191b26; --soft:#242735; --ink:#eef0f8; --ink2:#c3c7d8; --muted:#8e94aa; --line:#2b2e3f;
+  --glass:rgba(25,27,38,.93); --at:var(--seal-lite); --gold-ink:#ffcf5c;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
+  --wood:#5fcf9c; --fire:#ff8479; --earth:#e3b057; --metal:#aab3c9; --water:#6eb0f5;
+}
+
+/* ---------- 基础 ---------- */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;color:var(--ink);font:15px/1.65 var(--body);-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(70% 60% at 0% 0%,rgba(var(--a-rgb),.16),transparent 70%) no-repeat 0 0/100% 460px,
+    radial-gradient(60% 55% at 100% 8%,rgba(var(--b-rgb),.16),transparent 70%) no-repeat 0 0/100% 460px,
+    var(--bg)}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px;
+  padding:calc(14px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.view{animation:rise .32s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.el-0{color:var(--wood)}.el-1{color:var(--fire)}.el-2{color:var(--earth)}.el-3{color:var(--metal)}.el-4{color:var(--water)}
+
+/* ---------- 顶部品牌区 ---------- */
+.mast{position:relative;isolation:isolate;overflow:hidden;border-radius:26px;padding:18px 18px 20px;color:#fff;
+  background:linear-gradient(to top,rgba(18,16,58,.24),rgba(18,16,58,0) 64%),var(--grad-hero);box-shadow:0 14px 32px rgba(var(--a-rgb),.3)}
+.mast::before,.mast::after{content:"";position:absolute;z-index:-1;width:176px;height:176px;border-radius:50%;background:rgba(255,255,255,.14)}
+.mast::before{right:54px;top:-84px}
+.mast::after{right:-58px;top:-36px}
+.mast h1{margin:0;line-height:0}
+.mast h1 svg{display:block;height:44px;width:auto}
+.mast .kind{display:inline-block;margin-top:12px;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.2);font-size:12px;font-weight:600;letter-spacing:.08em}
+.mast .slogan{margin:18px 0 0;font-size:17px;line-height:1.4;font-weight:700;letter-spacing:.08em}
+.mast .intro{margin:6px 0 0;font-size:13px;line-height:1.75;opacity:.95}
+.mast .intro span{display:block;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance} /* 两句各占一段；只在标点处换行，不把词拆开 */
+.mast .mascot{position:absolute;right:16px;top:20px;width:96px;animation:bob 3.2s ease-in-out infinite}
+.mast,.sc-top{--m-body:#fff;--m-ink:#262a45;--m-tail:#fff;--m-heart:var(--gold)}
+.mascot svg{display:block;width:100%;height:auto}
+@keyframes bob{50%{transform:translateY(-5px) rotate(-3deg)}}
+@media (max-width:343px){.mast .intro span{word-break:normal}} /* 特别窄的屏幕放不下整句，恢复普通换行 */
+@media (max-width:359px){.mast h1 svg{height:40px}.mast .slogan{font-size:15px}.mast .mascot{width:84px}}
+
+/* ---------- 标签页 ---------- */
+.tabs{position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;border-radius:18px;
+  background:var(--glass);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px);box-shadow:var(--shadow)}
+.tabs a{display:flex;align-items:center;justify-content:center;height:40px;border-radius:13px;color:var(--ink2);font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;transition:color .2s,background-color .2s}
+.tabs a[aria-current="page"]{color:#fff;background:var(--grad);box-shadow:0 6px 14px rgba(var(--a-rgb),.32)}
+
+/* ---------- 卡片 ---------- */
+.card,.blk{background:var(--paper);border-radius:22px;padding:18px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h2{margin:0;font-size:17px;line-height:1.4;font-weight:700;display:flex;align-items:center;gap:8px}
+.card p,.blk p{margin:0;color:var(--ink2)}
+.blk h3{margin:0;font-size:16px;line-height:1.4;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+.blk h3::before{content:"";flex:none;width:5px;height:16px;border-radius:99px;background:var(--grad)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--seal)}
+.pf .dot{background:var(--b)}
+.tag{font-size:12px;font-weight:600;padding:1px 9px;border-radius:99px;background:rgba(var(--a-rgb),.12);color:var(--at)}
+.note,.meta{margin:0;font-size:12px;line-height:1.7;color:var(--muted)}
+.card p.note,.blk p.note{color:var(--muted)}
+
+/* ---------- 表单 ---------- */
+label{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:12px;color:var(--muted)}
+input,select{width:100%;min-width:0;height:44px;margin:0;padding:0 12px;border:1.5px solid transparent;border-radius:12px;background-color:var(--soft);color:var(--ink);
+  font:inherit;font-size:16px;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .15s,box-shadow .15s,background-color .15s}
+select{padding-right:32px;text-overflow:ellipsis;background-repeat:no-repeat;background-position:right 10px center;background-size:16px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%238a8fa3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+input:focus-visible,select:focus-visible{border-color:var(--seal);background-color:var(--paper);box-shadow:0 0 0 3px rgba(var(--a-rgb),.18)}
+input:disabled{opacity:.4}
+input::-webkit-date-and-time-value{text-align:left}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.row.dt{grid-template-columns:1.25fr 1fr} /* 生日比时间长，多给一点宽度 */
+@media (max-width:359px){input,select{padding-left:10px;padding-right:10px}select{padding-right:28px}}
+.saved{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+/* "时间不知道"开关 */
+label.chk{flex-direction:row;align-items:center;gap:8px;height:44px;align-self:end;font-size:14px;color:var(--ink2);cursor:pointer}
+input[type=checkbox]{flex:none;width:42px;height:26px;padding:0;border:0;border-radius:99px;cursor:pointer;
+  background:var(--line) radial-gradient(circle at center,#fff 0 9.5px,rgba(0,0,0,.1) 10px,transparent 11px) no-repeat 0 0/26px 26px;
+  transition:background-color .2s,background-position .2s}
+input[type=checkbox]:checked{background-color:var(--seal);background-position:16px 0}
+input[type=checkbox]:focus-visible{box-shadow:0 0 0 3px rgba(var(--a-rgb),.25)}
+
+/* ---------- 按钮 ---------- */
+button.go{height:52px;padding:0 16px;border:0;border-radius:16px;background:var(--grad);color:#fff;font-size:17px;font-weight:700;letter-spacing:.06em;
+  box-shadow:0 10px 22px rgba(var(--a-rgb),.32);transition:transform .12s}
+button.alt{height:52px;padding:0 16px;border:1.5px solid rgba(var(--a-rgb),.3);border-radius:16px;background:var(--paper);color:var(--at);font-size:16px;font-weight:600;transition:transform .12s}
+button.go:active,button.alt:active,button.mini:active{transform:scale(.97)}
+button.mini{flex:none;height:32px;padding:0 13px;border:0;border-radius:99px;background:rgba(var(--a-rgb),.12);color:var(--at);font-size:13px;font-weight:600;white-space:nowrap;transition:transform .12s}
+button.mini.ghost{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--line)}
+.saved .mini{height:44px;border-radius:12px;padding:0 14px}
+.btns{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
+@media (max-width:400px){.btns{grid-template-columns:1fr}}
+
+/* ---------- 命盘：四柱 ---------- */
+.out{display:flex;flex-direction:column;gap:12px}
+.out:empty{display:none}
+.out::before{content:"";height:1px;margin:2px 0;background:var(--line)}
+.pillars{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:4px}
+.pl{display:grid;grid-template-rows:18px 18px 46px 46px 16px 16px;row-gap:4px;justify-items:center;align-items:center;padding:6px 0 8px;border-radius:16px;
+  font-size:11px;line-height:1;color:var(--muted);white-space:nowrap}
+.pl.lab{justify-items:start;padding-right:6px;font-size:10px}
+.pl.me{background:rgba(var(--a-rgb),.08);box-shadow:inset 0 0 0 1.5px rgba(var(--a-rgb),.22)}
+.pl-h{letter-spacing:.1em}
+.pl-ss{font-size:12px;font-weight:600;color:var(--at)}
+.gzc{position:relative;isolation:isolate;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;font:900 26px/1 var(--display)}
+.gzc::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:.12}
+.pl-cg{letter-spacing:.08em}
+.pl-cg i{font-style:normal;font-weight:600}
+/* 五行条 */
+.wxbars{display:grid;gap:7px}
+.wxbars>div{display:grid;grid-template-columns:1.2em 1fr 1.2em;gap:10px;align-items:center;font-size:12px;font-weight:700;line-height:1}
+.trk{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+.trk i{display:block;height:100%;border-radius:99px;background:currentColor;transition:width .5s}
+.wxbars span:last-child{text-align:right;color:var(--muted);font-family:var(--num);font-variant-numeric:tabular-nums}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.facts span{padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--ink2);font-size:12px;font-weight:500}
+
+/* ---------- 解读 ---------- */
+.reading{display:flex;flex-direction:column;gap:14px}
+.reading:empty{display:none}
+.hero{border-radius:22px;padding:22px 18px 18px;text-align:center;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);
+  background:linear-gradient(135deg,rgba(var(--a-rgb),.14),rgba(var(--b-rgb),.16)),var(--paper)}
+.hero .meta{font-size:12px;font-weight:600;letter-spacing:.24em;color:var(--at)}
+.hero .lbl{font:900 30px/1.3 var(--display);background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.hero .one{font-size:14px;color:var(--ink2)}
+.hero q{display:block;margin-top:4px;padding:10px 14px;border-radius:14px;background:var(--paper);color:var(--ink);font-size:14px;quotes:"「" "」"}
+.today{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;color:var(--ink2)}
+.today b{color:var(--ink)}
+.today small{font-size:12px;color:var(--muted)}
+.today .ring{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--seal),var(--b) calc(var(--v)*1%),var(--soft) 0)}
+.today .ring span{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:var(--paper);color:var(--at);font:800 24px/1 var(--num)}
+.blk dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px}
+.yj{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.yj span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:10px;background:var(--soft);font-size:12px;line-height:1.5}
+.yj b.good{color:var(--wood)}.yj b.bad{color:var(--fire)}
+.yj .swatch{margin:0 -2px 0 0}
+.blk dt{align-self:start;justify-self:start;padding:2px 8px;border-radius:8px;background:rgba(var(--a-rgb),.1);color:var(--at);font-size:12px;font-weight:600;line-height:1.6;white-space:nowrap}
+.blk dd{margin:0;color:var(--ink2)}
+.swatch{display:inline-block;width:.9em;height:.9em;margin-right:4px;border-radius:50%;vertical-align:-1px;border:1px solid var(--line)}
+.good{color:var(--wood);font-weight:600}.bad{color:var(--fire)}.zero{color:var(--muted)}
+/* 大运 */
+.yun{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:520px){.yun{grid-template-columns:repeat(2,1fr)}}
+.yun div{position:relative;min-width:0;padding:10px 10px 8px;border-radius:14px;background:var(--soft);display:flex;flex-direction:column;gap:2px}
+.yun div.now{background:rgba(var(--a-rgb),.1);box-shadow:inset 0 0 0 1.5px var(--seal)}
+.yun div.now::after{content:"当前";position:absolute;top:8px;right:8px;padding:1px 7px;border-radius:99px;background:var(--grad);color:#fff;font-size:10px;font-weight:700;line-height:1.6}
+.yun small{font-size:11px;color:var(--muted)}
+.yun b{font:900 24px/1.2 var(--display)}
+.yun em{font-style:normal;font-size:12px;color:var(--ink2)}
+/* 排行榜 */
+.rank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.rank li{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.rank li:first-child{border-top:0;padding-top:0}
+.rank li:last-child{padding-bottom:0}
+.rank .no{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:var(--soft);color:var(--muted);font:800 13px/1 var(--num)}
+.rank li:nth-child(1) .no{background:var(--grad);color:#fff}
+.rank li:nth-child(2) .no,.rank li:nth-child(3) .no{background:rgba(var(--a-rgb),.14);color:var(--at)}
+.rank small{display:block;font-size:12px;color:var(--muted)}
+.rank .sc{color:var(--at);font:800 20px/1 var(--num);font-variant-numeric:tabular-nums}
+
+/* ---------- 合婚结果 ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:640px){.pair{grid-template-columns:1fr}}
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.num{font:800 68px/1 var(--num);letter-spacing:-.02em;font-variant-numeric:tabular-nums;
+  background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.verdict{font:900 26px/1.2 var(--display)}
+.bar{height:10px;border-radius:99px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--seal),var(--seal-2),var(--b));transition:width .6s}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.split div{padding:10px 12px;border-radius:14px;background:var(--soft);display:flex;flex-direction:column;gap:2px}
+.split small{font-size:12px;color:var(--muted)}
+.split b{font:800 24px/1.1 var(--num);font-variant-numeric:tabular-nums}
+.card p.summary{color:var(--ink);font-weight:500}
+ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ul.items li{display:grid;grid-template-columns:5.2em minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line);color:var(--ink2)}
+#itemsB li{grid-template-columns:3.4em minmax(0,1fr) auto}
+ul.items li:first-child{border-top:0;padding-top:0}
+ul.items li:last-child{padding-bottom:0}
+.k{padding-top:2px;font-size:12px;font-weight:600;color:var(--at)}
+.pts{min-width:2.6em;padding:0 8px;border-radius:99px;background:var(--soft);font:700 12px/1.9 var(--num);text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pts.pos{color:var(--wood);background:rgba(35,143,95,.12)}
+.pts.neg{color:var(--fire);background:rgba(220,76,65,.12)}
+ul.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+ul.tips li{position:relative;padding:10px 12px 10px 32px;border-radius:12px;background:var(--soft);color:var(--ink2)}
+ul.tips li::before{content:"";position:absolute;left:12px;top:17px;width:10px;height:10px;border-radius:50%;background:var(--grad)}
+
+/* ---------- 新手引导 / 词典 / 页脚 ---------- */
+.guide{border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--ink2);box-shadow:var(--shadow);
+  background:linear-gradient(135deg,rgba(var(--a-rgb),.12),rgba(var(--b-rgb),.14)),var(--paper)}
+.guide b{font-size:15px;color:var(--ink)}
+.guide ol{margin:0;padding:0;list-style:none;counter-reset:g;display:flex;flex-direction:column;gap:8px}
+.guide li{counter-increment:g;display:flex;gap:10px;align-items:flex-start}
+.guide li::before{content:counter(g);flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;background:var(--grad);color:#fff;font:700 12px/22px var(--num);text-align:center}
+.guide .x{align-self:flex-end;background:var(--paper)}
+details.dict{background:var(--paper);border-radius:22px;padding:0 16px;box-shadow:var(--shadow)}
+details.dict summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;font-size:15px;font-weight:700;-webkit-tap-highlight-color:transparent}
+details.dict summary::-webkit-details-marker{display:none}
+details.dict summary::after{content:"";flex:none;width:8px;height:8px;margin:0 4px 4px 0;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+details.dict[open] summary::after{transform:rotate(-135deg);margin-bottom:-4px}
+details.dict dl{margin:0;padding:14px 0 18px;border-top:1px solid var(--line);display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:10px;font-size:14px}
+details.dict dt{font-weight:600;color:var(--ink)}
+details.dict dd{margin:0;color:var(--ink2)}
+.ft{padding:6px 0 0;text-align:center;font-size:12px;line-height:1.8;color:var(--muted)}
+.ft b{font:900 15px/1 var(--display);letter-spacing:.12em;color:var(--at)}
+
+/* ---------- 上头卡（分享卡片） ---------- */
+.overlay{position:fixed;inset:0;z-index:50;display:flex;overflow:auto;background:rgba(10,11,20,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.overlay .box{margin:auto;width:min(340px,100%);display:flex;flex-direction:column;align-items:center;gap:12px;animation:pop .28s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(8px)}}
+#cardSlot{width:100%}
+.overlay p.hint{margin:0;font-size:13px;text-align:center;color:rgba(255,255,255,.88)}
+.sc-card{position:relative;overflow:hidden;border-radius:28px;padding-bottom:16px;background:var(--paper);color:var(--ink);display:flex;flex-direction:column;gap:12px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.sc-card>*{margin:0 18px}
+.sc-card .sc-top{position:relative;isolation:isolate;overflow:hidden;margin:0;padding:16px 18px 56px;color:#fff;background:var(--grad-hero)}
+.sc-top::before,.sc-top::after{content:"";position:absolute;z-index:-1;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.13)}
+.sc-top::before{right:44px;top:-64px}
+.sc-top::after{right:-52px;top:-30px}
+.sc-card .brand{display:flex;align-items:center;justify-content:space-between}
+.sc-card .brand .mascot{width:62px}
+.sc-card .wm{display:flex;align-items:center;gap:10px}
+.sc-card .wm svg{display:block;height:22px;width:auto}
+.sc-card .wm i{padding:0 9px;border-radius:99px;background:rgba(255,255,255,.22);font:600 11px/1.9 var(--body);letter-spacing:.08em}
+.sc-card h4{margin:8px 0 0;font:900 28px/1.25 var(--display);text-align:center;text-wrap:balance;overflow-wrap:anywhere}
+.sc-card .gz4{position:relative;margin-top:-44px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sc-card .gz4>div{padding:8px 0 10px;border-radius:16px;background:var(--paper);box-shadow:0 8px 20px rgba(29,32,48,.14);display:flex;flex-direction:column;align-items:center;gap:2px}
+.sc-card .gz4 small{font-size:10px;color:var(--muted)}
+.sc-card .gz4 b{font:900 26px/1.15 var(--display)}
+.sc-card .big{position:relative;margin:-52px auto 0;width:112px;height:112px;border-radius:50%;background:var(--paper);box-shadow:0 10px 24px rgba(29,32,48,.18);display:grid;place-items:center}
+.sc-card .big b{font:800 54px/1 var(--num);letter-spacing:-.02em;background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.sc-card .mid{align-self:center;padding:2px 16px;border-radius:99px;background:rgba(var(--a-rgb),.1);color:var(--at);font:900 20px/1.6 var(--display);text-align:center}
+.sc-card .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:12px}
+.sc-card .chips span{padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--ink2)}
+.sc-card ul{list-style:none;padding:12px 14px;border-radius:16px;background:var(--soft);display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.55;color:var(--ink2)}
+.sc-card ul li{position:relative;padding-left:18px}
+.sc-card ul li::before{content:"♥";position:absolute;left:0;top:1px;font-size:11px;color:var(--gold-ink)}
+.sc-card .foot{text-align:center;font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:60;transform:translateX(-50%);padding:8px 18px;border-radius:99px;
+  background:rgba(29,32,48,.92);color:#fff;font-size:13px;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
 <div class="wrap">
-  <header>
-    <div class="mascot" aria-hidden="true"><svg viewBox="0 0 120 100" width="84" height="70"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--ink)"/><circle cx="61" cy="50" r="3.6" fill="var(--ink)"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--seal)"/></svg></div>
-    <div>
-      <h1>心动气象台</h1>
-      <p class="sub">先看清自己，再决定要不要上头。下面是示例，换成真实信息再测</p>
-    </div>
+  <header class="mast">
+    <!-- 字标是画好的矢量轮廓（字形取自 Noto Serif CJK SC Bold，SIL OFL 1.1 授权），所以在任何手机上都长得一样 -->
+    <h1 id="wordmark"><svg viewBox="0 0 1025 470" role="img" aria-label="对盘"><path fill="currentColor" d="M226 186 222 190C248 220 259 266 264 295C307 344 372 233 226 186ZM428 83 400 126V25C412 23 417 18 418 11L342 4V126H214L218 141H342V394C342 400 338 403 329 403C316 403 250 400 250 400V406C280 411 294 418 304 427C313 436 316 450 318 470C390 462 400 439 400 398V141H463C470 141 475 138 476 133C460 114 428 83 428 83ZM40 128 33 132C65 167 93 212 115 258C88 328 50 393 0 443L6 448C64 411 107 364 140 312C148 334 154 354 158 370C184 437 246 396 212 320C202 298 188 275 171 253C194 200 209 145 218 92C230 90 236 88 239 83L186 35L156 67H11L16 82H160C154 123 144 166 132 208C106 180 75 154 40 128ZM740 82 736 85C752 98 768 124 772 145C820 176 861 83 740 82ZM981 398 959 434H953V328C961 327 966 324 968 321L917 282L891 309H676L616 286C677 258 699 216 705 170H876V225C876 232 874 234 866 234L816 232C820 211 800 183 735 178L731 182C748 197 766 224 768 248C788 262 806 254 814 240C834 244 842 249 850 256C856 264 859 277 860 294C925 288 934 268 934 231V170H1012C1018 170 1024 168 1025 162C1006 143 974 114 974 114L944 156H934V83C944 81 952 77 954 72L896 30L870 60H768L812 28C823 26 830 22 832 14L748 0L740 60H716L651 36V142L650 156H556L560 170H650C645 220 624 266 563 299L567 304C584 299 600 294 614 287V434H556L560 448H1008C1014 448 1019 446 1020 440C1007 424 981 398 981 398ZM707 74H876V156H706L707 142ZM896 324V434H856V324ZM670 324H710V434H670ZM803 324V434H762V324Z"/></svg></h1>
+    <span class="kind">八字 × 星座</span>
+    <div class="mascot" id="mascot" aria-hidden="true"></div>
+    <p class="slogan">观己，知人，而后动心。</p>
+    <p class="intro"><span>融合东方命理与西方占星体系的关系洞察工具。</span><span>真太阳时排定四柱，天文历算推演日月与上升，集命盘解读、理想型推演与双人合盘于一体。</span></p>
   </header>
 
-  <div class="palette" role="group" aria-label="换个颜色">换个颜色
-    <button id="pal-" title="中性灰" style="background:#4a4a4a"></button><button id="pal-haze" title="雾霾蓝" style="background:#7c94a8"></button><button id="pal-blue" title="奶油蓝" style="background:#6c9bcf"></button><button id="pal-pink" title="樱花粉" style="background:#d98a9e"></button><button id="pal-mint" title="薄荷绿" style="background:#6fae94"></button><button id="pal-taro" title="香芋紫" style="background:#9b88c4"></button>
-  </div>
-  <nav class="tabs"><a href="#self" id="tabSelf">我的命盘</a><a href="#match" id="tabMatch">理想另一半</a><a href="#pair" id="tabPair">合婚配对</a></nav>
+  <nav class="tabs" aria-label="功能"><a href="#self" id="tabSelf">我的命盘</a><a href="#match" id="tabMatch">理想另一半</a><a href="#pair" id="tabPair">合婚配对</a></nav>
 
-  <div id="viewMe" class="wrap" style="padding:0">
+  <div id="viewMe" class="stack">
     <section class="guide" id="guide" hidden>
       <b>第一次来？三步就会玩</b>
       <ol><li>在下面填你的生日、时间和城市</li><li>往下看命盘、恋爱人格和今日运势</li><li>点"理想另一半"或"合婚配对"，和别人配一配</li></ol>
-      <button class="x" id="guideX" aria-label="关闭引导">知道了</button>
+      <button type="button" class="x mini" id="guideX" aria-label="关闭引导">知道了</button>
     </section>
     <section class="card">
-      <h2>我的生辰</h2>
-      <div class="saved"><label>已保存的人<select id="savedS"><option value="">— 选一个人填进来 —</option></select></label><button class="mini" id="saveS">保存这个人</button><button class="mini ghost" id="delS">删除</button></div>
+      <div class="card-h"><h2>我的生辰</h2><button type="button" class="mini" id="saveS">保存这个人</button></div>
+      <p class="note">现在填的是示例，换成真实信息再测。生辰只在你的设备上计算，不会上传。</p>
+      <div class="saved"><label>已保存的人<select id="savedS"><option value="">— 选一个人填进来 —</option></select></label><button type="button" class="mini ghost" id="delS">删除</button></div>
       <div class="row">
         <label>称呼<input id="nameS" value="我（示例）"></label>
         <label>性别<select id="genS"><option value="M">男</option><option value="F" selected>女</option></select></label>
       </div>
-      <div class="row">
+      <div class="row dt">
         <label>公历生日<input type="date" id="dateS" value="1998-06-12" min="1901-01-01" max="2099-12-31"></label>
         <label>出生时间（当地钟表）<input type="time" id="timeS" value="08:30"></label>
       </div>
@@ -195,10 +327,11 @@ button.alt{font:inherit;font-family:var(--display);font-size:18px;color:var(--in
       </div>
       <div id="outS" class="out"></div>
     </section>
-  <div id="viewSelf" class="wrap" style="padding:0">
-    <section class="result reading" id="readS" aria-live="polite"></section>
-    <div class="btns"><button class="alt" id="shareSelf">生成上头卡</button><button class="alt" id="toPair">拿我的八字去配对 →</button></div>
-    <details class="dict"><summary>术语小词典（看不懂点这里）</summary><dl>
+
+    <div id="viewSelf" class="stack view">
+      <div class="reading" id="readS" aria-live="polite"></div>
+      <div class="btns"><button type="button" class="alt" id="shareSelf">生成上头卡</button><button type="button" class="go" id="toPair">拿我的八字去配对 →</button></div>
+      <details class="dict"><summary>术语小词典（看不懂点这里）</summary><dl>
       <dt>四柱八字</dt><dd>出生的年、月、日、时各用一个天干加一个地支表示，共四柱八个字，是排盘的基础。</dd>
       <dt>日主</dt><dd>日柱的天干，代表你自己。分析性格、强弱、喜忌都以它为中心。</dd>
       <dt>五行</dt><dd>木、火、土、金、水。相生：木生火、火生土、土生金、金生水、水生木；相克：木克土、土克水、水克火、火克金、金克木。</dd>
@@ -215,72 +348,72 @@ button.alt{font:inherit;font-family:var(--display);font-size:18px;color:var(--in
       <dt>上升星座</dt><dd>出生那一刻东方地平线上升起的星座，代表外在形象和给人的第一印象，大约两小时换一个，需要准确的出生时间。</dd>
       <dt>相位</dt><dd>两个星体之间的角度关系。三分相最和谐，六分相顺畅，对分相互相吸引又拉扯，四分相有张力。</dd>
     </dl></details>
-  </div>
-  <div id="viewMatch" class="wrap" style="padding:0" hidden>
-    <section class="result reading">
-      <h3>我的真命，到底长啥样？</h3>
-      <p>用上面"我的生辰"，把你上下几岁范围内每一天出生的人都和你合一遍婚，看看哪些星座、哪一年、哪一天出生的人和你最配。下次心动之前，先对照一下。</p>
-      <div class="row">
-        <label>对方比我小<select id="younger"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
-        <label>对方比我大<select id="older"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
-      </div>
-      <button class="go" id="findBtn">帮我找真命天子/天女</button>
-      <div id="matchOut"></div>
-    </section>
-  </div>
+    </div>
+
+    <div id="viewMatch" class="stack view" hidden>
+      <section class="card">
+        <h2>我的真命，到底长啥样？</h2>
+        <p>用上面"我的生辰"，把你上下几岁范围内每一天出生的人都和你合一遍婚，看看哪些星座、哪一年、哪一天出生的人和你最配。下次心动之前，先对照一下。</p>
+        <div class="row">
+          <label>对方比我小<select id="younger"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
+          <label>对方比我大<select id="older"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
+        </div>
+        <p class="note">两个都选 0 就是自由搭配：不限年龄，直接列出分数最高的十个生日。</p>
+        <button type="button" class="go" id="findBtn">帮我找真命天子/天女</button>
+      </section>
+      <div class="reading" id="matchOut"></div>
+    </div>
   </div>
 
-  <div id="viewPair" class="wrap" style="padding:0" hidden>
-  <div class="pair">
-    <section class="card">
-      <h2><span class="tag">乾造</span>男方</h2>
-      <label>从已保存的人中选<select id="savedM" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
-      <label>称呼<input id="nameM" value="阿明（示例）"></label>
-      <div class="row">
-        <label>公历生日<input type="date" id="dateM" value="1995-08-16" min="1901-01-01" max="2099-12-31"></label>
-        <label>出生时间（当地钟表）<input type="time" id="timeM" value="11:40"></label>
-      </div>
-      <div class="row">
-        <label>出生城市<select id="cityM"></select></label>
-        <label class="chk"><input type="checkbox" id="unkM">时间不知道</label>
-      </div>
-      <div id="outM" class="out"></div>
-    </section>
-    <section class="card">
-      <h2><span class="tag">坤造</span>女方</h2>
-      <label>从已保存的人中选<select id="savedF" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
-      <label>称呼<input id="nameF" value="小雅（示例）"></label>
-      <div class="row">
-        <label>公历生日<input type="date" id="dateF" value="1997-03-22" min="1901-01-01" max="2099-12-31"></label>
-        <label>出生时间（当地钟表）<input type="time" id="timeF" value="18:20"></label>
-      </div>
-      <div class="row">
-        <label>出生城市<select id="cityF"></select></label>
-        <label class="chk"><input type="checkbox" id="unkF">时间不知道</label>
-      </div>
-      <div id="outF" class="out"></div>
-    </section>
-  </div>
+  <div id="viewPair" class="stack view" hidden>
+    <div class="pair">
+      <section class="card pm">
+        <h2><span class="dot"></span>男方<span class="tag">乾造</span></h2>
+        <label>从已保存的人中选<select id="savedM" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
+        <label>称呼<input id="nameM" value="阿明（示例）"></label>
+        <div class="row dt">
+          <label>公历生日<input type="date" id="dateM" value="1995-08-16" min="1901-01-01" max="2099-12-31"></label>
+          <label>出生时间（当地钟表）<input type="time" id="timeM" value="11:40"></label>
+        </div>
+        <div class="row">
+          <label>出生城市<select id="cityM"></select></label>
+          <label class="chk"><input type="checkbox" id="unkM">时间不知道</label>
+        </div>
+        <div id="outM" class="out"></div>
+      </section>
+      <section class="card pf">
+        <h2><span class="dot"></span>女方<span class="tag">坤造</span></h2>
+        <label>从已保存的人中选<select id="savedF" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
+        <label>称呼<input id="nameF" value="小雅（示例）"></label>
+        <div class="row dt">
+          <label>公历生日<input type="date" id="dateF" value="1997-03-22" min="1901-01-01" max="2099-12-31"></label>
+          <label>出生时间（当地钟表）<input type="time" id="timeF" value="18:20"></label>
+        </div>
+        <div class="row">
+          <label>出生城市<select id="cityF"></select></label>
+          <label class="chk"><input type="checkbox" id="unkF">时间不知道</label>
+        </div>
+        <div id="outF" class="out"></div>
+      </section>
+    </div>
 
-  <button class="go" id="go">测测能不能上头</button>
+    <button type="button" class="go" id="go">测测能不能上头</button>
 
-  <section class="result" aria-live="polite">
-    <div class="score"><span class="num" id="num">--</span><span class="verdict" id="verdict"></span></div>
-    <div class="bar"><i id="bar" style="width:0"></i></div>
-    <div class="split"><div><small>八字分 · 占六成</small><b id="sBz">--</b></div><div><small>星盘分 · 占四成</small><b id="sXz">--</b></div></div>
-    <p class="summary" id="summary"></p>
-    <p class="sect">八字合婚</p>
-    <ul class="items" id="itemsB"></ul>
-    <p class="sect">星盘配对</p>
-    <ul class="items" id="itemsX"></ul>
-    <p class="sect">趣味彩蛋</p>
-    <ul class="items" id="fun"></ul>
-    <p class="sect">清醒建议</p>
-    <ul class="tips" id="tips"></ul>
-    <button class="alt" id="sharePair">生成上头卡</button>
+    <section class="card" aria-live="polite">
+      <div class="score"><span class="num" id="num">--</span><span class="verdict" id="verdict"></span></div>
+      <div class="bar"><i id="bar" style="width:0"></i></div>
+      <div class="split"><div><small>八字分 · 占六成</small><b id="sBz">--</b></div><div><small>星盘分 · 占四成</small><b id="sXz">--</b></div></div>
+      <p class="summary" id="summary"></p>
+    </section>
+    <section class="blk"><h3>八字合婚</h3><ul class="items" id="itemsB"></ul></section>
+    <section class="blk"><h3>星盘配对</h3><ul class="items" id="itemsX"></ul></section>
+    <section class="blk"><h3>趣味彩蛋</h3><ul class="items" id="fun"></ul></section>
+    <section class="blk"><h3>清醒建议</h3><ul class="tips" id="tips"></ul></section>
+    <button type="button" class="alt" id="sharePair">生成上头卡</button>
     <p class="note" id="noteP">八字按真太阳时排盘（按出生城市经度和均时差校正），节气按太阳实际黄经划分，23点后算次日（晚子时归次日）。太阳、月亮位置和上升点用简化天文公式计算，误差很小，但出生时间不准时上升星座可能不对；不知道时间时，月亮按中午估算，没有时柱和上升。中国1986–1991年夏令时期间出生的，请把夏天的出生时间减1小时再填。传统民俗与占星，仅供娱乐。命再合也要好好经营，命不合也别急着分手，脑子要自己带。</p>
-  </section>
   </div>
+
+  <footer class="ft"><b>对盘</b><br>八字 × 星座 · 传统民俗与占星，仅供娱乐</footer>
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="overlay" id="overlay" hidden><div class="box"><div id="cardSlot"></div><p class="hint">截图发朋友圈，让姐妹兄弟们也清醒一下 · 点空白处关闭</p></div></div>
@@ -586,6 +719,17 @@ function dayun(c,gender,birthYear){
   return {fwd,ay,am,list};
 }
 const $=id=>document.getElementById(id);
+// 吉祥物：页面顶部和上头卡共用这一份
+const MASCOT=`<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--m-tail,var(--seal))" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--m-body,var(--paper))" stroke="var(--m-ink,var(--ink))" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><circle cx="61" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--m-ink,var(--ink))" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="#ff9db0" opacity=".75"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="#ff9db0" opacity=".75"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--m-heart,var(--b))"/></svg>`;
+$("mascot").innerHTML=MASCOT;
+// 字标「对盘」：直接取页面顶部那一份，上头卡里共用
+const WORDMARK=$("wordmark").innerHTML;
+// 把一长串解读按小标题拆成一张张卡片；tail 为 true 时，最后那句说明放在卡片外面
+function cards(html,tail){
+  let note="";
+  if(tail){const i=html.lastIndexOf('<p class="note">'); if(i>=0){note=html.slice(i);html=html.slice(0,i);}}
+  return html.split(/(?=<h3>)/).filter(p=>p.trim()).map(p=>p.startsWith("<h3>")?`<section class="blk">${p}</section>`:p).join("")+note;
+}
 ["M","F","S"].forEach((s,i)=>{
   const sel=$("city"+s);
   let h="",g=null;
@@ -607,13 +751,12 @@ function read(s){
 }
 function render(s,o){
   const dm=o.P[2][0], H=["年","月","日","时"];
-  let h=`<div class="tbl"><span></span>${H.map(x=>`<span class="h">${x}柱</span>`).join("")}`;
-  h+=`<span class="rh">十神</span>`+o.P.map((p,i)=>`<span class="ss">${p?(i===2?"日主":shishen(dm,p[0])):""}</span>`).join("");
-  h+=`<span class="rh">干支</span>`+o.P.map(p=>p?`<span class="gz"><span class="el-${el(p[0])}">${GAN[p[0]]}</span><br><span class="el-${ZEL[p[1]]}">${ZHI[p[1]]}</span></span>`:`<span class="gz na">？<br>？</span>`).join("");
-  h+=`<span class="rh">藏干</span>`+o.P.map(p=>`<span class="cg">${p?CANG[p[1]]:""}</span>`).join("");
-  h+=`<span class="rh">纳音</span>`+o.P.map(p=>`<span class="ny">${p?nayin(p):""}</span>`).join("")+`</div>`;
+  const lab=`<div class="pl lab"><span></span><span>十神</span><span>天干</span><span>地支</span><span>藏干</span><span>纳音</span></div>`;
+  let h=`<div class="pillars">`+lab+o.P.map((p,i)=>`<div class="pl${i===2?" me":""}"><span class="pl-h">${H[i]}柱</span>`+(p
+    ?`<span class="pl-ss">${i===2?"日主":shishen(dm,p[0])}</span><b class="gzc el-${el(p[0])}">${GAN[p[0]]}</b><b class="gzc el-${ZEL[p[1]]}">${ZHI[p[1]]}</b><span class="pl-cg">${[...CANG[p[1]]].map(c=>`<i class="el-${el(GAN.indexOf(c))}">${c}</i>`).join("")}</span><span class="pl-ny">${nayin(p)}</span>`
+    :`<span class="pl-ss">—</span><b class="gzc">？</b><b class="gzc">？</b><span class="pl-cg">—</span><span class="pl-ny">—</span>`)+`</div>`).join("")+`</div>`;
   const mx=Math.max(...o.cnt,1);
-  h+=`<div class="wxbars">`+o.cnt.map((n,i)=>`<div class="el-${i}"><span>${WX[i]}</span><i style="width:${n/mx*100}%;${n?"":"opacity:.15;width:4px"}"></i><span>${n}</span></div>`).join("")+`</div>`;
+  h+=`<div class="wxbars">`+o.cnt.map((n,i)=>`<div class="el-${i}"><span>${WX[i]}</span><span class="trk"><i style="width:${n/mx*100}%"></i></span><span>${n}</span></div>`).join("")+`</div>`;
   const sun=XZ[signOf(o.sun)], moon=XZ[signOf(o.moon)], asc=o.asc==null?"未知":XZ[signOf(o.asc)];
   h+=`<div class="facts"><span>属${SX[o.P[0][1]]}</span><span>日主 ${GAN[dm]}${WX[el(dm)]}</span><span>${o.strength}</span><span>喜用 ${o.xi.map(i=>WX[i]).join("、")}</span><span>☉ 太阳${sun}</span><span>☽ 月亮${moon}</span><span>↑ 上升${asc}</span></div>`;
   h+=`<p class="meta">${o.unk?"未填时间：无时柱，无上升星座，月亮按中午估算。":`真太阳时 ${o.trueSolar}（比钟表${o.corr>=0?"快":"慢"} ${Math.abs(Math.round(o.corr))} 分钟）。`}年命 ${nayin(o.P[0])}。</p>`;
@@ -752,7 +895,7 @@ function selfReading(o,gender){
   const sun=signOf(o.sun), moon=signOf(o.moon), asc=o.asc==null?null:signOf(o.asc);
   const yb=o.P[0][1];
   const D=dayun(o,gender,o.y), thisY=2026, nowAge=thisY-o.y;
-  const yun=`<p>${D.fwd?"顺":"逆"}排大运，${D.ay}岁${D.am?D.am+"个月":""}起运，每十年换一步。红框是你现在走的运。</p><div class="yun">`+D.list.map(x=>{
+  const yun=`<p>${D.fwd?"顺":"逆"}排大运，${D.ay}岁${D.am?D.am+"个月":""}起运，每十年换一步。标着「当前」的是你现在走的运。</p><div class="yun">`+D.list.map(x=>{
     const ss=shishen(dm,x.s), good=o.xi.includes(el(x.s))||o.xi.includes(ZEL[x.b]);
     const now=nowAge>=x.age&&nowAge<x.age+10;
     return `<div class="${now?"now":""}"><small>${x.age}–${x.age+9}岁 · ${x.year}年起</small><b><span class="el-${el(x.s)}">${GAN[x.s]}</span><span class="el-${ZEL[x.b]}">${ZHI[x.b]}</span></b><em>${ss}运 · <span class="${good?"good":"zero"}">${good?"喜用到位，较顺":"平稳，靠努力"}</span></em></div>`;}).join("")+`</div>`;
@@ -774,7 +917,7 @@ function selfReading(o,gender){
   const tcat=(el(td[0])-de+5)%5, tr=rel(td[1],o.P[2][1]);
   let love=62+(tr==="he"?20:tr==="san"?14:tr==="chong"?-16:tr==="hai"?-8:0)+(o.xi.includes(el(td[0]))?10:0)+(o.xi.includes(ZEL[td[1]])?6:0)+((td[0]*7+td[1]*3)%9);
   love=Math.max(35,Math.min(99,love));
-  const today=`<div class="today"><div class="ring" style="--v:${love}"><span>${love}</span></div><div><b>今日恋爱指数</b> <small>${now.getMonth()+1}月${now.getDate()}日 · ${GAN[td[0]]}${ZHI[td[1]]}日</small><br>${DAILY[tcat][2]}。<br><small>宜：${DAILY[tcat][0]}　忌：${DAILY[tcat][1]}　幸运色：${LUCK[o.xi[0]][0].split("、")[0]}</small></div></div>`;
+  const today=`<div class="today"><div class="ring" style="--v:${love}"><span>${love}</span></div><div><b>今日恋爱指数</b> <small>${now.getMonth()+1}月${now.getDate()}日 · ${GAN[td[0]]}${ZHI[td[1]]}日</small><br>${DAILY[tcat][2]}。</div><div class="yj"><span><b class="good">宜</b>${DAILY[tcat][0]}</span><span><b class="bad">忌</b>${DAILY[tcat][1]}</span><span><b>幸运色</b><i class="swatch" style="background:${LUCKC[o.xi[0]]}"></i>${LUCK[o.xi[0]][0].split("、")[0]}</span></div></div>`;
   const hero=`<div class="hero"><small class="meta">你的恋爱人格</small><div class="lbl">${persona(o)}</div><div class="one">${GAN[dm]}${WX[de]}日主，${o.strength}，喜${o.xi.map(i=>WX[i]).join("")}；太阳${XZ[sun]}、月亮${XZ[moon]}。${MINE[sun%4]}。</div><q>${LOVELINE[dm]}</q></div>`;
   return hero+`<h3>今日运势</h3>`+today+`<h3>性格</h3><dl>
     <dt>日主</dt><dd>${GAN[dm]}${WX[de]}，${DAYMASTER[dm]}<br>优点：${DMPLUS[dm][0]}；短板：${DMPLUS[dm][1]}。<br>建议：${DMPLUS[dm][2]}。</dd>
@@ -797,8 +940,8 @@ function selfReading(o,gender){
   <p class="note">传统命理与占星，仅供娱乐和自我了解。看清自己比算准对方更重要。</p>`;
 }
 function runSelf(){
-  const o=read("S"); if(!o){$("readS").innerHTML="<p>请先填好生日。</p>";return;}
-  render("S",o); $("readS").innerHTML=selfReading(o,$("genS").value);
+  const o=read("S"); if(!o){$("readS").innerHTML='<section class="blk"><p>请先填好生日。</p></section>';return;}
+  render("S",o); $("readS").innerHTML=cards(selfReading(o,$("genS").value),true);
 }
 const XZDATE=["3/21–4/19","4/20–5/20","5/21–6/21","6/22–7/22","7/23–8/22","8/23–9/22","9/23–10/23","10/24–11/22","11/23–12/21","12/22–1/19","1/20–2/18","2/19–3/20"];
 const NOUN=["大树守护者","藤蔓小可爱","小太阳","烛光诗人","靠山本山","暖心田园","钢铁直球","精致宝石","自由浪子","温柔雨滴"];
@@ -814,10 +957,14 @@ function findMatch(){
   const me=read("S"); if(!me) return;
   const g=$("genS").value, yg=Number($("younger").value), og=Number($("older").value);
   const [by,bm,bd]=$("dateS").value.split("-").map(Number);
-  const start=Date.UTC(by-og,bm-1,bd), end=Date.UTC(by+yg,bm-1,bd);
+  const free=yg===0&&og===0, FREE=12; // 上下都选 0：自由搭配，不限年龄。范围取上下各一轮生肖（12 岁）
+  const now=new Date(), today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()), adult=Date.UTC(now.getFullYear()-18,now.getMonth(),now.getDate());
+  const meAdult=Date.UTC(by,bm-1,bd)<=adult;
+  const start=Date.UTC(by-(free?FREE:og),bm-1,bd), end=Math.min(today,Date.UTC(by+(free?FREE:yg),bm-1,bd)); // 不会推荐还没出生的日期
   const all=[], bySign={}, byYear={}, byEl={};
   const acc=(o,k,v,lab)=>{(o[k]=o[k]||{sum:0,n:0,lab}).sum+=v;o[k].n++;};
   for(let t=start;t<=end;t+=864e5){
+    if(free&&meAdult&&t>adult) break; // 自由搭配时只看已经成年的人
     const D=new Date(t), y=D.getUTCFullYear(), m=D.getUTCMonth()+1, d=D.getUTCDate();
     const p=person(y,m,d,me.city);
     const [M,F]=g==="M"?[me,p]:[p,me];
@@ -827,32 +974,41 @@ function findMatch(){
     const yb=p.P[0][1], Y=((y-4)%12+12)%12===yb?y:y-1; acc(byYear,Y,s,SX[yb]);
     acc(byEl,el(p.P[2][0]),s);
   }
+  if(!all.length){ $("matchOut").innerHTML='<section class="blk"><p>这个范围里没有可以推荐的生日，换个范围试试。</p></section>'; return; }
   const avg=o=>Object.entries(o).map(([k,v])=>({k:Number(k),a:v.sum/v.n,lab:v.lab})).sort((a,b)=>b.a-a.a);
-  const signs=avg(bySign), years=avg(byYear).filter(x=>byYear[x.k].n>=200); let els=avg(byEl);
+  // 生肖和我相冲、相害的年份和生日不进推荐（传统合婚的忌讳），只在说明里提一句
+  const myYb=me.P[0][1], clash=yb=>{const r=rel(myYb,yb);return r==="chong"||r==="hai";};
+  const YREL={he:"生肖六合",san:"生肖三合",same:"同生肖",none:"生肖不冲不合",chong:"生肖相冲",hai:"生肖相害"};
+  let yearsAll=avg(byYear); const fullYears=yearsAll.filter(x=>byYear[x.k].n>=200); if(fullYears.length) yearsAll=fullYears;
+  yearsAll.forEach(x=>{x.yb=SX.indexOf(x.lab);});
+  let years=yearsAll.filter(x=>!clash(x.yb)); if(!years.length) years=yearsAll;
+  const cut=years[Math.min(2,years.length-1)].a, skipped=yearsAll.filter(x=>clash(x.yb)&&x.a>=cut);
+  const signs=avg(bySign); let els=avg(byEl);
   all.sort((a,b)=>b.s-a.s);
-  const top=all.slice(0,6);
-  const ec=[0,0,0,0,0]; all.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
+  let pool=all.filter(x=>!clash(x.p.P[0][1])); if(!pool.length) pool=all;
+  const top=pool.slice(0,free?10:6);
+  const ec=[0,0,0,0,0]; pool.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
   els.sort((a,b)=>ec[b.k]-ec[a.k]);
   const who=g==="M"?"她":"他";
   lastMatch={signs:signs.slice(0,3).map(x=>XZ[x.k]),year:years[0],el:els[0].k};
-  $("matchOut").innerHTML=`
+  $("matchOut").innerHTML=cards(`
    <h3>最配的星座</h3><ul class="rank">${signs.slice(0,5).map((x,i)=>`<li><span class="no">${i+1}</span><span>${XZ[x.k]}座 <small>${XZDATE[x.k]} · ${XEL[x.k%4]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
    <p class="note">分数是这个星座期间出生的所有人和你合婚的平均分。最不配的是${XZ[signs[signs.length-1].k]}座（${Math.round(signs[signs.length-1].a)}分）。</p>
-   <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
-   <p class="note">按农历生肖年（立春到立春）统计。</p>
-   <h3>最配的具体生日</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>
+   <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"} · ${YREL[rel(myYb,x.yb)]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
+   <p class="note">按农历生肖年（立春到立春）统计。和你生肖相冲、相害的年份和生日不列入推荐${skipped.length?`：${skipped.map(x=>`${x.k}年属${x.lab}（${YREL[rel(myYb,x.yb)].slice(2)}）`).join("、")}平均分也不低，但没有列入`:""}。</p>
+   <h3>${free?"分数最高的十个生日":"最配的具体生日"}</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>${free?`<p class="note">两个都选了 0，按自由搭配来找：不限年龄，范围是比你大 ${FREE} 岁到小 ${FREE} 岁之间${meAdult?"、已经成年":""}的人。</p>`:""}
    <h3>你的理想型画像（心动前先对照）</h3>
    <p>${who}最好是<b>${WX[els[0].k]}日主</b>的人（${DMTYPE.filter((_,i)=>el(i)===els[0].k).join("或")}型），性格上${DAYMASTER[els[0].k*2].split("：")[1].replace(/。$/,"")}。星座上优先找${lastMatch.signs.join("、")}座，年份上${years[0].k}年属${years[0].lab}的人和你最有缘。</p>
-   <p class="note">具体生日按中午出生估算，没算时柱和上升星座，真遇到了可以去"合婚配对"里填准确时间再算一次。</p>`;
+   <p class="note">具体生日按中午出生估算，没算时柱和上升星座，真遇到了可以去"合婚配对"里填准确时间再算一次。</p>`);
 }
-function scoreCard(html){$("cardSlot").innerHTML=`<div class="sc-card">${html}<div class="foot">心动气象台 · 八字 × 星座 · 仅供娱乐</div></div>`;$("overlay").hidden=false;}
+function scoreCard(html){$("cardSlot").innerHTML=`<div class="sc-card">${html}<div class="foot">对盘 · 八字 × 星座 · 仅供娱乐</div></div>`;$("overlay").hidden=false;}
 $("overlay").addEventListener("click",e=>{ if(!e.target.closest(".sc-card")) $("overlay").hidden=true; });
+const cardTop=(kind,title)=>`<div class="sc-top"><div class="brand"><span class="wm">${WORDMARK}<i>${kind}</i></span><span class="mascot">${MASCOT}</span></div><h4>${title}</h4></div>`;
 $("shareSelf").addEventListener("click",()=>{
   const o=read("S"); if(!o) return; const dm=o.P[2][0], sun=signOf(o.sun), moon=signOf(o.moon);
   const nm=($("nameS").value.trim()||"我").replace(/（示例）/,"");
-  scoreCard(`<div class="brand"><span>我的命盘</span><span><svg viewBox="0 0 120 100" width="84" height="70"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--ink)"/><circle cx="61" cy="50" r="3.6" fill="var(--ink)"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--seal)"/></svg></span></div>
-   <h4>${nm}</h4>
-   <div class="gz4">${o.P.map((p,i)=>`<div><small>${"年月日时"[i]}</small>${p?GAN[p[0]]+"<br>"+ZHI[p[1]]:"？<br>？"}</div>`).join("")}</div>
+  scoreCard(cardTop("我的命盘",nm)+`
+   <div class="gz4">${o.P.map((p,i)=>`<div><small>${"年月日时"[i]}</small>${p?`<b class="el-${el(p[0])}">${GAN[p[0]]}</b><b class="el-${ZEL[p[1]]}">${ZHI[p[1]]}</b>`:"<b>？</b><b>？</b>"}</div>`).join("")}</div>
    <div class="mid">${persona(o)}</div>
    <div class="chips"><span>☉ ${XZ[sun]}</span><span>☽ ${XZ[moon]}</span><span>↑ ${o.asc==null?"未知":XZ[signOf(o.asc)]}</span><span>属${SX[o.P[0][1]]}</span><span>喜${o.xi.map(i=>WX[i]).join("")}</span></div>
    <ul><li>「${LOVELINE[dm]}」</li><li>${DMPLUS[dm][0]}</li><li>恋爱：${SUNPLUS[sun][2]}</li>${lastMatch?`<li>最配：${lastMatch.signs.join("、")}座，${lastMatch.year.k}年属${lastMatch.year.lab}</li>`:`<li>情绪需求：${MOONTXT[moon]}</li>`}</ul>`);
@@ -862,36 +1018,34 @@ $("sharePair").addEventListener("click",()=>{
   const B=bazi(M,F), X=stars(M,F), s=Math.round(B.s*0.6+X.s*0.4), [v]=verdict(s);
   const pos=B.items.filter(i=>i.p>0).sort((a,b)=>b.p-a.p).slice(0,2).map(i=>`${i.k}：${i.t.split("。")[1]||i.t.split("。")[0]}`);
   const bx=X.items.filter(i=>i.p!=null).sort((a,b)=>b.p-a.p)[0];
-  scoreCard(`<div class="brand"><span>合婚帖</span><span><svg viewBox="0 0 120 100" width="84" height="70"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--ink)"/><circle cx="61" cy="50" r="3.6" fill="var(--ink)"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--seal)"/></svg></span></div>
-   <h4>${M.name.replace(/（示例）/,"")} × ${F.name.replace(/（示例）/,"")}</h4>
-   <div class="big">${s}</div><div class="mid">${v}</div>
+  scoreCard(cardTop("合婚帖",`${M.name.replace(/（示例）/,"")} × ${F.name.replace(/（示例）/,"")}`)+`
+   <div class="big"><b>${s}</b></div><div class="mid">${v}</div>
    <div class="chips"><span>属${SX[M.P[0][1]]} × 属${SX[F.P[0][1]]}</span><span>${XZ[signOf(M.sun)]} × ${XZ[signOf(F.sun)]}</span></div>
    <ul>${pos.map(t=>`<li>${t}</li>`).join("")}<li>${bx.k}：${bx.t.split("。").slice(0,2).join("，")}</li></ul>`);
 });
-$("findBtn").addEventListener("click",()=>{ $("matchOut").innerHTML="<p>正在帮你一天一天地筛……</p>"; setTimeout(findMatch,30); });
+$("findBtn").addEventListener("click",()=>{ $("matchOut").innerHTML='<section class="blk"><p>正在帮你一天一天地筛……</p></section>'; setTimeout(findMatch,30); });
+let view="self"; // 当前显示哪个标签页：self / match / pair
 function route(){
-  const h=location.hash, pair=h==="#pair", match=h==="#match";
+  const pair=view==="pair", match=view==="match";
   $("viewMe").hidden=pair; $("viewPair").hidden=!pair;
   $("viewSelf").hidden=pair||match; $("viewMatch").hidden=!match;
   $("tabSelf").setAttribute("aria-current",!pair&&!match?"page":"false");
   $("tabMatch").setAttribute("aria-current",match?"page":"false");
   $("tabPair").setAttribute("aria-current",pair?"page":"false");
   if(pair) run(); else runSelf();
+  // 切换标签时如果已经滚到下面，就回到内容开头
+  const m=document.querySelector(".mast"), y=m.offsetTop+m.offsetHeight+6;
+  if(window.scrollY>y) window.scrollTo(0,y);
 }
 $("toPair").addEventListener("click",()=>{
   const g=$("genS").value;
   ["name","date","time","city"].forEach(k=>$(k+g).value=$(k+"S").value);
   $("unk"+g).checked=$("unkS").checked;
-  location.hash="#pair"; route(); window.scrollTo(0,0);
+  openTab("pair"); window.scrollTo(0,0);
 });
 $("go").addEventListener("click",run);
 ["date","time","city","unk","name"].forEach(k=>["M","F"].forEach(s=>$(k+s).addEventListener("change",run)));
 ["date","time","city","unk","name","gen"].forEach(k=>$(k+"S").addEventListener("change",runSelf));
-function setPal(k){ if(k) document.documentElement.setAttribute("data-palette",k); else document.documentElement.removeAttribute("data-palette");
-  document.querySelectorAll(".palette button").forEach(b=>b.setAttribute("aria-pressed",String(b.id==="pal-"+k)));
-  try{localStorage.setItem("palette",k);}catch(e){} }
-document.querySelectorAll(".palette button").forEach(b=>b.addEventListener("click",()=>setPal(b.id.slice(4))));
-let sp=""; try{sp=localStorage.getItem("palette")||"";}catch(e){} setPal(sp);
 function toast(t){const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,1800);}
 let PEOPLE=[]; try{PEOPLE=JSON.parse(localStorage.getItem("people")||"[]");}catch(e){PEOPLE=[];}
 function savePeople(){try{localStorage.setItem("people",JSON.stringify(PEOPLE));}catch(e){}}
@@ -914,8 +1068,12 @@ fillSaved();
 let seen=false; try{seen=localStorage.getItem("guideSeen")==="1";}catch(e){}
 $("guide").hidden=seen;
 $("guideX").addEventListener("click",()=>{$("guide").hidden=true;try{localStorage.setItem("guideSeen","1");}catch(e){}});
-window.addEventListener("hashchange",route);
-route();
+// 标签页由脚本直接切换，不依赖链接跳转：有些内嵌的浏览器会拦截或改写 #链接，导致点了没反应
+function setView(v){ view=(v==="match"||v==="pair")?v:"self"; route(); }
+function openTab(v){ setView(v); try{ if(location.hash!=="#"+view) location.hash="#"+view; }catch(e){} }
+[["tabSelf","self"],["tabMatch","match"],["tabPair","pair"]].forEach(([id,v])=>$(id).addEventListener("click",e=>{ e.preventDefault(); openTab(v); }));
+window.addEventListener("hashchange",()=>{ const v=location.hash.slice(1), n=(v==="match"||v==="pair")?v:"self"; if(n!==view) setView(n); });
+setView(location.hash.slice(1));
 </script>
-
+</body>
 </html>
