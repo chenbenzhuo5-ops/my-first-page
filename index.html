@@ -10,16 +10,17 @@
 <meta property="og:description" content="观己，知人，而后动心。融合东方八字命理与西方占星体系的关系洞察工具。">
 <meta name="theme-color" content="#f4f5fa" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1017" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235b67f1'/%3E%3Ccircle cx='25' cy='32' r='15' fill='%23fff' fill-opacity='.95'/%3E%3Ccircle cx='39' cy='32' r='15' fill='%23f76fa3' fill-opacity='.9'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233b55e6'/%3E%3Ccircle cx='25' cy='32' r='15' fill='%23fff' fill-opacity='.95'/%3E%3Ccircle cx='39' cy='32' r='15' fill='%23ffcf5c' fill-opacity='.95'/%3E%3C/svg%3E">
 <style>
 /* ============ 对盘 · 界面样式 ============
-   颜色都集中在下面的 :root 里：
-   --seal 主色，--seal-2 渐变的另一头，--b 点缀色（两个"盘"的两种颜色） */
+   全站固定一套蓝色，男女通用。颜色都集中在下面的 :root 里：
+   --seal 主色（靛蓝），--seal-2 渐变的另一头（亮蓝），--b 更亮的湖蓝，--gold 只用在小爱心上 */
 :root{
   color-scheme:light;
-  --seal:#5b67f1; --seal-2:#8a5cf0; --b:#f76fa3;
-  --seal-ink:#4450d6; --seal-lite:#a8b0ff;
-  --a-rgb:91,103,241; --b-rgb:247,111,163;
+  --seal:#3b55e6; --seal-2:#2a7de1; --b:#1fa2e8;
+  --seal-ink:#2f47cc; --seal-lite:#9db1ff;
+  --a-rgb:59,85,230; --b-rgb:31,162,232;
+  --gold:#ffcf5c; --gold-ink:#dd9f1f;
 
   --bg:#f4f5fa; --paper:#fff; --soft:#f2f3f8; --ink:#1d2030; --ink2:#4c5167; --muted:#70758a; --line:#e8e9f1;
   --glass:rgba(255,255,255,.93); --at:var(--seal-ink);
@@ -33,24 +34,18 @@
   --body:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans","Noto Sans SC","Noto Sans CJK SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
   --num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Noto Sans CJK SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
 }
-/* 可切换的配色 */
-:root[data-palette="haze"]{--seal:#5b7896;--seal-2:#6f7fa6;--b:#a9bccf;--seal-ink:#486481;--seal-lite:#a9c0d8;--a-rgb:91,120,150;--b-rgb:169,188,207}
-:root[data-palette="blue"]{--seal:#2f7fe6;--seal-2:#4767e6;--b:#6cc3f5;--seal-ink:#2466c4;--seal-lite:#8fbcff;--a-rgb:47,127,230;--b-rgb:108,195,245}
-:root[data-palette="pink"]{--seal:#e24d83;--seal-2:#e85a70;--b:#ffb38a;--seal-ink:#cf3f74;--seal-lite:#ff9dbb;--a-rgb:226,77,131;--b-rgb:255,179,138}
-:root[data-palette="mint"]{--seal:#16957a;--seal-2:#1a8fa8;--b:#7fdcb9;--seal-ink:#0f7a63;--seal-lite:#6fdcc0;--a-rgb:22,149,122;--b-rgb:127,220,185}
-:root[data-palette="taro"]{--seal:#8b6fe8;--seal-2:#a660d8;--b:#f0a3d8;--seal-ink:#6f51d1;--seal-lite:#c0adff;--a-rgb:139,111,232;--b-rgb:240,163,216}
 /* 深色模式（跟随手机系统设置；第二段是给能手动切换深浅色的环境用的，内容相同） */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
   --bg:#0f1017; --paper:#191b26; --soft:#242735; --ink:#eef0f8; --ink2:#c3c7d8; --muted:#8e94aa; --line:#2b2e3f;
-  --glass:rgba(25,27,38,.93); --at:var(--seal-lite);
+  --glass:rgba(25,27,38,.93); --at:var(--seal-lite); --gold-ink:#ffcf5c;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
   --wood:#5fcf9c; --fire:#ff8479; --earth:#e3b057; --metal:#aab3c9; --water:#6eb0f5;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#0f1017; --paper:#191b26; --soft:#242735; --ink:#eef0f8; --ink2:#c3c7d8; --muted:#8e94aa; --line:#2b2e3f;
-  --glass:rgba(25,27,38,.93); --at:var(--seal-lite);
+  --glass:rgba(25,27,38,.93); --at:var(--seal-lite); --gold-ink:#ffcf5c;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
   --wood:#5fcf9c; --fire:#ff8479; --earth:#e3b057; --metal:#aab3c9; --water:#6eb0f5;
 }
@@ -85,15 +80,12 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .mast .slogan{margin:18px 0 0;font-size:17px;line-height:1.4;font-weight:700;letter-spacing:.08em}
 .mast .intro{margin:6px 0 0;font-size:13px;line-height:1.75;opacity:.95}
 .mast .intro span{display:block;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance} /* 两句各占一段；只在标点处换行，不把词拆开 */
-.mast .mascot{position:absolute;right:14px;top:48px;width:84px;animation:bob 3.2s ease-in-out infinite}
-.mast,.sc-top{--m-body:#fff;--m-ink:#262a45;--m-tail:#fff;--m-heart:#ffd166}
+.mast .mascot{position:absolute;right:16px;top:20px;width:96px;animation:bob 3.2s ease-in-out infinite}
+.mast,.sc-top{--m-body:#fff;--m-ink:#262a45;--m-tail:#fff;--m-heart:var(--gold)}
 .mascot svg{display:block;width:100%;height:auto}
 @keyframes bob{50%{transform:translateY(-5px) rotate(-3deg)}}
-.palette{position:absolute;top:12px;right:12px;display:flex;gap:7px;padding:5px 6px;border-radius:99px;background:rgba(255,255,255,.24)}
-.palette button{width:22px;height:22px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.95);transition:transform .15s}
-.palette button[aria-pressed="true"]{transform:scale(1.18);box-shadow:0 0 0 2px rgba(255,255,255,.55),0 2px 6px rgba(0,0,0,.2)}
 @media (max-width:343px){.mast .intro span{word-break:normal}} /* 特别窄的屏幕放不下整句，恢复普通换行 */
-@media (max-width:359px){.mast h1 svg{height:40px}.mast .slogan{font-size:15px}.palette{gap:5px}.palette button{width:18px;height:18px}.mast .mascot{width:74px}}
+@media (max-width:359px){.mast h1 svg{height:40px}.mast .slogan{font-size:15px}.mast .mascot{width:84px}}
 
 /* ---------- 标签页 ---------- */
 .tabs{position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;border-radius:18px;
@@ -290,7 +282,7 @@ details.dict dd{margin:0;color:var(--ink2)}
 .sc-card .chips span{padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--ink2)}
 .sc-card ul{list-style:none;padding:12px 14px;border-radius:16px;background:var(--soft);display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.55;color:var(--ink2)}
 .sc-card ul li{position:relative;padding-left:18px}
-.sc-card ul li::before{content:"♥";position:absolute;left:0;top:1px;font-size:11px;color:var(--b)}
+.sc-card ul li::before{content:"♥";position:absolute;left:0;top:1px;font-size:11px;color:var(--gold-ink)}
 .sc-card .foot{text-align:center;font-size:11px;letter-spacing:.08em;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:60;transform:translateX(-50%);padding:8px 18px;border-radius:99px;
   background:rgba(29,32,48,.92);color:#fff;font-size:13px;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.2)}
@@ -301,14 +293,6 @@ details.dict dd{margin:0;color:var(--ink2)}
 <body>
 <div class="wrap">
   <header class="mast">
-    <div class="palette" role="group" aria-label="换个颜色">
-      <button type="button" id="pal-" title="极光" aria-label="配色：极光" style="background:linear-gradient(135deg,#5b67f1,#f76fa3)"></button>
-      <button type="button" id="pal-haze" title="雾霾蓝" aria-label="配色：雾霾蓝" style="background:linear-gradient(135deg,#5b7896,#a9bccf)"></button>
-      <button type="button" id="pal-blue" title="奶油蓝" aria-label="配色：奶油蓝" style="background:linear-gradient(135deg,#2f7fe6,#6cc3f5)"></button>
-      <button type="button" id="pal-pink" title="樱花粉" aria-label="配色：樱花粉" style="background:linear-gradient(135deg,#e24d83,#ffb38a)"></button>
-      <button type="button" id="pal-mint" title="薄荷绿" aria-label="配色：薄荷绿" style="background:linear-gradient(135deg,#16957a,#7fdcb9)"></button>
-      <button type="button" id="pal-taro" title="香芋紫" aria-label="配色：香芋紫" style="background:linear-gradient(135deg,#8b6fe8,#f0a3d8)"></button>
-    </div>
     <!-- 字标是画好的矢量轮廓（字形取自 Noto Serif CJK SC Bold，SIL OFL 1.1 授权），所以在任何手机上都长得一样 -->
     <h1 id="wordmark"><svg viewBox="0 0 1025 470" role="img" aria-label="对盘"><path fill="currentColor" d="M226 186 222 190C248 220 259 266 264 295C307 344 372 233 226 186ZM428 83 400 126V25C412 23 417 18 418 11L342 4V126H214L218 141H342V394C342 400 338 403 329 403C316 403 250 400 250 400V406C280 411 294 418 304 427C313 436 316 450 318 470C390 462 400 439 400 398V141H463C470 141 475 138 476 133C460 114 428 83 428 83ZM40 128 33 132C65 167 93 212 115 258C88 328 50 393 0 443L6 448C64 411 107 364 140 312C148 334 154 354 158 370C184 437 246 396 212 320C202 298 188 275 171 253C194 200 209 145 218 92C230 90 236 88 239 83L186 35L156 67H11L16 82H160C154 123 144 166 132 208C106 180 75 154 40 128ZM740 82 736 85C752 98 768 124 772 145C820 176 861 83 740 82ZM981 398 959 434H953V328C961 327 966 324 968 321L917 282L891 309H676L616 286C677 258 699 216 705 170H876V225C876 232 874 234 866 234L816 232C820 211 800 183 735 178L731 182C748 197 766 224 768 248C788 262 806 254 814 240C834 244 842 249 850 256C856 264 859 277 860 294C925 288 934 268 934 231V170H1012C1018 170 1024 168 1025 162C1006 143 974 114 974 114L944 156H934V83C944 81 952 77 954 72L896 30L870 60H768L812 28C823 26 830 22 832 14L748 0L740 60H716L651 36V142L650 156H556L560 170H650C645 220 624 266 563 299L567 304C584 299 600 294 614 287V434H556L560 448H1008C1014 448 1019 446 1020 440C1007 424 981 398 981 398ZM707 74H876V156H706L707 142ZM896 324V434H856V324ZM670 324H710V434H670ZM803 324V434H762V324Z"/></svg></h1>
     <span class="kind">八字 × 星座</span>
@@ -735,7 +719,7 @@ function dayun(c,gender,birthYear){
 }
 const $=id=>document.getElementById(id);
 // 吉祥物：页面顶部和上头卡共用这一份
-const MASCOT=`<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--m-tail,var(--seal))" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--m-body,var(--paper))" stroke="var(--m-ink,var(--ink))" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><circle cx="61" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--m-ink,var(--ink))" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--b)" opacity=".6"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--b)" opacity=".6"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--m-heart,var(--b))"/></svg>`;
+const MASCOT=`<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--m-tail,var(--seal))" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--m-body,var(--paper))" stroke="var(--m-ink,var(--ink))" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><circle cx="61" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--m-ink,var(--ink))" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="#ff9db0" opacity=".75"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="#ff9db0" opacity=".75"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--m-heart,var(--b))"/></svg>`;
 $("mascot").innerHTML=MASCOT;
 // 字标「对盘」：直接取页面顶部那一份，上头卡里共用
 const WORDMARK=$("wordmark").innerHTML;
@@ -1047,11 +1031,6 @@ $("toPair").addEventListener("click",()=>{
 $("go").addEventListener("click",run);
 ["date","time","city","unk","name"].forEach(k=>["M","F"].forEach(s=>$(k+s).addEventListener("change",run)));
 ["date","time","city","unk","name","gen"].forEach(k=>$(k+"S").addEventListener("change",runSelf));
-function setPal(k){ if(k) document.documentElement.setAttribute("data-palette",k); else document.documentElement.removeAttribute("data-palette");
-  document.querySelectorAll(".palette button").forEach(b=>b.setAttribute("aria-pressed",String(b.id==="pal-"+k)));
-  try{localStorage.setItem("palette",k);}catch(e){} }
-document.querySelectorAll(".palette button").forEach(b=>b.addEventListener("click",()=>setPal(b.id.slice(4))));
-let sp=""; try{sp=localStorage.getItem("palette")||"";}catch(e){} setPal(sp);
 function toast(t){const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,1800);}
 let PEOPLE=[]; try{PEOPLE=JSON.parse(localStorage.getItem("people")||"[]");}catch(e){PEOPLE=[];}
 function savePeople(){try{localStorage.setItem("people",JSON.stringify(PEOPLE));}catch(e){}}
