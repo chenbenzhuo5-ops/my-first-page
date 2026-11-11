@@ -1,152 +1,921 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>陈本灼 · 个人介绍</title>
-  <style>
-    :root {
-      --bg: #f2f8f7;
-      --card: #ffffff;
-      --text: #1f3b3a;
-      --muted: #5b7573;
-      --accent: #2bb3a3;
-      --accent-soft: #e3f5f2;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>心动气象台</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 布局：两张"庚帖"并列（手机上叠放），下方是合婚批语：总分、八字细项、星盘细项、相处建议 */
+:root{
+  --bg:#f4f4f3; --paper:#ffffff; --ink:#3d3d3d; --muted:#8b8b8b; --line:#e4e4e2;
+  --seal:#4a4a4a; --onseal:#ffffff; --gold:#a88b5d; --soft:#efefed;
+  --wood:#6f9a80; --fire:#c27c72; --earth:#b59660; --metal:#8f96a0; --water:#6f8cab;
+  --display:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",sans-serif;
+  --body:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+:root[data-palette="haze"]{--bg:#f1f3f4; --paper:#fafbfb; --ink:#4a5560; --muted:#8a949d; --line:#dde3e7; --seal:#7c94a8; --gold:#b39a72; --soft:#eef1f3}
+:root[data-palette="blue"]{--bg:#eef4fa; --paper:#ffffff; --ink:#34465c; --muted:#75879b; --line:#d6e3ef; --seal:#6c9bcf; --gold:#c79a52; --soft:#e6eff8}
+:root[data-palette="pink"]{--bg:#faf3f4; --paper:#ffffff; --ink:#4d3a40; --muted:#94808a; --line:#efdde2; --seal:#d98a9e; --gold:#c39a6b; --soft:#f8eaee}
+:root[data-palette="mint"]{--bg:#f1f6f3; --paper:#ffffff; --ink:#36483f; --muted:#7d8f86; --line:#d9e6df; --seal:#6fae94; --gold:#b89a62; --soft:#e7f1ec}
+:root[data-palette="taro"]{--bg:#f5f3f8; --paper:#ffffff; --ink:#433b52; --muted:#8a8297; --line:#e3ddeb; --seal:#9b88c4; --gold:#c2a06a; --soft:#eeeaf5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1f1f1f; --paper:#292929; --ink:#e4e4e4; --muted:#9c9c9c; --line:#3b3b3b;
+  --seal:#d6d6d6; --onseal:#1f1f1f; --gold:#c8ad80; --soft:#323232;
+  --wood:#8fb59c; --fire:#cf968d; --earth:#c9ad7c; --metal:#a8aeb7; --water:#90a9c4; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1f1f1f; --paper:#292929; --ink:#e4e4e4; --muted:#9c9c9c; --line:#3b3b3b;
+  --seal:#d6d6d6; --onseal:#1f1f1f; --gold:#c8ad80; --soft:#323232;
+  --wood:#8fb59c; --fire:#cf968d; --earth:#c9ad7c; --metal:#a8aeb7; --water:#90a9c4; color-scheme:dark}
+body{background:var(--bg);background-image:radial-gradient(var(--line) 1px,transparent 1.1px);background-size:22px 22px;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:20px}
+header{display:flex;align-items:center;gap:14px}
+.mascot{flex:none;line-height:0;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-3deg)}}
+@media (prefers-reduced-motion:reduce){.mascot{animation:none}}
+h1{font-family:var(--display);font-weight:400;font-size:34px;margin:0;letter-spacing:.04em;color:var(--seal);text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.pair{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h2{margin:0;font-family:var(--display);font-weight:400;font-size:20px;display:flex;align-items:center;gap:8px}
+.tag{font-family:var(--body);font-size:12px;color:var(--onseal);background:var(--seal);border-radius:999px;padding:0 8px}
+label{font-size:12px;color:var(--muted);letter-spacing:.05em;display:flex;flex-direction:column;gap:4px;min-width:0}
+input,select{font:inherit;color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0;width:100%;box-sizing:border-box}
+input[type=checkbox]{width:auto}
+label.chk{flex-direction:row;align-items:center;gap:6px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tbl{display:grid;grid-template-columns:auto repeat(4,1fr);gap:2px 4px;text-align:center;align-items:center}
+.tbl .rh{font-size:11px;color:var(--muted);text-align:left;white-space:nowrap}
+.tbl .h{font-size:11px;color:var(--muted);letter-spacing:.1em}
+.tbl .ss{font-size:12px;color:var(--gold)}
+.tbl .gz{font-family:var(--display);font-size:26px;line-height:1.15}
+.tbl .ny{font-size:11px;color:var(--muted)}
+.na{color:var(--line)}
+.el-0{color:var(--wood)}.el-1{color:var(--fire)}.el-2{color:var(--earth)}.el-3{color:var(--metal)}.el-4{color:var(--water)}
+.wxbars{display:flex;flex-direction:column;gap:3px;font-size:12px}
+.wxbars div{display:grid;grid-template-columns:1.5em 1fr 2.2em;gap:6px;align-items:center}
+.wxbars i{display:block;height:6px;border-radius:3px;background:currentColor;opacity:.75}
+.wxbars span:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
+.facts span{border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+.meta{font-size:12px;color:var(--muted);margin:0}
+button.go{font-family:var(--display);font-size:20px;letter-spacing:.1em;color:var(--onseal);background:var(--seal);border:none;border-radius:999px;padding:12px;cursor:pointer;transition:transform .1s}
+button.go:active,button.alt:active{transform:translateY(1px)}
+.result{background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:20px 16px;display:flex;flex-direction:column;gap:14px}
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.num{font-family:var(--display);font-size:64px;line-height:1;color:var(--seal);font-variant-numeric:tabular-nums}
+.verdict{font-family:var(--display);font-size:26px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--seal));transition:width .6s}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.split div{border:2px solid var(--line);border-radius:14px;padding:8px 12px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.split b{font-family:var(--display);font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
+.split small{color:var(--muted);font-size:12px}
+.sect{font-family:var(--display);font-size:18px;margin:6px 0 -6px;color:var(--gold)}
+ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+ul.items li{display:grid;grid-template-columns:4.5em 1fr auto;gap:10px;align-items:start;border-top:1px dashed var(--line);padding-top:8px}
+.k{font-size:12px;color:var(--muted);padding-top:2px}
+.pts{font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+.pos{color:var(--wood)}.neg{color:var(--fire)}.zero{color:var(--muted)}
+ul.tips{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.note{font-size:12px;color:var(--muted);margin:0}
+.summary{margin:0}
+.palette{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.palette button{width:24px;height:24px;border-radius:50%;border:2px solid var(--paper);box-shadow:0 0 0 1.5px var(--line);cursor:pointer;padding:0}
+.palette button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:4px}
+.tabs a{text-align:center;padding:8px 4px;border-radius:999px;color:var(--muted);text-decoration:none;font-family:var(--display);font-size:17px;white-space:nowrap}
+.tabs a[aria-current="page"]{background:var(--seal);color:var(--onseal)}
+.reading{display:flex;flex-direction:column;gap:6px}
+.reading h3{margin:6px 0 0;font-family:var(--display);font-weight:400;font-size:18px;color:var(--gold)}
+.reading p{margin:0}
+.reading dl{margin:0;display:grid;grid-template-columns:4.5em 1fr;gap:6px 10px}
+.reading dt{font-size:12px;color:var(--muted);padding-top:3px}
+.reading dd{margin:0}
+.swatch{display:inline-block;width:.9em;height:.9em;border-radius:50%;vertical-align:-1px;margin-right:3px;border:1px solid var(--line)}
+.yun{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+@media (max-width:480px){.yun{grid-template-columns:repeat(2,1fr)}}
+.yun div{border:2px solid var(--line);border-radius:14px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.yun div.now{border-color:var(--seal);box-shadow:inset 0 0 0 1px var(--seal)}
+.yun b{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.1}
+.yun small{font-size:11px;color:var(--muted)}
+.yun em{font-style:normal;font-size:12px}
+.good{color:var(--wood)}.bad{color:var(--fire)}
+details.dict{background:var(--paper);border:1.5px dashed var(--line);border-radius:22px;padding:10px 16px}
+details.dict summary{cursor:pointer;font-family:var(--display);font-size:18px;color:var(--gold)}
+details.dict dl{margin:8px 0 0;display:grid;grid-template-columns:5em 1fr;gap:6px 10px;font-size:14px}
+details.dict dt{color:var(--muted)}
+details.dict dd{margin:0}
+.tbl .cg{font-size:11px;color:var(--muted);letter-spacing:.05em}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.btns{grid-template-columns:1fr}}
+.rank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.rank li{display:grid;grid-template-columns:1.6em 1fr auto;gap:8px;align-items:center;border-top:1px dashed var(--line);padding-top:6px}
+.rank .no{font-family:var(--display);font-size:20px;color:var(--seal);text-align:center}
+.rank .sc{font-variant-numeric:tabular-nums;font-family:var(--display);font-size:20px}
+.rank small{color:var(--muted);font-size:12px}
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(10,14,15,.72);display:flex;align-items:center;justify-content:center;
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow:auto}
+.overlay p.hint{color:#fff;font-size:13px;text-align:center;margin:10px 0 0}
+.overlay .box{display:flex;flex-direction:column;align-items:center;max-height:100%}
+.sc-card{width:min(360px,100%);aspect-ratio:3/4.6;max-width:100%;box-sizing:border-box;border-radius:28px;overflow:hidden;position:relative;
+  background:var(--bg);background-image:radial-gradient(var(--line) 1.4px,transparent 1.5px);background-size:20px 20px;color:var(--ink);border:1.5px solid var(--line);
+  padding:20px 20px;display:flex;flex-direction:column;gap:10px;font-family:var(--body)}
+.sc-card .brand{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:15px;color:var(--seal)}
+.sc-card .brand svg{width:56px;height:46px}
+.sc-card h4{margin:0;font-family:var(--display);font-weight:400;font-size:28px;text-align:center;line-height:1.2;text-wrap:balance}
+.sc-card .big{font-family:var(--display);font-size:76px;color:var(--seal);text-align:center;line-height:1;text-shadow:none}
+.sc-card .mid{font-family:var(--display);font-size:24px;text-align:center;color:var(--ink);background:var(--soft);border:1.5px solid var(--line);border-radius:999px;align-self:center;padding:0 16px}
+.sc-card .gz4{display:flex;justify-content:center;gap:12px;font-family:var(--display);font-size:28px;line-height:1.1;text-align:center}
+.sc-card .gz4>div{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:4px 8px}
+.sc-card .gz4 small{display:block;font-family:var(--body);font-size:10px;color:var(--muted)}
+.sc-card ul{margin:0;padding:10px 12px;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:13px;line-height:1.55;background:var(--paper);border:1.5px dashed var(--line);border-radius:16px}
+.sc-card ul li::before{content:"♥ ";color:var(--seal);font-size:11px}
+.sc-card .foot{margin-top:auto;text-align:center;font-size:11px;color:var(--muted);letter-spacing:.06em}
+.sc-card .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:12px}
+.sc-card .chips span{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+.guide{background:var(--soft);border:1.5px dashed var(--seal);border-radius:18px;padding:12px 16px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.guide ol{margin:0;padding-left:1.3em}
+.guide .x{align-self:flex-end;font:inherit;font-size:13px;background:var(--seal);color:var(--onseal);border:none;border-radius:999px;padding:4px 14px;cursor:pointer}
+.saved{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:end}
+button.mini{font:inherit;font-size:13px;background:var(--seal);color:var(--onseal);border:none;border-radius:999px;padding:8px 12px;cursor:pointer;white-space:nowrap}
+button.mini.ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line)}
+.hero{display:flex;flex-direction:column;gap:6px;text-align:center;padding:4px 0 10px;border-bottom:1.5px dashed var(--line)}
+.hero .lbl{font-family:var(--display);font-size:30px;color:var(--seal);line-height:1.2}
+.hero .one{color:var(--ink)}
+.hero q{color:var(--muted);font-size:14px}
+.today{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:var(--soft);border-radius:16px;padding:12px}
+.today .ring{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:26px;color:var(--seal);background:conic-gradient(var(--seal) calc(var(--v)*1%),var(--line) 0);position:relative}
+.today .ring span{background:var(--soft);width:58px;height:58px;border-radius:50%;display:grid;place-items:center}
+.today small{color:var(--muted);font-size:12px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:6px 16px;border-radius:999px;font-size:13px;z-index:60}
+button.alt{font:inherit;font-family:var(--display);font-size:18px;color:var(--ink);background:var(--soft);border:1.5px solid var(--line);border-radius:999px;padding:10px;cursor:pointer}
+</style>
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<div class="wrap">
+  <header>
+    <div class="mascot" aria-hidden="true"><svg viewBox="0 0 120 100" width="84" height="70"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--ink)"/><circle cx="61" cy="50" r="3.6" fill="var(--ink)"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--seal)"/></svg></div>
+    <div>
+      <h1>心动气象台</h1>
+      <p class="sub">先看清自己，再决定要不要上头。下面是示例，换成真实信息再测</p>
+    </div>
+  </header>
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-      background: linear-gradient(160deg, #e8f6f3 0%, #eef4fb 100%);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
-                   "Microsoft YaHei", "Segoe UI", sans-serif;
-      line-height: 1.6;
-    }
+  <div class="palette" role="group" aria-label="换个颜色">换个颜色
+    <button id="pal-" title="中性灰" style="background:#4a4a4a"></button><button id="pal-haze" title="雾霾蓝" style="background:#7c94a8"></button><button id="pal-blue" title="奶油蓝" style="background:#6c9bcf"></button><button id="pal-pink" title="樱花粉" style="background:#d98a9e"></button><button id="pal-mint" title="薄荷绿" style="background:#6fae94"></button><button id="pal-taro" title="香芋紫" style="background:#9b88c4"></button>
+  </div>
+  <nav class="tabs"><a href="#self" id="tabSelf">我的命盘</a><a href="#match" id="tabMatch">理想另一半</a><a href="#pair" id="tabPair">合婚配对</a></nav>
 
-    .card {
-      width: 100%;
-      max-width: 440px;
-      background: var(--card);
-      border-radius: 20px;
-      padding: 36px 28px;
-      box-shadow: 0 10px 30px rgba(43, 179, 163, 0.12);
-      text-align: center;
-    }
+  <div id="viewMe" class="wrap" style="padding:0">
+    <section class="guide" id="guide" hidden>
+      <b>第一次来？三步就会玩</b>
+      <ol><li>在下面填你的生日、时间和城市</li><li>往下看命盘、恋爱人格和今日运势</li><li>点"理想另一半"或"合婚配对"，和别人配一配</li></ol>
+      <button class="x" id="guideX" aria-label="关闭引导">知道了</button>
+    </section>
+    <section class="card">
+      <h2>我的生辰</h2>
+      <div class="saved"><label>已保存的人<select id="savedS"><option value="">— 选一个人填进来 —</option></select></label><button class="mini" id="saveS">保存这个人</button><button class="mini ghost" id="delS">删除</button></div>
+      <div class="row">
+        <label>称呼<input id="nameS" value="我（示例）"></label>
+        <label>性别<select id="genS"><option value="M">男</option><option value="F" selected>女</option></select></label>
+      </div>
+      <div class="row">
+        <label>公历生日<input type="date" id="dateS" value="1998-06-12" min="1901-01-01" max="2099-12-31"></label>
+        <label>出生时间（当地钟表）<input type="time" id="timeS" value="08:30"></label>
+      </div>
+      <div class="row">
+        <label>出生城市<select id="cityS"></select></label>
+        <label class="chk"><input type="checkbox" id="unkS">时间不知道</label>
+      </div>
+      <div id="outS" class="out"></div>
+    </section>
+  <div id="viewSelf" class="wrap" style="padding:0">
+    <section class="result reading" id="readS" aria-live="polite"></section>
+    <div class="btns"><button class="alt" id="shareSelf">生成上头卡</button><button class="alt" id="toPair">拿我的八字去配对 →</button></div>
+    <details class="dict"><summary>术语小词典（看不懂点这里）</summary><dl>
+      <dt>四柱八字</dt><dd>出生的年、月、日、时各用一个天干加一个地支表示，共四柱八个字，是排盘的基础。</dd>
+      <dt>日主</dt><dd>日柱的天干，代表你自己。分析性格、强弱、喜忌都以它为中心。</dd>
+      <dt>五行</dt><dd>木、火、土、金、水。相生：木生火、火生土、土生金、金生水、水生木；相克：木克土、土克水、水克火、火克金、金克木。</dd>
+      <dt>十神</dt><dd>其他字和日主的关系。比劫是同类（兄弟朋友），食伤是我生的（才华表达），财是我克的（钱财，男命也代表妻子），官杀是克我的（事业规矩，女命也代表丈夫），印是生我的（学业贵人长辈）。</dd>
+      <dt>藏干</dt><dd>每个地支里藏着的天干，第一个是主气，力量最大。</dd>
+      <dt>纳音</dt><dd>六十甲子配的五行名称，比如"海中金""炉中火"，传统合婚常看年柱纳音。</dd>
+      <dt>身强身弱</dt><dd>日主在八字里得到的帮助多不多。身强宜泄宜耗，身弱宜生宜扶。</dd>
+      <dt>喜用神</dt><dd>对你最有利的五行，可以用在颜色、方位、行业的选择上。</dd>
+      <dt>大运</dt><dd>从起运岁数开始，每十年换一步运，代表人生不同阶段的大环境。</dd>
+      <dt>流年</dt><dd>每一年的干支，和你的八字发生作用，影响当年运势。和年支相同叫本命年，相冲叫冲太岁。</dd>
+      <dt>真太阳时</dt><dd>按出生地经度换算的当地实际太阳时间，比北京时间更准确，排时柱要用它。</dd>
+      <dt>太阳星座</dt><dd>出生时太阳所在的星座，就是平常说的"星座"，代表核心性格。</dd>
+      <dt>月亮星座</dt><dd>出生时月亮所在的星座，代表情绪和内心需求。月亮两三天换一个星座。</dd>
+      <dt>上升星座</dt><dd>出生那一刻东方地平线上升起的星座，代表外在形象和给人的第一印象，大约两小时换一个，需要准确的出生时间。</dd>
+      <dt>相位</dt><dd>两个星体之间的角度关系。三分相最和谐，六分相顺畅，对分相互相吸引又拉扯，四分相有张力。</dd>
+    </dl></details>
+  </div>
+  <div id="viewMatch" class="wrap" style="padding:0" hidden>
+    <section class="result reading">
+      <h3>我的真命，到底长啥样？</h3>
+      <p>用上面"我的生辰"，把你上下几岁范围内每一天出生的人都和你合一遍婚，看看哪些星座、哪一年、哪一天出生的人和你最配。下次心动之前，先对照一下。</p>
+      <div class="row">
+        <label>对方比我小<select id="younger"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
+        <label>对方比我大<select id="older"><option>0</option><option>2</option><option>3</option><option selected>5</option><option>8</option><option>10</option></select></label>
+      </div>
+      <button class="go" id="findBtn">帮我找真命天子/天女</button>
+      <div id="matchOut"></div>
+    </section>
+  </div>
+  </div>
 
-    .avatar {
-      width: 88px;
-      height: 88px;
-      margin: 0 auto 18px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #4fd1c1, #6aa8f0);
-      color: #fff;
-      font-size: 36px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  <div id="viewPair" class="wrap" style="padding:0" hidden>
+  <div class="pair">
+    <section class="card">
+      <h2><span class="tag">乾造</span>男方</h2>
+      <label>从已保存的人中选<select id="savedM" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
+      <label>称呼<input id="nameM" value="阿明（示例）"></label>
+      <div class="row">
+        <label>公历生日<input type="date" id="dateM" value="1995-08-16" min="1901-01-01" max="2099-12-31"></label>
+        <label>出生时间（当地钟表）<input type="time" id="timeM" value="11:40"></label>
+      </div>
+      <div class="row">
+        <label>出生城市<select id="cityM"></select></label>
+        <label class="chk"><input type="checkbox" id="unkM">时间不知道</label>
+      </div>
+      <div id="outM" class="out"></div>
+    </section>
+    <section class="card">
+      <h2><span class="tag">坤造</span>女方</h2>
+      <label>从已保存的人中选<select id="savedF" class="savedSel"><option value="">— 不选，手动填 —</option></select></label>
+      <label>称呼<input id="nameF" value="小雅（示例）"></label>
+      <div class="row">
+        <label>公历生日<input type="date" id="dateF" value="1997-03-22" min="1901-01-01" max="2099-12-31"></label>
+        <label>出生时间（当地钟表）<input type="time" id="timeF" value="18:20"></label>
+      </div>
+      <div class="row">
+        <label>出生城市<select id="cityF"></select></label>
+        <label class="chk"><input type="checkbox" id="unkF">时间不知道</label>
+      </div>
+      <div id="outF" class="out"></div>
+    </section>
+  </div>
 
-    h1 {
-      font-size: 28px;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
+  <button class="go" id="go">测测能不能上头</button>
 
-    .intro {
-      color: var(--muted);
-      font-size: 16px;
-      margin-bottom: 28px;
-    }
+  <section class="result" aria-live="polite">
+    <div class="score"><span class="num" id="num">--</span><span class="verdict" id="verdict"></span></div>
+    <div class="bar"><i id="bar" style="width:0"></i></div>
+    <div class="split"><div><small>八字分 · 占六成</small><b id="sBz">--</b></div><div><small>星盘分 · 占四成</small><b id="sXz">--</b></div></div>
+    <p class="summary" id="summary"></p>
+    <p class="sect">八字合婚</p>
+    <ul class="items" id="itemsB"></ul>
+    <p class="sect">星盘配对</p>
+    <ul class="items" id="itemsX"></ul>
+    <p class="sect">趣味彩蛋</p>
+    <ul class="items" id="fun"></ul>
+    <p class="sect">清醒建议</p>
+    <ul class="tips" id="tips"></ul>
+    <button class="alt" id="sharePair">生成上头卡</button>
+    <p class="note" id="noteP">八字按真太阳时排盘（按出生城市经度和均时差校正），节气按太阳实际黄经划分，23点后算次日（晚子时归次日）。太阳、月亮位置和上升点用简化天文公式计算，误差很小，但出生时间不准时上升星座可能不对；不知道时间时，月亮按中午估算，没有时柱和上升。中国1986–1991年夏令时期间出生的，请把夏天的出生时间减1小时再填。传统民俗与占星，仅供娱乐。命再合也要好好经营，命不合也别急着分手，脑子要自己带。</p>
+  </section>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="overlay" id="overlay" hidden><div class="box"><div id="cardSlot"></div><p class="hint">截图发朋友圈，让姐妹兄弟们也清醒一下 · 点空白处关闭</p></div></div>
+<script>
+const GAN="甲乙丙丁戊己庚辛壬癸",ZHI="子丑寅卯辰巳午未申酉戌亥";
+const SX="鼠牛虎兔龙蛇马羊猴鸡狗猪",WX="木火土金水";
+const ZEL=[4,2,0,0,2,1,1,2,3,3,2,4];
+const NAYIN="海中金 炉中火 大林木 路旁土 剑锋金 山头火 涧下水 城头土 白蜡金 杨柳木 泉中水 屋上土 霹雳火 松柏木 长流水 砂中金 山下火 平地木 壁上土 金箔金 覆灯火 天河水 大驿土 钗钏金 桑柘木 大溪水 沙中土 天上火 石榴木 大海水".split(" ");
+const XZ=["白羊","金牛","双子","巨蟹","狮子","处女","天秤","天蝎","射手","摩羯","水瓶","双鱼"];
+const XEL=["火象","土象","风象","水象"];
+const SHISHEN=[["比肩","劫财"],["食神","伤官"],["偏财","正财"],["七杀","正官"],["偏印","正印"]];
+const CITIES=[
+ ["福州",119.30,26.08,8,"福建"],
+ ["厦门",118.09,24.48,8,"福建"],
+ ["泉州",118.68,24.87,8,"福建"],
+ ["莆田",119.01,25.45,8,"福建"],
+ ["漳州",117.65,24.51,8,"福建"],
+ ["宁德",119.55,26.67,8,"福建"],
+ ["南平",118.18,26.64,8,"福建"],
+ ["三明",117.64,26.26,8,"福建"],
+ ["龙岩",117.02,25.08,8,"福建"],
+ ["福清",119.38,25.72,8,"福建"],
+ ["长乐",119.52,25.96,8,"福建"],
+ ["晋江",118.55,24.78,8,"福建"],
+ ["石狮",118.65,24.73,8,"福建"],
+ ["北京",116.40,39.90,8,"直辖市"],
+ ["天津",117.20,39.13,8,"直辖市"],
+ ["上海",121.47,31.23,8,"直辖市"],
+ ["重庆",106.55,29.56,8,"直辖市"],
+ ["石家庄",114.51,38.04,8,"河北"],
+ ["唐山",118.18,39.63,8,"河北"],
+ ["保定",115.46,38.87,8,"河北"],
+ ["邯郸",114.54,36.63,8,"河北"],
+ ["秦皇岛",119.60,39.94,8,"河北"],
+ ["张家口",114.89,40.82,8,"河北"],
+ ["廊坊",116.70,39.52,8,"河北"],
+ ["沧州",116.84,38.30,8,"河北"],
+ ["邢台",114.50,37.07,8,"河北"],
+ ["承德",117.96,40.95,8,"河北"],
+ ["太原",112.55,37.87,8,"山西"],
+ ["大同",113.30,40.08,8,"山西"],
+ ["运城",111.00,35.03,8,"山西"],
+ ["长治",113.12,36.20,8,"山西"],
+ ["呼和浩特",111.75,40.84,8,"内蒙古"],
+ ["包头",109.84,40.66,8,"内蒙古"],
+ ["赤峰",118.89,42.26,8,"内蒙古"],
+ ["鄂尔多斯",109.78,39.61,8,"内蒙古"],
+ ["沈阳",123.43,41.81,8,"辽宁"],
+ ["大连",121.61,38.91,8,"辽宁"],
+ ["鞍山",122.99,41.11,8,"辽宁"],
+ ["抚顺",123.96,41.88,8,"辽宁"],
+ ["锦州",121.13,41.10,8,"辽宁"],
+ ["丹东",124.35,40.00,8,"辽宁"],
+ ["长春",125.32,43.82,8,"吉林"],
+ ["吉林",126.55,43.84,8,"吉林"],
+ ["延吉",129.51,42.89,8,"吉林"],
+ ["哈尔滨",126.53,45.80,8,"黑龙江"],
+ ["齐齐哈尔",123.92,47.35,8,"黑龙江"],
+ ["大庆",125.10,46.59,8,"黑龙江"],
+ ["牡丹江",129.63,44.55,8,"黑龙江"],
+ ["佳木斯",130.32,46.80,8,"黑龙江"],
+ ["南京",118.80,32.06,8,"江苏"],
+ ["苏州",120.58,31.30,8,"江苏"],
+ ["无锡",120.31,31.49,8,"江苏"],
+ ["常州",119.97,31.81,8,"江苏"],
+ ["南通",120.89,31.98,8,"江苏"],
+ ["徐州",117.28,34.20,8,"江苏"],
+ ["扬州",119.41,32.39,8,"江苏"],
+ ["盐城",120.16,33.35,8,"江苏"],
+ ["镇江",119.45,32.20,8,"江苏"],
+ ["泰州",119.92,32.46,8,"江苏"],
+ ["淮安",119.01,33.61,8,"江苏"],
+ ["连云港",119.22,34.60,8,"江苏"],
+ ["宿迁",118.28,33.96,8,"江苏"],
+ ["杭州",120.16,30.27,8,"浙江"],
+ ["宁波",121.55,29.87,8,"浙江"],
+ ["温州",120.70,28.00,8,"浙江"],
+ ["嘉兴",120.76,30.75,8,"浙江"],
+ ["湖州",120.09,30.89,8,"浙江"],
+ ["绍兴",120.58,30.03,8,"浙江"],
+ ["金华",119.65,29.08,8,"浙江"],
+ ["义乌",120.08,29.31,8,"浙江"],
+ ["台州",121.42,28.66,8,"浙江"],
+ ["丽水",119.92,28.47,8,"浙江"],
+ ["衢州",118.87,28.94,8,"浙江"],
+ ["舟山",122.21,29.99,8,"浙江"],
+ ["合肥",117.23,31.82,8,"安徽"],
+ ["芜湖",118.43,31.35,8,"安徽"],
+ ["蚌埠",117.39,32.92,8,"安徽"],
+ ["安庆",117.06,30.54,8,"安徽"],
+ ["阜阳",115.81,32.89,8,"安徽"],
+ ["马鞍山",118.51,31.67,8,"安徽"],
+ ["黄山",118.34,29.71,8,"安徽"],
+ ["南昌",115.86,28.68,8,"江西"],
+ ["赣州",114.93,25.83,8,"江西"],
+ ["九江",116.00,29.71,8,"江西"],
+ ["上饶",117.94,28.45,8,"江西"],
+ ["景德镇",117.18,29.27,8,"江西"],
+ ["宜春",114.42,27.82,8,"江西"],
+ ["济南",117.12,36.65,8,"山东"],
+ ["青岛",120.38,36.07,8,"山东"],
+ ["烟台",121.45,37.46,8,"山东"],
+ ["潍坊",119.16,36.71,8,"山东"],
+ ["临沂",118.36,35.10,8,"山东"],
+ ["淄博",118.05,36.81,8,"山东"],
+ ["济宁",116.59,35.41,8,"山东"],
+ ["威海",122.12,37.51,8,"山东"],
+ ["泰安",117.09,36.20,8,"山东"],
+ ["日照",119.53,35.42,8,"山东"],
+ ["菏泽",115.48,35.23,8,"山东"],
+ ["德州",116.36,37.43,8,"山东"],
+ ["聊城",115.99,36.46,8,"山东"],
+ ["郑州",113.63,34.75,8,"河南"],
+ ["洛阳",112.45,34.62,8,"河南"],
+ ["开封",114.31,34.80,8,"河南"],
+ ["南阳",112.53,33.00,8,"河南"],
+ ["新乡",113.93,35.30,8,"河南"],
+ ["安阳",114.39,36.10,8,"河南"],
+ ["商丘",115.66,34.41,8,"河南"],
+ ["信阳",114.09,32.15,8,"河南"],
+ ["周口",114.70,33.63,8,"河南"],
+ ["许昌",113.85,34.04,8,"河南"],
+ ["平顶山",113.19,33.77,8,"河南"],
+ ["驻马店",114.02,33.01,8,"河南"],
+ ["武汉",114.31,30.59,8,"湖北"],
+ ["宜昌",111.29,30.69,8,"湖北"],
+ ["襄阳",112.14,32.04,8,"湖北"],
+ ["荆州",112.24,30.33,8,"湖北"],
+ ["黄石",115.04,30.20,8,"湖北"],
+ ["十堰",110.80,32.63,8,"湖北"],
+ ["孝感",113.92,30.92,8,"湖北"],
+ ["长沙",112.94,28.23,8,"湖南"],
+ ["株洲",113.13,27.83,8,"湖南"],
+ ["湘潭",112.94,27.83,8,"湖南"],
+ ["衡阳",112.57,26.89,8,"湖南"],
+ ["岳阳",113.13,29.36,8,"湖南"],
+ ["常德",111.70,29.03,8,"湖南"],
+ ["郴州",113.01,25.77,8,"湖南"],
+ ["邵阳",111.47,27.24,8,"湖南"],
+ ["张家界",110.48,29.12,8,"湖南"],
+ ["广州",113.26,23.13,8,"广东"],
+ ["深圳",114.06,22.54,8,"广东"],
+ ["东莞",113.75,23.02,8,"广东"],
+ ["佛山",113.12,23.02,8,"广东"],
+ ["珠海",113.58,22.27,8,"广东"],
+ ["中山",113.39,22.52,8,"广东"],
+ ["惠州",114.42,23.11,8,"广东"],
+ ["汕头",116.68,23.35,8,"广东"],
+ ["江门",113.08,22.58,8,"广东"],
+ ["湛江",110.36,21.27,8,"广东"],
+ ["茂名",110.93,21.66,8,"广东"],
+ ["肇庆",112.47,23.05,8,"广东"],
+ ["梅州",116.12,24.29,8,"广东"],
+ ["揭阳",116.37,23.55,8,"广东"],
+ ["潮州",116.62,23.66,8,"广东"],
+ ["清远",113.06,23.68,8,"广东"],
+ ["韶关",113.60,24.81,8,"广东"],
+ ["南宁",108.37,22.82,8,"广西"],
+ ["柳州",109.42,24.33,8,"广西"],
+ ["桂林",110.29,25.27,8,"广西"],
+ ["北海",109.12,21.48,8,"广西"],
+ ["玉林",110.18,22.65,8,"广西"],
+ ["海口",110.32,20.03,8,"海南"],
+ ["三亚",109.51,18.25,8,"海南"],
+ ["成都",104.07,30.57,8,"四川"],
+ ["绵阳",104.68,31.47,8,"四川"],
+ ["德阳",104.40,31.13,8,"四川"],
+ ["南充",106.11,30.84,8,"四川"],
+ ["宜宾",104.64,28.75,8,"四川"],
+ ["泸州",105.44,28.87,8,"四川"],
+ ["乐山",103.77,29.55,8,"四川"],
+ ["自贡",104.78,29.34,8,"四川"],
+ ["达州",107.47,31.21,8,"四川"],
+ ["攀枝花",101.72,26.58,8,"四川"],
+ ["贵阳",106.63,26.65,8,"贵州"],
+ ["遵义",106.93,27.73,8,"贵州"],
+ ["昆明",102.83,24.88,8,"云南"],
+ ["大理",100.27,25.61,8,"云南"],
+ ["丽江",100.23,26.86,8,"云南"],
+ ["曲靖",103.80,25.49,8,"云南"],
+ ["景洪",100.80,22.01,8,"云南"],
+ ["拉萨",91.11,29.65,8,"西藏"],
+ ["西安",108.94,34.34,8,"陕西"],
+ ["宝鸡",107.24,34.36,8,"陕西"],
+ ["咸阳",108.71,34.33,8,"陕西"],
+ ["延安",109.49,36.59,8,"陕西"],
+ ["榆林",109.73,38.29,8,"陕西"],
+ ["汉中",107.02,33.07,8,"陕西"],
+ ["兰州",103.83,36.06,8,"甘肃"],
+ ["天水",105.72,34.58,8,"甘肃"],
+ ["酒泉",98.49,39.73,8,"甘肃"],
+ ["西宁",101.78,36.62,8,"青海"],
+ ["银川",106.23,38.49,8,"宁夏"],
+ ["乌鲁木齐",87.62,43.83,8,"新疆"],
+ ["喀什",75.99,39.47,8,"新疆"],
+ ["伊宁",81.32,43.92,8,"新疆"],
+ ["克拉玛依",84.87,45.58,8,"新疆"],
+ ["香港",114.17,22.32,8,"港澳台"],
+ ["澳门",113.54,22.20,8,"港澳台"],
+ ["台北",121.56,25.04,8,"港澳台"],
+ ["台中",120.68,24.15,8,"港澳台"],
+ ["高雄",120.31,22.63,8,"港澳台"],
+ ["雅加达",106.85,-6.21,7,"印度尼西亚"],
+ ["泗水",112.75,-7.25,7,"印度尼西亚"],
+ ["万隆",107.61,-6.91,7,"印度尼西亚"],
+ ["棉兰",98.67,3.59,7,"印度尼西亚"],
+ ["三宝垄",110.42,-6.97,7,"印度尼西亚"],
+ ["日惹",110.37,-7.80,7,"印度尼西亚"],
+ ["巨港",104.76,-2.98,7,"印度尼西亚"],
+ ["坤甸",109.34,-0.03,7,"印度尼西亚"],
+ ["巴厘岛",115.22,-8.65,8,"印度尼西亚"],
+ ["望加锡",119.42,-5.14,8,"印度尼西亚"],
+ ["新加坡",103.82,1.35,8,"东南亚及其他"],
+ ["吉隆坡",101.69,3.14,8,"东南亚及其他"],
+ ["曼谷",100.50,13.76,7,"东南亚及其他"],
+ ["马尼拉",120.98,14.60,8,"东南亚及其他"],
+ ["胡志明市",106.63,10.82,7,"东南亚及其他"],
+ ["河内",105.85,21.03,7,"东南亚及其他"],
+ ["东京",139.69,35.69,9,"东南亚及其他"],
+ ["首尔",126.98,37.57,9,"东南亚及其他"]];
+const rad=x=>x*Math.PI/180, nrm=x=>((x%360)+360)%360;
+function sunLon(T){const M=357.52911+35999.05029*T, L0=280.46646+36000.76983*T;
+  return nrm(L0+(1.914602-0.004817*T)*Math.sin(rad(M))+0.019993*Math.sin(rad(2*M))+0.000289*Math.sin(rad(3*M))-0.00569);}
+function moonLon(T){
+  const L=218.3164477+481267.88123421*T, D=297.8501921+445267.1114034*T, M=357.5291092+35999.0502909*T,
+        Mp=134.9633964+477198.8675055*T, F=93.2720950+483202.0175233*T, s=x=>Math.sin(rad(x));
+  return nrm(L+6.289*s(Mp)+1.274*s(2*D-Mp)+0.658*s(2*D)+0.214*s(2*Mp)-0.186*s(M)-0.114*s(2*F)
+    +0.059*s(2*D-2*Mp)+0.057*s(2*D-M-Mp)+0.053*s(2*D+Mp)+0.046*s(2*D-M)-0.041*s(M-Mp)-0.035*s(D)-0.031*s(M+Mp));}
+function ascLon(jd,lon,lat){
+  const th=rad(nrm(280.46061837+360.98564736629*(jd-2451545)+lon)), e=rad(23.4393);
+  return nrm(Math.atan2(Math.cos(th),-(Math.sin(th)*Math.cos(e)+Math.tan(rad(lat))*Math.sin(e)))*180/Math.PI);}
+function eot(doy){const B=rad(360/365*(doy-81));return 9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B);}
+const jzIdx=(s,b)=>((6*s-5*b)%60+60)%60;
+function chart(y,m,d,hh,mm,timeKnown,city){
+  const [,lon,lat,tz]=city;
+  if(!timeKnown){hh=12;mm=0;}
+  const utMs=Date.UTC(y,m-1,d,hh,mm)-tz*3600000;
+  const jd=utMs/864e5+2440587.5, T=(jd-2451545)/36525;
+  const doy=Math.floor((Date.UTC(y,m-1,d)-Date.UTC(y,0,0))/864e5);
+  const corr=(lon-tz*15)*4+eot(doy); // minutes
+  const ts=new Date(Date.UTC(y,m-1,d,hh,mm)+corr*60000);
+  const ty=ts.getUTCFullYear(),tm=ts.getUTCMonth()+1,td=ts.getUTCDate(),tH=ts.getUTCHours()+ts.getUTCMinutes()/60;
+  const sl=sunLon(T);
+  const k=Math.floor(nrm(sl-315)/30); // 0=寅月
+  const yy=(tm<=2&&k>=10)?ty-1:ty;
+  const ys=((yy-4)%10+10)%10, yb=((yy-4)%12+12)%12;
+  const ms=((ys%5)*2+2+k)%10, mb=(2+k)%12;
+  let dayMs=Date.UTC(ty,tm-1,td); if(timeKnown&&tH>=23) dayMs+=864e5;
+  const di=((Math.round((dayMs-Date.UTC(1949,9,1))/864e5)%60)+60)%60, ds=di%10, db=di%12;
+  const P=[[ys,yb],[ms,mb],[ds,db]];
+  if(timeKnown){const hb=Math.floor((tH+1)/2)%12;P.push([((ds%5)*2+hb)%10,hb]);} else P.push(null);
+  const ml=moonLon(T);
+  const asc=timeKnown?ascLon(jd,lon,lat):null;
+  return {P,jd,k,sun:sl,moon:ml,asc,trueSolar:timeKnown?`${String(ts.getUTCHours()).padStart(2,"0")}:${String(ts.getUTCMinutes()).padStart(2,"0")}`:null,corr};
+}
+const el=s=>Math.floor(s/2);
+function shishen(dm,s){const d=(el(s)-el(dm)+5)%5;return SHISHEN[d][(s%2===dm%2)?0:1];}
+function nayin(p){const n=NAYIN[Math.floor(jzIdx(p[0],p[1])/2)];return n;}
+const nayinEl=n=>"木火土金水".indexOf(n[2]);
+function analyze(c){
+  const P=c.P, dm=P[2][0], de=el(dm);
+  const cnt=[0,0,0,0,0], w=[0,0,0,0,0];
+  P.forEach((p,i)=>{ if(!p) return; cnt[el(p[0])]++; cnt[ZEL[p[1]]]++;
+    if(i!==2) w[el(p[0])]+=1; w[ZEL[p[1]]]+= (i===1?2.5:1); });
+  const tot=w.reduce((a,b)=>a+b,0), sup=w[de]+w[(de+4)%5], r=sup/tot;
+  let strength, xi;
+  if(r>=0.5){strength="身强";xi=[(de+1)%5,(de+2)%5,(de+3)%5];}
+  else if(r<=0.36){strength="身弱";xi=[(de+4)%5,de];}
+  else {strength="中和";const mn=Math.min(...cnt);xi=[0,1,2,3,4].filter(i=>cnt[i]===mn);}
+  const top=[0,1,2,3,4].sort((a,b)=>w[b]-w[a]).slice(0,2);
+  return {cnt,w,strength,xi,ratio:r,top};
+}
+function rel(a,b){
+  if(a===b) return "same";
+  if((a+b)%12===1) return "he";
+  if(Math.abs(a-b)===6) return "chong";
+  if(a%4===b%4) return "san";
+  if((a+b)%12===7) return "hai";
+  return "none";
+}
+const RELN={same:"同支",he:"六合",chong:"六冲",san:"三合",hai:"相害",none:"无合无冲"};
+function signOf(l){return Math.floor(l/30);}
+function aspect(a,b){let d=Math.abs(signOf(a)-signOf(b));return Math.min(d,12-d);}
+const ASP={0:[74,"同宫"],1:[60,"相邻"],2:[82,"六分相"],3:[52,"四分相"],4:[90,"三分相"],5:[57,"梅花相"],6:[72,"对分相"]};
+const CANG=["癸","己癸辛","甲丙戊","乙","戊乙癸","丙庚戊","丁己","己丁乙","庚壬戊","辛","戊辛丁","壬甲"];
+function sunAt(jd){return sunLon((jd-2451545)/36525);}
+function findTerm(jd,target,dir){ // jd of next(dir=1)/previous(dir=-1) time sun reaches target
+  const f=x=>nrm(sunAt(x)-target+180)-180;
+  let a=jd, b=jd+dir; let n=0;
+  while(n++<40){ if(Math.sign(f(a))!==Math.sign(f(b))&&Math.abs(f(a)-f(b))<90) break; a=b; b+=dir; }
+  let lo=Math.min(a,b), hi=Math.max(a,b);
+  for(let i=0;i<40;i++){const m=(lo+hi)/2; if(Math.sign(f(m))===Math.sign(f(lo))) lo=m; else hi=m;}
+  return (lo+hi)/2;
+}
+function dayun(c,gender,birthYear){
+  const ys=c.P[0][0], fwd=(ys%2===0)===(gender==="M");
+  const target=nrm(315+30*(fwd?c.k+1:c.k));
+  const t=findTerm(c.jd,target,fwd?1:-1), days=Math.abs(t-c.jd);
+  const startAge=days/3; const ay=Math.floor(startAge), am=Math.round((startAge-ay)*12);
+  const list=[]; let s=c.P[1][0], b=c.P[1][1];
+  for(let i=0;i<8;i++){ s=(s+(fwd?1:-1)+10)%10; b=(b+(fwd?1:-1)+12)%12;
+    const age=Math.round(startAge)+i*10; list.push({s,b,age,year:birthYear+age}); }
+  return {fwd,ay,am,list};
+}
+const $=id=>document.getElementById(id);
+["M","F","S"].forEach((s,i)=>{
+  const sel=$("city"+s);
+  let h="",g=null;
+  CITIES.forEach((c,j)=>{ if(c[4]!==g){ if(g!==null) h+="</optgroup>"; g=c[4]; h+=`<optgroup label="${g}">`; }
+    h+=`<option value="${j}">${c[0]}${c[3]===8?"":"（UTC+"+c[3]+"）"}</option>`; });
+  sel.innerHTML=h+"</optgroup>";
+  sel.value=String(i===1?2:0);
+});
+function read(s){
+  const dv=$("date"+s).value; if(!dv) return null;
+  const [y,m,d]=dv.split("-").map(Number);
+  const unk=$("unk"+s).checked, tv=$("time"+s).value||"12:00";
+  $("time"+s).disabled=unk;
+  const [hh,mm]=tv.split(":").map(Number);
+  const city=CITIES[Number($("city"+s).value)];
+  const c=chart(y,m,d,hh,mm,!unk,city), a=analyze(c);
+  const name=$("name"+s).value.trim()||(s==="M"?"男方":"女方");
+  return {...c,...a,name,city,unk,y};
+}
+function render(s,o){
+  const dm=o.P[2][0], H=["年","月","日","时"];
+  let h=`<div class="tbl"><span></span>${H.map(x=>`<span class="h">${x}柱</span>`).join("")}`;
+  h+=`<span class="rh">十神</span>`+o.P.map((p,i)=>`<span class="ss">${p?(i===2?"日主":shishen(dm,p[0])):""}</span>`).join("");
+  h+=`<span class="rh">干支</span>`+o.P.map(p=>p?`<span class="gz"><span class="el-${el(p[0])}">${GAN[p[0]]}</span><br><span class="el-${ZEL[p[1]]}">${ZHI[p[1]]}</span></span>`:`<span class="gz na">？<br>？</span>`).join("");
+  h+=`<span class="rh">藏干</span>`+o.P.map(p=>`<span class="cg">${p?CANG[p[1]]:""}</span>`).join("");
+  h+=`<span class="rh">纳音</span>`+o.P.map(p=>`<span class="ny">${p?nayin(p):""}</span>`).join("")+`</div>`;
+  const mx=Math.max(...o.cnt,1);
+  h+=`<div class="wxbars">`+o.cnt.map((n,i)=>`<div class="el-${i}"><span>${WX[i]}</span><i style="width:${n/mx*100}%;${n?"":"opacity:.15;width:4px"}"></i><span>${n}</span></div>`).join("")+`</div>`;
+  const sun=XZ[signOf(o.sun)], moon=XZ[signOf(o.moon)], asc=o.asc==null?"未知":XZ[signOf(o.asc)];
+  h+=`<div class="facts"><span>属${SX[o.P[0][1]]}</span><span>日主 ${GAN[dm]}${WX[el(dm)]}</span><span>${o.strength}</span><span>喜用 ${o.xi.map(i=>WX[i]).join("、")}</span><span>☉ 太阳${sun}</span><span>☽ 月亮${moon}</span><span>↑ 上升${asc}</span></div>`;
+  h+=`<p class="meta">${o.unk?"未填时间：无时柱，无上升星座，月亮按中午估算。":`真太阳时 ${o.trueSolar}（比钟表${o.corr>=0?"快":"慢"} ${Math.abs(Math.round(o.corr))} 分钟）。`}年命 ${nayin(o.P[0])}。</p>`;
+  $("out"+s).innerHTML=h;
+}
+function bazi(M,F){
+  const items=[]; let s=55; const add=(k,t,p)=>{items.push({k,t,p});s+=p;};
+  const rt={he:"六合",san:"三合",same:"同支",none:"无合无冲",hai:"相害",chong:"六冲"};
+  // 生肖
+  const ym=M.P[0][1], yf=F.P[0][1], yr=rel(ym,yf);
+  add("生肖",`属${SX[ym]} × 属${SX[yf]}，${rt[yr]}。`+{he:"传统认为最合的生肖组合，彼此吸引",san:"同一三合局，三观接近",same:"同生肖，想法相近，也容易较劲",none:"不冲不合，平稳",hai:"相害，小事上容易互相看不惯",chong:"相冲，脾气容易对着干"}[yr],{he:7,san:5,same:2,none:0,hai:-4,chong:-7}[yr]);
+  // 年命纳音
+  const nm=nayin(M.P[0]), nf=nayin(F.P[0]), am=nayinEl(nm), af=nayinEl(nf);
+  let np,nt;
+  if(am===af){np=3;nt="同属"+WX[am]+"命，比和";}
+  else if((am+1)%5===af||(af+1)%5===am){np=5;nt=`${WX[am]}${WX[af]}相生，传统合婚里的上配`;}
+  else if((am+2)%5===af){np=1;nt="男命克女命，旧说尚可";}
+  else {np=-4;nt="女命克男命，旧说要多包容";}
+  add("年命",`${nm} × ${nf}。${nt}`,np);
+  // 夫妻宫
+  const dm=M.P[2][1], df=F.P[2][1], dr=rel(dm,df);
+  add("夫妻宫",`日支 ${ZHI[dm]} × ${ZHI[df]}，${rt[dr]}。`+{he:"夫妻宫相合，合婚里最看重的好配置",san:"夫妻宫三合，生活很合拍",same:"夫妻宫相同，习惯相近",none:"夫妻宫无冲无合，靠经营",hai:"夫妻宫相害，生活细节上要多沟通",chong:"夫妻宫相冲，容易争吵或聚少离多"}[dr],{he:10,san:8,same:2,none:0,hai:-6,chong:-10}[dr]);
+  // 日主 / 夫妻星
+  const gm=M.P[2][0], gf=F.P[2][0], em=el(gm), ef=el(gf);
+  let gp,gt;
+  if(Math.abs(gm-gf)===5){gp=10;gt="日干五合，女方正是男方的正财（妻星），男方正是女方的正官（夫星），非常有缘";}
+  else if((em+2)%5===ef){gp=7;gt="男克女：女方日主是男方的妻星，男方日主是女方的夫星，夫妻星对位";}
+  else if((em+1)%5===ef||(ef+1)%5===em){gp=5;gt=`${WX[em]}${WX[ef]}相生，一方能滋养另一方`;}
+  else if(em===ef){gp=2;gt="同五行，像朋友一样平等";}
+  else {gp=-4;gt="女克男，女方气场更强，男方容易感到压力";}
+  add("日主",`${GAN[gm]}${WX[em]} × ${GAN[gf]}${WX[ef]}。${gt}`,gp);
+  // 喜用互补
+  let xp=0; const xn=[];
+  if(M.xi.includes(F.top[0])){xp+=4;xn.push(`${F.name}旺${WX[F.top[0]]}，正是${M.name}的喜用`);}
+  if(F.xi.includes(M.top[0])){xp+=4;xn.push(`${M.name}旺${WX[M.top[0]]}，正是${F.name}的喜用`);}
+  add("喜用神",`${M.name}${M.strength}喜${M.xi.map(i=>WX[i]).join("")}，${F.name}${F.strength}喜${F.xi.map(i=>WX[i]).join("")}。`+(xn.length?xn.join("；")+"，能互相补运。":"彼此旺的五行不是对方的喜用，补运作用一般。"),xp);
+  // 五行互补
+  let wp=0; const wn=[];
+  [0,1,2,3,4].forEach(i=>{
+    if(M.cnt[i]===0&&F.cnt[i]>=2){wp+=3;wn.push(`${F.name}补上${M.name}缺的${WX[i]}`);}
+    if(F.cnt[i]===0&&M.cnt[i]>=2){wp+=3;wn.push(`${M.name}补上${F.name}缺的${WX[i]}`);}
+    if(M.cnt[i]===0&&F.cnt[i]===0){wp-=3;wn.push(`两人都缺${WX[i]}`);}
+  });
+  wp=Math.max(-6,Math.min(9,wp));
+  add("五行",wn.length?wn.join("；")+"。":"两人都不缺五行，或缺的没被补上，影响不大。",wp);
+  // 其他柱
+  let op=0; const on=[];
+  const mr=rel(M.P[1][1],F.P[1][1]);
+  if(mr==="he"||mr==="san"){op+=3;on.push(`月支${rt[mr]}，家庭观念相近`);}
+  if(mr==="chong"){op-=3;on.push("月支相冲，原生家庭习惯不同");}
+  if(M.P[3]&&F.P[3]){const hr=rel(M.P[3][1],F.P[3][1]);
+    if(hr==="he"||hr==="san"){op+=3;on.push(`时支${rt[hr]}，晚年和子女缘分好`);}
+    if(hr==="chong"){op-=3;on.push("时支相冲，对子女教育看法可能不同");}}
+  let wh=0; M.P.forEach((a,i)=>F.P.forEach((b,j)=>{ if(a&&b&&!(i===2&&j===2)&&Math.abs(a[0]-b[0])===5) wh++; }));
+  if(wh){op+=Math.min(4,wh*2);on.push(`其他天干有${wh}处五合，相处有默契`);}
+  add("其他柱",on.length?on.join("；")+"。":"月柱、时柱之间没有明显的合冲。",op);
+  return {s:Math.max(30,Math.min(98,s)),items};
+}
+function stars(M,F){
+  const pairs=[["太阳×太阳","性格和人生方向",M.sun,F.sun,.2],["月亮×月亮","情绪和生活需求",M.moon,F.moon,.25],
+    ["男日×女月","他的理想与她的情感",M.sun,F.moon,.2],["女日×男月","她的理想与他的情感",F.sun,M.moon,.15]];
+  if(M.asc!=null&&F.asc!=null) pairs.push(["上升×上升","第一印象和相处方式",M.asc,F.asc,.2]);
+  const TX={0:"同在一个星座，强烈共鸣",1:"差异较大，需要时间适应",2:"互相欣赏，配合轻松",3:"有张力，容易摩擦也有火花",4:"最和谐的角度，舒服自在",5:"频率不同，需要多理解",6:"互相吸引又互相拉扯，互补性强"};
+  let sum=0,wt=0; const items=pairs.map(([k,what,a,b,w])=>{
+    const d=aspect(a,b), [sc,nm]=ASP[d]; sum+=sc*w; wt+=w;
+    return {k,t:`${XZ[signOf(a)]} × ${XZ[signOf(b)]}，${nm}。${what}上${TX[d]}。`,p:sc,d};
+  });
+  if(M.asc==null||F.asc==null) items.push({k:"上升",t:"有一方没填出生时间，算不出上升星座，这项不计分。",p:null});
+  return {s:Math.round(sum/wt),items};
+}
+function verdict(s){
+  if(s>=86) return ["天作之合","八字和星盘都很合，可以放心上头。"];
+  if(s>=76) return ["上等良缘","整体很合，适度上头，小差异正好是互补。"];
+  if(s>=66) return ["中上之配","合多冲少，可以上头，但记得带脑子。"];
+  if(s>=55) return ["平和可期","不冲也不算特别合，先别急着上头，多相处看看。"];
+  return ["需多磨合","有几处相冲，建议冷静三秒再上头，要多理解包容。"];
+}
+function tips(M,F,B,X){
+  const t=[], find=k=>B.items.find(i=>i.k===k);
+  if(find("夫妻宫").p<0) t.push("夫妻宫有冲害：日常习惯差异大，家务、作息这类小事提前说好规则，比事后吵架强。");
+  if(find("生肖").p<0) t.push("生肖相冲相害：脾气上来时容易对着干，约定好吵架先冷静十分钟再谈。");
+  if(find("日主").p<0) t.push("女克男：女方给男方留面子，男方多主动表达想法，别闷着。");
+  if(find("日主").p>=7) t.push("日主夫妻星对位：彼此天然有吸引力，记得把感激说出口，别把好当成理所当然。");
+  if(find("喜用神").p>0) t.push("喜用互补：遇到大事一起商量、一起做决定，往往比各自做更顺。");
+  const mm=X.items[1];
+  if(mm&&[3,5,1].includes(mm.d)) t.push("月亮不和：两人表达情绪的方式不同，难过时直接说「我需要什么」，不要让对方猜。");
+  if(mm&&[0,2,4].includes(mm.d)) t.push("月亮和谐：生活节奏相似，适合一起培养共同的习惯，比如固定的约会日。");
+  if(M.strength==="身强"&&F.strength==="身强") t.push("两人都身强、有主见：分好各自做主的领域，减少争夺控制权。");
+  if(M.strength==="身弱"&&F.strength==="身弱") t.push("两人都偏身弱：都需要被支持，多肯定对方，遇事别互相埋怨。");
+  if(!t.length) t.push("八字和星盘没有明显的冲突，保持沟通和新鲜感就好。");
+  return t;
+}
+function run(){
+  const M=read("M"),F=read("F");
+  if(!M||!F){$("summary").textContent="请先填好两个人的生日。";return;}
+  render("M",M);render("F",F);
+  const B=bazi(M,F), X=stars(M,F), s=Math.round(B.s*0.6+X.s*0.4), [v,t]=verdict(s);
+  $("num").textContent=s; $("verdict").textContent=v; $("bar").style.width=s+"%";
+  $("sBz").textContent=B.s; $("sXz").textContent=X.s;
+  $("summary").textContent=`${M.name} 与 ${F.name}：${t}`;
+  const li=i=>{const cls=i.p==null?"zero":(i.p>0?"pos":i.p<0?"neg":"zero");return `<li><span class="k">${i.k}</span><span>${i.t}</span><span class="pts ${cls}">${i.p==null?"—":(i.p>0?"+":"")+i.p}</span></li>`;};
+  $("itemsB").innerHTML=B.items.map(li).join("");
+  $("itemsX").innerHTML=X.items.map(i=>`<li><span class="k">${i.k}</span><span>${i.t}</span><span class="pts zero">${i.p==null?"—":i.p}</span></li>`).join("");
+  $("tips").innerHTML=tips(M,F,B,X).map(x=>`<li>${x}</li>`).join("");
+  const nm=x=>x.name.replace(/（示例）/,"");
+  const softer=M.ratio<=F.ratio?M:F, clingy=["水象","土象","火象","风象"].indexOf(XEL[signOf(M.moon)%4])<=["水象","土象","火象","风象"].indexOf(XEL[signOf(F.moon)%4])?M:F;
+  const money=x=>x.cnt[(el(x.P[2][0])+2)%5]+x.cnt[2]*0.5;
+  const boss=money(M)>=money(F)?M:F;
+  const fun=[["CP名",`${persona(M)} × ${persona(F)}`],["谁先低头",`${nm(softer)}。日主力量相对弱一点，更容易先心软讲和`],["谁更粘人",`${nm(clingy)}。月亮在${XEL[signOf(clingy.moon)%4]}，更需要陪伴和回应`],["谁来管钱",`${nm(boss)}。命里财星和土更旺，理财更靠谱`],["专属情话",`${nm(M)}对${nm(F)}说：「${LOVELINE[M.P[2][0]]}」`]];
+  $("fun").innerHTML=fun.map(([k,t])=>`<li><span class="k">${k}</span><span>${t}</span><span></span></li>`).join("");
+}
+const DMPLUS=[["有担当、仁厚、有长远眼光","固执，不肯认输","学会适当弯腰，合作比硬扛更有效"],["灵活、细心、人缘好","容易迁就别人，缺乏主见","多相信自己，别总委屈自己迎合别人"],["热情、慷慨、感染力强","急躁，三分钟热度","热情要持久，承诺之前多想一下"],["细腻、有洞察力、专注","想法藏在心里，容易钻牛角尖","把想法说出来，别让人猜"],["稳重、可靠、包容","保守、反应慢","遇到变化别太守旧，偶尔试试新东西"],["体贴、会照顾人、多才","操心太多，容易焦虑","少操心别人的事，多照顾自己"],["果断、讲义气、执行力强","说话太冲，容易硬碰硬","说话前缓三秒，直率配上温和效果更好"],["精致、有品味、追求完美","自尊心强，受不了批评","别太在意别人的评价"],["聪明、大气、适应力强","不受约束，做事难长久","自由之外，也给自己定一个长期目标"],["温柔、直觉准、有想象力","情绪化，容易想太多","心情低落时找人聊聊，别一个人闷着"]];
+const SUNPLUS=[["勇敢、行动快、有感染力","没耐心、容易冲动","爱得直接热烈，喜欢主动追求"],["可靠、有耐心、懂生活","固执、不爱改变","慢热但专一，用实际行动表达爱"],["风趣、反应快、好沟通","善变、不够专注","需要能聊得来的伴侣，讨厌无聊"],["体贴、顾家、念旧","情绪化、没安全感","全心付出，渴望稳定的家"],["大方、自信、有担当","爱面子、需要被捧","浪漫高调，希望被对方放在第一位"],["细致、靠谱、肯付出","挑剔、爱操心","用照顾和细节表达爱，慢热谨慎"],["有分寸、审美好、善协调","犹豫不决、怕得罪人","重视浪漫和平等，讨厌争吵"],["专注、有毅力、看人准","多疑、记仇","爱得深也要得多，最看重忠诚"],["乐观、坦率、见识广","随性、承诺感弱","需要一起探索世界的伙伴，给足空间"],["稳重、自律、有目标","严肃、不善表达","把感情当长期投资，重视未来规划"],["独立、有创意、看得远","冷淡、难以捉摸","先做朋友再做恋人，需要精神契合"],["温柔、浪漫、有同理心","逃避现实、容易被骗","爱得很梦幻，愿意为对方牺牲"]];
+const YEARTXT=["比劫年：朋友和同辈的影响大，适合合作、拓展人脉；注意破财、借钱和竞争。","食伤年：想法多、表达欲强，适合学技能、做内容、展示自己；注意说话分寸。","财星年：赚钱和投资机会多，适合开拓副业、谈生意；注意别贪心冒进。","官杀年：工作压力和责任加重，有升职、考证、定下来的机会；注意劳累和人际压力。","印星年：利学习、进修、考试，容易遇到贵人和长辈帮助；注意别光想不做。"];
+const DAYMASTER=["像参天大树：正直有担当，有上进心，但有时固执，不肯低头。","像花草藤蔓：温和灵活，善于适应环境，心思细腻敏感。","像太阳：热情开朗、大方外向，喜欢被关注，脾气来得快去得也快。","像烛火：外表安静，内心温暖细致，有洞察力，认定的事很执着。","像高山大地：稳重可靠，包容力强，做事踏实，有点慢热。","像田园沃土：温和体贴，善于照顾人，心思多，容易想太多。","像刀剑钢铁：果断讲义气，行动力强，说话直接，容易得罪人。","像珠宝首饰：精致爱美，自尊心强，重细节，内心比较敏感。","像江河大海：聪明灵活，见多识广，喜欢自由，不爱被约束。","像雨露：细腻温柔，想象力丰富，直觉准，有时情绪化。"];
+const SSCAT=[["比劫","独立自主，重朋友讲义气，竞争心强，不喜欢被人管。"],["食伤","有才华、表达欲强，点子多，懂得享受生活，也容易任性。"],["财星","务实，有经济头脑，重视结果和实际收益，善于把握机会。"],["官杀","自律、有责任感，重规矩和名誉，也容易给自己太大压力。"],["印星","爱学习、心地善良，有贵人缘，依赖感稍强，有时想得多做得少。"]];
+const SXTXT="机灵聪明，适应力强|踏实肯干，有耐力|勇敢自信，有领导欲|温和善良，人缘好|自信大气，有抱负|冷静理智，心思缜密|热情奔放，爱自由|温柔体贴，重感情|聪明活泼，反应快|勤奋认真，爱面子|忠诚可靠，正义感强|真诚乐观，有福气".split("|");
+const WXTRAIT=["木主仁：有爱心，喜欢成长和学习","火主礼：热情有礼，积极外向","土主信：诚实守信，稳重包容","金主义：果断讲义气，原则性强","水主智：聪明灵活，善于变通"];
+const LUCK=[["绿色、青色","东方","教育、文化、出版、园艺、服装"],["红色、紫色","南方","餐饮、传媒、电子、能源、美业"],["黄色、咖啡色","中部、本地","地产、建筑、农业、仓储、咨询"],["白色、金色","西方","金融、法律、机械、汽车、珠宝"],["黑色、蓝色","北方","贸易、物流、旅游、航运、翻译"]];
+const LUCKC=["#3f7d4e","#c0432f","#c79a3c","#e8e8e8","#1f3550"];
+const SUNTXT="冲劲十足、直率，做事快，耐心稍差|稳重踏实，重享受和安全感，有点固执|聪明好奇、口才好，兴趣多变|顾家重感情，保护欲强，情绪起伏大|自信大方，有领导气质，需要被欣赏|细心认真，追求完美，容易挑剔|优雅随和，重公平和美感，有选择困难|专一深沉，洞察力强，占有欲也强|乐观自由，爱冒险旅行，怕被束缚|务实上进，有耐力，外冷内热|独立有想法，重友情，有时显得疏离|浪漫敏感，同理心强，容易心软".split("|");
+const MOONTXT="情绪来得快去得快，需要对方直接回应|需要稳定和安全感，美食和舒适能治愈你|需要聊天交流，说出来心情就好了|很需要家和被照顾的感觉，情绪细腻|需要被重视和赞美，喜欢被宠着|用忙碌缓解焦虑，需要别人认可你的付出|需要关系和谐，很讨厌冲突|情感深沉，需要百分百的信任和忠诚|需要空间和自由，乐观能自我疗愈|不轻易表露情绪，希望努力被理解|需要独处空间，习惯理性处理情绪|情绪敏感，需要温柔和包容".split("|");
+const ASCTXT="有活力、直爽|温和稳重、有亲和力|年轻灵活、健谈|温柔亲切、好相处|气场强、存在感高|干净整洁、认真靠谱|有气质、礼貌得体|神秘有距离感、眼神有力|开朗爽快、有幽默感|成熟稳重、略显严肃|个性独特、与众不同|温柔梦幻、让人想保护".split("|");
+function selfReading(o,gender){
+  const dm=o.P[2][0], de=el(dm);
+  const cat=[0,0,0,0,0];
+  o.P.forEach((p,i)=>{ if(!p) return; if(i!==2) cat[(el(p[0])-de+5)%5]++; cat[(ZEL[p[1]]-de+5)%5]++; });
+  const topc=[0,1,2,3,4].sort((a,b)=>cat[b]-cat[a])[0];
+  const mx=[0,1,2,3,4].sort((a,b)=>o.cnt[b]-o.cnt[a])[0];
+  const lack=[0,1,2,3,4].filter(i=>o.cnt[i]===0);
+  const strTxt={身强:"日主力量足，有主见、抗压能力强，适合主动出击；要注意别太强势。",身弱:"日主力量偏弱，做事谨慎、懂得借力，有贵人和团队支持时发挥最好；要多给自己打气。",中和:"五行比较平衡，性格不走极端，适应力好。"}[o.strength];
+  const star=gender==="M"?(de+2)%5:(de+3)%5, sn=gender==="M"?"妻星（财）":"夫星（官）", sc=o.cnt[star];
+  const starTxt=sc===0?`命中${sn}属${WX[star]}，盘里没有出现，感情上比较慢热，缘分可能来得晚，但来了会很珍惜。`:sc<=2?`命中${sn}属${WX[star]}，有${sc}个，感情运平稳，适合细水长流。`:`命中${sn}属${WX[star]}，有${sc}个，异性缘旺，桃花多，更要专一。`;
+  const db=ZEL[o.P[2][1]], r=(db-de+5)%5;
+  const palTxt=["夫妻宫和日主同五行：另一半更像朋友和伙伴，平等相处。","你生夫妻宫：你在感情里愿意付出，很会照顾另一半。","你克夫妻宫：你在感情里比较主导，记得多听对方的想法。","夫妻宫克你：另一半对你要求高，也能督促你进步。","夫妻宫生你：另一半对你帮助很大，是你的依靠。"][r];
+  const sun=signOf(o.sun), moon=signOf(o.moon), asc=o.asc==null?null:signOf(o.asc);
+  const yb=o.P[0][1];
+  const D=dayun(o,gender,o.y), thisY=2026, nowAge=thisY-o.y;
+  const yun=`<p>${D.fwd?"顺":"逆"}排大运，${D.ay}岁${D.am?D.am+"个月":""}起运，每十年换一步。红框是你现在走的运。</p><div class="yun">`+D.list.map(x=>{
+    const ss=shishen(dm,x.s), good=o.xi.includes(el(x.s))||o.xi.includes(ZEL[x.b]);
+    const now=nowAge>=x.age&&nowAge<x.age+10;
+    return `<div class="${now?"now":""}"><small>${x.age}–${x.age+9}岁 · ${x.year}年起</small><b><span class="el-${el(x.s)}">${GAN[x.s]}</span><span class="el-${ZEL[x.b]}">${ZHI[x.b]}</span></b><em>${ss}运 · <span class="${good?"good":"zero"}">${good?"喜用到位，较顺":"平稳，靠努力"}</span></em></div>`;}).join("")+`</div>`;
+  const ln=[2026,2027].map(Y=>{
+    const s=((Y-4)%10+10)%10, b=((Y-4)%12+12)%12, cat=(el(s)-de+5)%5;
+    const notes=[];
+    const ry=rel(b,yb), rd=rel(b,o.P[2][1]);
+    if(ry==="same") notes.push("本命年（值太岁），变动多，凡事稳一点");
+    if(ry==="chong") notes.push("冲太岁，容易有搬家、换工作等大变动");
+    if(ry==="hai") notes.push("害太岁，小心小人和口舌");
+    if(ry==="he"||ry==="san") notes.push("和生肖相合，人缘和机会都不错");
+    if(rd==="chong") notes.push("冲夫妻宫，感情或住处可能有变化，多沟通");
+    if(rd==="he") notes.push("合夫妻宫，利恋爱和婚姻");
+    const good=o.xi.includes(el(s))||o.xi.includes(ZEL[b]);
+    return `<dt>${Y} ${GAN[s]}${ZHI[b]}</dt><dd><span class="${good?"good":"zero"}">${good?"流年带喜用，整体偏顺。":"流年五行不是喜用，整体平稳，稳中求进。"}</span>${YEARTXT[cat]}${notes.length?"另外，"+notes.join("；")+"。":""}</dd>`;}).join("");
+  const luck=o.xi.map(i=>`<span class="swatch" style="background:${LUCKC[i]}"></span>${WX[i]}：${LUCK[i][0]}，${LUCK[i][1]}`).join("<br>");
+  const jobs=[...new Set(o.xi.map(i=>LUCK[i][2]))].join("；");
+  const now=new Date(), tc=chart(now.getFullYear(),now.getMonth()+1,now.getDate(),12,0,false,o.city), td=tc.P[2];
+  const tcat=(el(td[0])-de+5)%5, tr=rel(td[1],o.P[2][1]);
+  let love=62+(tr==="he"?20:tr==="san"?14:tr==="chong"?-16:tr==="hai"?-8:0)+(o.xi.includes(el(td[0]))?10:0)+(o.xi.includes(ZEL[td[1]])?6:0)+((td[0]*7+td[1]*3)%9);
+  love=Math.max(35,Math.min(99,love));
+  const today=`<div class="today"><div class="ring" style="--v:${love}"><span>${love}</span></div><div><b>今日恋爱指数</b> <small>${now.getMonth()+1}月${now.getDate()}日 · ${GAN[td[0]]}${ZHI[td[1]]}日</small><br>${DAILY[tcat][2]}。<br><small>宜：${DAILY[tcat][0]}　忌：${DAILY[tcat][1]}　幸运色：${LUCK[o.xi[0]][0].split("、")[0]}</small></div></div>`;
+  const hero=`<div class="hero"><small class="meta">你的恋爱人格</small><div class="lbl">${persona(o)}</div><div class="one">${GAN[dm]}${WX[de]}日主，${o.strength}，喜${o.xi.map(i=>WX[i]).join("")}；太阳${XZ[sun]}、月亮${XZ[moon]}。${MINE[sun%4]}。</div><q>${LOVELINE[dm]}</q></div>`;
+  return hero+`<h3>今日运势</h3>`+today+`<h3>性格</h3><dl>
+    <dt>日主</dt><dd>${GAN[dm]}${WX[de]}，${DAYMASTER[dm]}<br>优点：${DMPLUS[dm][0]}；短板：${DMPLUS[dm][1]}。<br>建议：${DMPLUS[dm][2]}。</dd>
+    <dt>十神</dt><dd>${SSCAT[topc][0]}最多：${SSCAT[topc][1]}</dd>
+    <dt>生肖</dt><dd>属${SX[o.P[0][1]]}，${SXTXT[o.P[0][1]]}。年命${nayin(o.P[0])}。<br>最合：${SX[(13-yb)%12]}（六合）、${SX[(yb+4)%12]}、${SX[(yb+8)%12]}（三合）；要多包容：${SX[(yb+6)%12]}（相冲）、${SX[((7-yb)%12+12)%12]}（相害）。</dd></dl>
+  <h3>五行与喜用</h3><dl>
+    <dt>五行</dt><dd>${WX[mx]}最旺，${WXTRAIT[mx]}。${lack.length?`五行缺${lack.map(i=>WX[i]).join("、")}，不代表不好，生活里适当补充就行。`:"五行齐全。"}</dd>
+    <dt>强弱</dt><dd>${o.strength}。${strTxt}</dd>
+    <dt>喜用神</dt><dd>${luck}</dd>
+    <dt>适合行业</dt><dd>${jobs}</dd></dl>
+  <h3>大运</h3>${yun}
+  <h3>流年</h3><dl>${ln}</dl>
+  <h3>感情</h3><dl>
+    <dt>${gender==="M"?"妻星":"夫星"}</dt><dd>${starTxt}</dd>
+    <dt>夫妻宫</dt><dd>日支${ZHI[o.P[2][1]]}${WX[db]}。${palTxt}</dd></dl>
+  <h3>星座</h3><dl>
+    <dt>☉ 太阳</dt><dd>${XZ[sun]}座（${XEL[sun%4]}）：${SUNTXT[sun]}。这是你的核心性格。<br>优点：${SUNPLUS[sun][0]}；短板：${SUNPLUS[sun][1]}。<br>恋爱：${SUNPLUS[sun][2]}。</dd>
+    <dt>☽ 月亮</dt><dd>${XZ[moon]}座：${MOONTXT[moon]}。这是你内心的情绪需求。</dd>
+    <dt>↑ 上升</dt><dd>${asc==null?"没填出生时间，算不出上升星座。":`${XZ[asc]}座：给人${ASCTXT[asc]}的第一印象。`}</dd></dl>
+  <p class="note">传统命理与占星，仅供娱乐和自我了解。看清自己比算准对方更重要。</p>`;
+}
+function runSelf(){
+  const o=read("S"); if(!o){$("readS").innerHTML="<p>请先填好生日。</p>";return;}
+  render("S",o); $("readS").innerHTML=selfReading(o,$("genS").value);
+}
+const XZDATE=["3/21–4/19","4/20–5/20","5/21–6/21","6/22–7/22","7/23–8/22","8/23–9/22","9/23–10/23","10/24–11/22","11/23–12/21","12/22–1/19","1/20–2/18","2/19–3/20"];
+const NOUN=["大树守护者","藤蔓小可爱","小太阳","烛光诗人","靠山本山","暖心田园","钢铁直球","精致宝石","自由浪子","温柔雨滴"];
+const ADJ=["热烈的","踏实的","嘴甜的","粘人的"];
+const LOVELINE=["我不太会说漂亮话，但我会一直站在你前面。","你在哪，我就往哪边长。","今天的阳光很好，但没你好。","我把最暖的那一点光，都留给你了。","累了就靠过来，我在。","你负责开心，饭我来做。","我喜欢你，就这样，没别的意思，就是喜欢。","我的偏爱，只给你一个人。","去过很多地方，最想停下来的是你身边。","下雨天也没关系，我陪你听雨。"];
+const MINE=["最怕被冷落和敷衍，回消息别太慢","最怕承诺不兑现，说到就要做到","最怕无聊和被管太紧，要给点自由","最怕忽冷忽热，安全感最重要"];
+const DAILY=[["约朋友、运动、团队合作","借钱、争输赢","适合和TA一起做件有挑战的小事"],["表白、拍照、发朋友圈、创作","口不择言、抬杠","适合表达心意，嘴甜一点准没错"],["购物、谈事、做计划","冲动消费","适合一起规划个小目标，今晚约饭你请"],["工作、学习、处理正事","熬夜、硬刚","TA可能比较忙，多体谅，少查岗"],["看书、休息、见长辈","想太多、内耗","适合安静陪伴，煲个电话粥"]];
+const persona=o=>ADJ[signOf(o.moon)%4]+"·"+NOUN[o.P[2][0]];
+const DMTYPE=DAYMASTER.map(t=>t.split("：")[0].replace("像",""));
+let lastMatch=null;
+function person(y,m,d,city){const c=chart(y,m,d,12,0,false,city);return {...c,...analyze(c),name:"TA",city,unk:true,y};}
+function findMatch(){
+  const me=read("S"); if(!me) return;
+  const g=$("genS").value, yg=Number($("younger").value), og=Number($("older").value);
+  const [by,bm,bd]=$("dateS").value.split("-").map(Number);
+  const start=Date.UTC(by-og,bm-1,bd), end=Date.UTC(by+yg,bm-1,bd);
+  const all=[], bySign={}, byYear={}, byEl={};
+  const acc=(o,k,v,lab)=>{(o[k]=o[k]||{sum:0,n:0,lab}).sum+=v;o[k].n++;};
+  for(let t=start;t<=end;t+=864e5){
+    const D=new Date(t), y=D.getUTCFullYear(), m=D.getUTCMonth()+1, d=D.getUTCDate();
+    const p=person(y,m,d,me.city);
+    const [M,F]=g==="M"?[me,p]:[p,me];
+    const B=bazi(M,F), X=stars(M,F), s=Math.round(B.s*0.6+X.s*0.4);
+    all.push({y,m,d,s,p});
+    const sg=signOf(p.sun); acc(bySign,sg,s);
+    const yb=p.P[0][1], Y=((y-4)%12+12)%12===yb?y:y-1; acc(byYear,Y,s,SX[yb]);
+    acc(byEl,el(p.P[2][0]),s);
+  }
+  const avg=o=>Object.entries(o).map(([k,v])=>({k:Number(k),a:v.sum/v.n,lab:v.lab})).sort((a,b)=>b.a-a.a);
+  const signs=avg(bySign), years=avg(byYear).filter(x=>byYear[x.k].n>=200); let els=avg(byEl);
+  all.sort((a,b)=>b.s-a.s);
+  const top=all.slice(0,6);
+  const ec=[0,0,0,0,0]; all.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
+  els.sort((a,b)=>ec[b.k]-ec[a.k]);
+  const who=g==="M"?"她":"他";
+  lastMatch={signs:signs.slice(0,3).map(x=>XZ[x.k]),year:years[0],el:els[0].k};
+  $("matchOut").innerHTML=`
+   <h3>最配的星座</h3><ul class="rank">${signs.slice(0,5).map((x,i)=>`<li><span class="no">${i+1}</span><span>${XZ[x.k]}座 <small>${XZDATE[x.k]} · ${XEL[x.k%4]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
+   <p class="note">分数是这个星座期间出生的所有人和你合婚的平均分。最不配的是${XZ[signs[signs.length-1].k]}座（${Math.round(signs[signs.length-1].a)}分）。</p>
+   <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
+   <p class="note">按农历生肖年（立春到立春）统计。</p>
+   <h3>最配的具体生日</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>
+   <h3>你的理想型画像（心动前先对照）</h3>
+   <p>${who}最好是<b>${WX[els[0].k]}日主</b>的人（${DMTYPE.filter((_,i)=>el(i)===els[0].k).join("或")}型），性格上${DAYMASTER[els[0].k*2].split("：")[1].replace(/。$/,"")}。星座上优先找${lastMatch.signs.join("、")}座，年份上${years[0].k}年属${years[0].lab}的人和你最有缘。</p>
+   <p class="note">具体生日按中午出生估算，没算时柱和上升星座，真遇到了可以去"合婚配对"里填准确时间再算一次。</p>`;
+}
+function scoreCard(html){$("cardSlot").innerHTML=`<div class="sc-card">${html}<div class="foot">心动气象台 · 八字 × 星座 · 仅供娱乐</div></div>`;$("overlay").hidden=false;}
+$("overlay").addEventListener("click",e=>{ if(!e.target.closest(".sc-card")) $("overlay").hidden=true; });
+$("shareSelf").addEventListener("click",()=>{
+  const o=read("S"); if(!o) return; const dm=o.P[2][0], sun=signOf(o.sun), moon=signOf(o.moon);
+  const nm=($("nameS").value.trim()||"我").replace(/（示例）/,"");
+  scoreCard(`<div class="brand"><span>我的命盘</span><span><svg viewBox="0 0 120 100" width="84" height="70"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--ink)"/><circle cx="61" cy="50" r="3.6" fill="var(--ink)"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--seal)"/></svg></span></div>
+   <h4>${nm}</h4>
+   <div class="gz4">${o.P.map((p,i)=>`<div><small>${"年月日时"[i]}</small>${p?GAN[p[0]]+"<br>"+ZHI[p[1]]:"？<br>？"}</div>`).join("")}</div>
+   <div class="mid">${persona(o)}</div>
+   <div class="chips"><span>☉ ${XZ[sun]}</span><span>☽ ${XZ[moon]}</span><span>↑ ${o.asc==null?"未知":XZ[signOf(o.asc)]}</span><span>属${SX[o.P[0][1]]}</span><span>喜${o.xi.map(i=>WX[i]).join("")}</span></div>
+   <ul><li>「${LOVELINE[dm]}」</li><li>${DMPLUS[dm][0]}</li><li>恋爱：${SUNPLUS[sun][2]}</li>${lastMatch?`<li>最配：${lastMatch.signs.join("、")}座，${lastMatch.year.k}年属${lastMatch.year.lab}</li>`:`<li>情绪需求：${MOONTXT[moon]}</li>`}</ul>`);
+});
+$("sharePair").addEventListener("click",()=>{
+  const M=read("M"),F=read("F"); if(!M||!F) return;
+  const B=bazi(M,F), X=stars(M,F), s=Math.round(B.s*0.6+X.s*0.4), [v]=verdict(s);
+  const pos=B.items.filter(i=>i.p>0).sort((a,b)=>b.p-a.p).slice(0,2).map(i=>`${i.k}：${i.t.split("。")[1]||i.t.split("。")[0]}`);
+  const bx=X.items.filter(i=>i.p!=null).sort((a,b)=>b.p-a.p)[0];
+  scoreCard(`<div class="brand"><span>合婚帖</span><span><svg viewBox="0 0 120 100" width="84" height="70"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--ink)"/><circle cx="61" cy="50" r="3.6" fill="var(--ink)"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="var(--seal)" opacity=".45"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--seal)"/></svg></span></div>
+   <h4>${M.name.replace(/（示例）/,"")} × ${F.name.replace(/（示例）/,"")}</h4>
+   <div class="big">${s}</div><div class="mid">${v}</div>
+   <div class="chips"><span>属${SX[M.P[0][1]]} × 属${SX[F.P[0][1]]}</span><span>${XZ[signOf(M.sun)]} × ${XZ[signOf(F.sun)]}</span></div>
+   <ul>${pos.map(t=>`<li>${t}</li>`).join("")}<li>${bx.k}：${bx.t.split("。").slice(0,2).join("，")}</li></ul>`);
+});
+$("findBtn").addEventListener("click",()=>{ $("matchOut").innerHTML="<p>正在帮你一天一天地筛……</p>"; setTimeout(findMatch,30); });
+function route(){
+  const h=location.hash, pair=h==="#pair", match=h==="#match";
+  $("viewMe").hidden=pair; $("viewPair").hidden=!pair;
+  $("viewSelf").hidden=pair||match; $("viewMatch").hidden=!match;
+  $("tabSelf").setAttribute("aria-current",!pair&&!match?"page":"false");
+  $("tabMatch").setAttribute("aria-current",match?"page":"false");
+  $("tabPair").setAttribute("aria-current",pair?"page":"false");
+  if(pair) run(); else runSelf();
+}
+$("toPair").addEventListener("click",()=>{
+  const g=$("genS").value;
+  ["name","date","time","city"].forEach(k=>$(k+g).value=$(k+"S").value);
+  $("unk"+g).checked=$("unkS").checked;
+  location.hash="#pair"; route(); window.scrollTo(0,0);
+});
+$("go").addEventListener("click",run);
+["date","time","city","unk","name"].forEach(k=>["M","F"].forEach(s=>$(k+s).addEventListener("change",run)));
+["date","time","city","unk","name","gen"].forEach(k=>$(k+"S").addEventListener("change",runSelf));
+function setPal(k){ if(k) document.documentElement.setAttribute("data-palette",k); else document.documentElement.removeAttribute("data-palette");
+  document.querySelectorAll(".palette button").forEach(b=>b.setAttribute("aria-pressed",String(b.id==="pal-"+k)));
+  try{localStorage.setItem("palette",k);}catch(e){} }
+document.querySelectorAll(".palette button").forEach(b=>b.addEventListener("click",()=>setPal(b.id.slice(4))));
+let sp=""; try{sp=localStorage.getItem("palette")||"";}catch(e){} setPal(sp);
+function toast(t){const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,1800);}
+let PEOPLE=[]; try{PEOPLE=JSON.parse(localStorage.getItem("people")||"[]");}catch(e){PEOPLE=[];}
+function savePeople(){try{localStorage.setItem("people",JSON.stringify(PEOPLE));}catch(e){}}
+function fillSaved(){
+  const opts=PEOPLE.map((p,i)=>`<option value="${i}">${p.name}（${p.g==="M"?"男":"女"}，${p.date}）</option>`).join("");
+  $("savedS").innerHTML=`<option value="">${PEOPLE.length?"— 选一个人填进来 —":"— 还没有保存的人 —"}</option>`+opts;
+  ["M","F"].forEach(s=>{$("saved"+s).innerHTML=`<option value="">— 不选，手动填 —</option>`+PEOPLE.map((p,i)=>p.g===s?`<option value="${i}">${p.name}（${p.date}）</option>`:"").join("");});
+}
+function loadInto(sfx,p){$("name"+sfx).value=p.name;$("date"+sfx).value=p.date;$("time"+sfx).value=p.time;$("city"+sfx).value=p.city;$("unk"+sfx).checked=p.unk;if(sfx==="S")$("genS").value=p.g;}
+$("saveS").addEventListener("click",()=>{
+  const p={name:($("nameS").value.trim()||"未命名").replace(/（示例）/,""),g:$("genS").value,date:$("dateS").value,time:$("timeS").value,city:$("cityS").value,unk:$("unkS").checked};
+  if(!p.date){toast("先填生日再保存");return;}
+  const i=PEOPLE.findIndex(x=>x.name===p.name); if(i>=0) PEOPLE[i]=p; else PEOPLE.push(p);
+  savePeople(); fillSaved(); toast("已保存："+p.name);
+});
+$("delS").addEventListener("click",()=>{const v=$("savedS").value; if(v===""){toast("先在列表里选要删除的人");return;} const n=PEOPLE[v].name; PEOPLE.splice(Number(v),1); savePeople(); fillSaved(); toast("已删除："+n);});
+$("savedS").addEventListener("change",()=>{const v=$("savedS").value; if(v==="")return; loadInto("S",PEOPLE[v]); runSelf();});
+["M","F"].forEach(s=>$("saved"+s).addEventListener("change",()=>{const v=$("saved"+s).value; if(v==="")return; loadInto(s,PEOPLE[v]); run();}));
+fillSaved();
+let seen=false; try{seen=localStorage.getItem("guideSeen")==="1";}catch(e){}
+$("guide").hidden=seen;
+$("guideX").addEventListener("click",()=>{$("guide").hidden=true;try{localStorage.setItem("guideSeen","1");}catch(e){}});
+window.addEventListener("hashchange",route);
+route();
+</script>
 
-    h2 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 1px;
-      margin-bottom: 14px;
-    }
-
-    .hobbies {
-      list-style: none;
-      display: grid;
-      gap: 12px;
-    }
-
-    .hobbies li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      background: var(--accent-soft);
-      border-radius: 12px;
-      text-align: left;
-      font-size: 16px;
-    }
-
-    .hobbies .icon { font-size: 22px; }
-
-    .tools-title { margin-top: 28px; }
-
-    .tool {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #4fd1c1, #6aa8f0);
-      color: #fff;
-      text-decoration: none;
-      text-align: left;
-      box-shadow: 0 6px 16px rgba(79, 160, 200, 0.25);
-      transition: transform .15s;
-    }
-    .tool:active { transform: scale(.98); }
-    .tool .icon { font-size: 24px; }
-    .tool-text { flex: 1; display: flex; flex-direction: column; line-height: 1.4; }
-    .tool-text b { font-size: 16px; }
-    .tool-text small { font-size: 12px; opacity: .9; }
-    .tool .arrow { font-size: 24px; opacity: .8; }
-
-    footer {
-      margin-top: 28px;
-      font-size: 13px;
-      color: #9ab0ae;
-    }
-
-    @media (max-width: 380px) {
-      .card { padding: 28px 20px; }
-      h1 { font-size: 24px; }
-    }
-  </style>
-</head>
-<body>
-  <main class="card">
-    <div class="avatar" aria-hidden="true">陈</div>
-    <h1>陈本灼</h1>
-    <p class="intro">你好！我是陈本灼，一个热爱生活、喜欢探索新事物的人，很高兴认识你。</p>
-
-    <h2>我的兴趣爱好</h2>
-    <ul class="hobbies">
-      <li><span class="icon">📚</span>阅读</li>
-      <li><span class="icon">🎵</span>听音乐</li>
-      <li><span class="icon">🏃</span>跑步运动</li>
-    </ul>
-
-    <h2 class="tools-title">我做的小工具</h2>
-    <a class="tool" href="bazi.html">
-      <span class="icon">🔮</span>
-      <span class="tool-text"><b>心动气象台</b><small>八字 × 星座 · 命盘与合婚配对</small></span>
-      <span class="arrow">›</span>
-    </a>
-
-    <footer>© 2026 陈本灼</footer>
-  </main>
-</body>
 </html>
