@@ -970,18 +970,26 @@ function findMatch(){
     acc(byEl,el(p.P[2][0]),s);
   }
   const avg=o=>Object.entries(o).map(([k,v])=>({k:Number(k),a:v.sum/v.n,lab:v.lab})).sort((a,b)=>b.a-a.a);
-  const signs=avg(bySign), years=avg(byYear).filter(x=>byYear[x.k].n>=200); let els=avg(byEl);
+  // 生肖和我相冲、相害的年份和生日不进推荐（传统合婚的忌讳），只在说明里提一句
+  const myYb=me.P[0][1], clash=yb=>{const r=rel(myYb,yb);return r==="chong"||r==="hai";};
+  const YREL={he:"生肖六合",san:"生肖三合",same:"同生肖",none:"生肖不冲不合",chong:"生肖相冲",hai:"生肖相害"};
+  let yearsAll=avg(byYear); const fullYears=yearsAll.filter(x=>byYear[x.k].n>=200); if(fullYears.length) yearsAll=fullYears;
+  yearsAll.forEach(x=>{x.yb=SX.indexOf(x.lab);});
+  let years=yearsAll.filter(x=>!clash(x.yb)); if(!years.length) years=yearsAll;
+  const cut=years[Math.min(2,years.length-1)].a, skipped=yearsAll.filter(x=>clash(x.yb)&&x.a>=cut);
+  const signs=avg(bySign); let els=avg(byEl);
   all.sort((a,b)=>b.s-a.s);
-  const top=all.slice(0,6);
-  const ec=[0,0,0,0,0]; all.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
+  let pool=all.filter(x=>!clash(x.p.P[0][1])); if(!pool.length) pool=all;
+  const top=pool.slice(0,6);
+  const ec=[0,0,0,0,0]; pool.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
   els.sort((a,b)=>ec[b.k]-ec[a.k]);
   const who=g==="M"?"她":"他";
   lastMatch={signs:signs.slice(0,3).map(x=>XZ[x.k]),year:years[0],el:els[0].k};
   $("matchOut").innerHTML=cards(`
    <h3>最配的星座</h3><ul class="rank">${signs.slice(0,5).map((x,i)=>`<li><span class="no">${i+1}</span><span>${XZ[x.k]}座 <small>${XZDATE[x.k]} · ${XEL[x.k%4]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
    <p class="note">分数是这个星座期间出生的所有人和你合婚的平均分。最不配的是${XZ[signs[signs.length-1].k]}座（${Math.round(signs[signs.length-1].a)}分）。</p>
-   <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
-   <p class="note">按农历生肖年（立春到立春）统计。</p>
+   <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"} · ${YREL[rel(myYb,x.yb)]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
+   <p class="note">按农历生肖年（立春到立春）统计。和你生肖相冲、相害的年份和生日不列入推荐${skipped.length?`：${skipped.map(x=>`${x.k}年属${x.lab}（${YREL[rel(myYb,x.yb)].slice(2)}）`).join("、")}平均分也不低，但没有列入`:""}。</p>
    <h3>最配的具体生日</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>
    <h3>你的理想型画像（心动前先对照）</h3>
    <p>${who}最好是<b>${WX[els[0].k]}日主</b>的人（${DMTYPE.filter((_,i)=>el(i)===els[0].k).join("或")}型），性格上${DAYMASTER[els[0].k*2].split("：")[1].replace(/。$/,"")}。星座上优先找${lastMatch.signs.join("、")}座，年份上${years[0].k}年属${years[0].lab}的人和你最有缘。</p>
@@ -1010,8 +1018,9 @@ $("sharePair").addEventListener("click",()=>{
    <ul>${pos.map(t=>`<li>${t}</li>`).join("")}<li>${bx.k}：${bx.t.split("。").slice(0,2).join("，")}</li></ul>`);
 });
 $("findBtn").addEventListener("click",()=>{ $("matchOut").innerHTML='<section class="blk"><p>正在帮你一天一天地筛……</p></section>'; setTimeout(findMatch,30); });
+let view="self"; // 当前显示哪个标签页：self / match / pair
 function route(){
-  const h=location.hash, pair=h==="#pair", match=h==="#match";
+  const pair=view==="pair", match=view==="match";
   $("viewMe").hidden=pair; $("viewPair").hidden=!pair;
   $("viewSelf").hidden=pair||match; $("viewMatch").hidden=!match;
   $("tabSelf").setAttribute("aria-current",!pair&&!match?"page":"false");
@@ -1026,7 +1035,7 @@ $("toPair").addEventListener("click",()=>{
   const g=$("genS").value;
   ["name","date","time","city"].forEach(k=>$(k+g).value=$(k+"S").value);
   $("unk"+g).checked=$("unkS").checked;
-  location.hash="#pair"; route(); window.scrollTo(0,0);
+  openTab("pair"); window.scrollTo(0,0);
 });
 $("go").addEventListener("click",run);
 ["date","time","city","unk","name"].forEach(k=>["M","F"].forEach(s=>$(k+s).addEventListener("change",run)));
@@ -1053,8 +1062,12 @@ fillSaved();
 let seen=false; try{seen=localStorage.getItem("guideSeen")==="1";}catch(e){}
 $("guide").hidden=seen;
 $("guideX").addEventListener("click",()=>{$("guide").hidden=true;try{localStorage.setItem("guideSeen","1");}catch(e){}});
-window.addEventListener("hashchange",route);
-route();
+// 标签页由脚本直接切换，不依赖链接跳转：有些内嵌的浏览器会拦截或改写 #链接，导致点了没反应
+function setView(v){ view=(v==="match"||v==="pair")?v:"self"; route(); }
+function openTab(v){ setView(v); try{ if(location.hash!=="#"+view) location.hash="#"+view; }catch(e){} }
+[["tabSelf","self"],["tabMatch","match"],["tabPair","pair"]].forEach(([id,v])=>$(id).addEventListener("click",e=>{ e.preventDefault(); openTab(v); }));
+window.addEventListener("hashchange",()=>{ const v=location.hash.slice(1), n=(v==="match"||v==="pair")?v:"self"; if(n!==view) setView(n); });
+setView(location.hash.slice(1));
 </script>
 </body>
 </html>
