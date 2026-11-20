@@ -767,7 +767,7 @@ function bazi(M,F){
   const rt={he:"六合",san:"三合",same:"同支",none:"无合无冲",hai:"相害",chong:"六冲"};
   // 生肖
   const ym=M.P[0][1], yf=F.P[0][1], yr=rel(ym,yf);
-  add("生肖",`属${SX[ym]} × 属${SX[yf]}，${rt[yr]}。`+{he:"传统认为最合的生肖组合，彼此吸引",san:"同一三合局，三观接近",same:"同生肖，想法相近，也容易较劲",none:"不冲不合，平稳",hai:"相害，小事上容易互相看不惯",chong:"相冲，脾气容易对着干"}[yr],{he:7,san:5,same:2,none:0,hai:-4,chong:-7}[yr]);
+  add("生肖",`属${SX[ym]} × 属${SX[yf]}，${rt[yr]}。`+{he:"传统认为最合的生肖组合，彼此吸引",san:"同一三合局，三观接近",same:"同生肖，想法相近，也容易较劲",none:"不冲不合，平稳",hai:"相害，是传统合婚的忌讳，小事上容易互相看不惯",chong:"相冲，是传统合婚的忌讳，脾气容易对着干"}[yr],{he:7,san:5,same:2,none:0,hai:-10,chong:-12}[yr]);
   // 年命纳音
   const nm=nayin(M.P[0]), nf=nayin(F.P[0]), am=nayinEl(nm), af=nayinEl(nf);
   let np,nt;
@@ -961,7 +961,7 @@ function findMatch(){
   const now=new Date(), today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()), adult=Date.UTC(now.getFullYear()-18,now.getMonth(),now.getDate());
   const meAdult=Date.UTC(by,bm-1,bd)<=adult;
   const start=Date.UTC(by-(free?FREE:og),bm-1,bd), end=Math.min(today,Date.UTC(by+(free?FREE:yg),bm-1,bd)); // 不会推荐还没出生的日期
-  const all=[], bySign={}, byYear={}, byEl={};
+  const all=[], bySign={}, bySignAll={}, byYear={}, byEl={};
   const acc=(o,k,v,lab)=>{(o[k]=o[k]||{sum:0,n:0,lab}).sum+=v;o[k].n++;};
   for(let t=start;t<=end;t+=864e5){
     if(free&&meAdult&&t>adult) break; // 自由搭配时只看已经成年的人
@@ -970,7 +970,7 @@ function findMatch(){
     const [M,F]=g==="M"?[me,p]:[p,me];
     const B=bazi(M,F), X=stars(M,F), s=Math.round(B.s*0.6+X.s*0.4);
     all.push({y,m,d,s,p});
-    const sg=signOf(p.sun); acc(bySign,sg,s);
+    const sg=signOf(p.sun); acc(bySignAll,sg,s); if(!["chong","hai"].includes(rel(me.P[0][1],p.P[0][1]))) acc(bySign,sg,s); // 星座排名不算和我生肖相冲、相害的人
     const yb=p.P[0][1], Y=((y-4)%12+12)%12===yb?y:y-1; acc(byYear,Y,s,SX[yb]);
     acc(byEl,el(p.P[2][0]),s);
   }
@@ -983,22 +983,23 @@ function findMatch(){
   yearsAll.forEach(x=>{x.yb=SX.indexOf(x.lab);});
   let years=yearsAll.filter(x=>!clash(x.yb)); if(!years.length) years=yearsAll;
   const cut=years[Math.min(2,years.length-1)].a, skipped=yearsAll.filter(x=>clash(x.yb)&&x.a>=cut);
-  const signs=avg(bySign); let els=avg(byEl);
+  const signs=avg(Object.keys(bySign).length?bySign:bySignAll); let els=avg(byEl);
   all.sort((a,b)=>b.s-a.s);
   let pool=all.filter(x=>!clash(x.p.P[0][1])); if(!pool.length) pool=all;
   const top=pool.slice(0,free?10:6);
-  const ec=[0,0,0,0,0]; pool.slice(0,100).forEach(x=>ec[el(x.p.P[2][0])]++);
+  const ec=[0,0,0,0,0], stc=Array(10).fill(0); pool.slice(0,100).forEach(x=>{ec[el(x.p.P[2][0])]++; stc[x.p.P[2][0]]++;});
   els.sort((a,b)=>ec[b.k]-ec[a.k]);
+  const ek=els[0].k, st=stc[2*ek]>=stc[2*ek+1]?2*ek:2*ek+1; // 这个五行里，前 100 名中更常见的是阳干还是阴干
   const who=g==="M"?"她":"他";
   lastMatch={signs:signs.slice(0,3).map(x=>XZ[x.k]),year:years[0],el:els[0].k};
   $("matchOut").innerHTML=cards(`
    <h3>最配的星座</h3><ul class="rank">${signs.slice(0,5).map((x,i)=>`<li><span class="no">${i+1}</span><span>${XZ[x.k]}座 <small>${XZDATE[x.k]} · ${XEL[x.k%4]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
-   <p class="note">分数是这个星座期间出生的所有人和你合婚的平均分。最不配的是${XZ[signs[signs.length-1].k]}座（${Math.round(signs[signs.length-1].a)}分）。</p>
+   <p class="note">分数是这个星座期间出生的人和你合婚的平均分，不算和你生肖相冲、相害的人。最不配的是${XZ[signs[signs.length-1].k]}座（${Math.round(signs[signs.length-1].a)}分）。</p>
    <h3>最配的出生年份</h3><ul class="rank">${years.slice(0,3).map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.k}年 · 属${x.lab} <small>${x.k>by?"比你小":x.k<by?"比你大":"和你同年"}${x.k===by?"":Math.abs(x.k-by)+"岁"} · ${YREL[rel(myYb,x.yb)]}</small></span><span class="sc">${Math.round(x.a)}</span></li>`).join("")}</ul>
    <p class="note">按农历生肖年（立春到立春）统计。和你生肖相冲、相害的年份和生日不列入推荐${skipped.length?`：${skipped.map(x=>`${x.k}年属${x.lab}（${YREL[rel(myYb,x.yb)].slice(2)}）`).join("、")}平均分也不低，但没有列入`:""}。</p>
    <h3>${free?"分数最高的十个生日":"最配的具体生日"}</h3><ul class="rank">${top.map((x,i)=>`<li><span class="no">${i+1}</span><span>${x.y}年${x.m}月${x.d}日 <small>${GAN[x.p.P[2][0]]}${WX[el(x.p.P[2][0])]}日主 · ${XZ[signOf(x.p.sun)]}座 · 属${SX[x.p.P[0][1]]}</small></span><span class="sc">${x.s}</span></li>`).join("")}</ul>${free?`<p class="note">两个都选了 0，按自由搭配来找：不限年龄，范围是比你大 ${FREE} 岁到小 ${FREE} 岁之间${meAdult?"、已经成年":""}的人。</p>`:""}
    <h3>你的理想型画像（心动前先对照）</h3>
-   <p>${who}最好是<b>${WX[els[0].k]}日主</b>的人（${DMTYPE.filter((_,i)=>el(i)===els[0].k).join("或")}型），性格上${DAYMASTER[els[0].k*2].split("：")[1].replace(/。$/,"")}。星座上优先找${lastMatch.signs.join("、")}座，年份上${years[0].k}年属${years[0].lab}的人和你最有缘。</p>
+   <p>${who}最好是<b>${WX[ek]}日主</b>的人，尤其是${GAN[st]}${WX[ek]}日主（${DMTYPE[st]}型），性格上${DAYMASTER[st].split("：")[1].replace(/。$/,"")}。星座上优先找${lastMatch.signs.join("、")}座，年份上${years[0].k}年属${years[0].lab}的人和你最有缘。</p>
    <p class="note">具体生日按中午出生估算，没算时柱和上升星座，真遇到了可以去"合婚配对"里填准确时间再算一次。</p>`);
 }
 function scoreCard(html){$("cardSlot").innerHTML=`<div class="sc-card">${html}<div class="foot">对盘 · 八字 × 星座 · 仅供娱乐</div></div>`;$("overlay").hidden=false;}
