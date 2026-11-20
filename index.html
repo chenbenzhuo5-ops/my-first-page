@@ -136,8 +136,9 @@ button.go:active,button.alt:active,button.mini:active{transform:scale(.97)}
 button.mini{flex:none;height:32px;padding:0 13px;border:0;border-radius:99px;background:rgba(var(--a-rgb),.12);color:var(--at);font-size:13px;font-weight:600;white-space:nowrap;transition:transform .12s}
 button.mini.ghost{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--line)}
 .saved .mini{height:44px;border-radius:12px;padding:0 14px}
-.btns{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
-@media (max-width:400px){.btns{grid-template-columns:1fr}}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:340px){.btns{grid-template-columns:1fr}}
+#inviteUrl{font-size:13px;color:var(--ink2)}
 
 /* ---------- 命盘：四柱 ---------- */
 .out{display:flex;flex-direction:column;gap:12px}
@@ -182,6 +183,14 @@ button.mini.ghost{background:transparent;color:var(--muted);box-shadow:inset 0 0
 .yj span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:10px;background:var(--soft);font-size:12px;line-height:1.5}
 .yj b.good{color:var(--wood)}.yj b.bad{color:var(--fire)}
 .yj .swatch{margin:0 -2px 0 0}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-items:end;padding-top:4px}
+.week div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
+.week i{display:block;width:100%;max-width:24px;border-radius:7px 7px 3px 3px;background:rgba(var(--a-rgb),.2)}
+.week .best i{background:var(--grad)}
+.week span{font:700 12px/1 var(--num);color:var(--muted)}
+.week .best span{color:var(--at)}
+.week small{font-size:11px;color:var(--muted);white-space:nowrap}
+.week .best small{color:var(--at);font-weight:700}
 .blk dt{align-self:start;justify-self:start;padding:2px 8px;border-radius:8px;background:rgba(var(--a-rgb),.1);color:var(--at);font-size:12px;font-weight:600;line-height:1.6;white-space:nowrap}
 .blk dd{margin:0;color:var(--ink2)}
 .swatch{display:inline-block;width:.9em;height:.9em;margin-right:4px;border-radius:50%;vertical-align:-1px;border:1px solid var(--line)}
@@ -330,7 +339,10 @@ details.dict dd{margin:0;color:var(--ink2)}
 
     <div id="viewSelf" class="stack view">
       <div class="reading" id="readS" aria-live="polite"></div>
-      <div class="btns"><button type="button" class="alt" id="shareSelf">生成上头卡</button><button type="button" class="go" id="toPair">拿我的八字去配对 →</button></div>
+      <button type="button" class="go" id="toPair">拿我的八字去配对 →</button>
+      <div class="btns"><button type="button" class="alt" id="invite">邀请 TA 来配对</button><button type="button" class="alt" id="shareSelf">生成上头卡</button></div>
+      <input id="inviteUrl" readonly hidden aria-label="邀请链接">
+      <p class="note">邀请链接会带上你的生日、出生时间和城市，只发给你信任的人。对方打开后只要填自己的生日，就能看到你们的合婚结果。</p>
       <details class="dict"><summary>术语小词典（看不懂点这里）</summary><dl>
       <dt>四柱八字</dt><dd>出生的年、月、日、时各用一个天干加一个地支表示，共四柱八个字，是排盘的基础。</dd>
       <dt>日主</dt><dd>日柱的天干，代表你自己。分析性格、强弱、喜忌都以它为中心。</dd>
@@ -346,7 +358,9 @@ details.dict dd{margin:0;color:var(--ink2)}
       <dt>太阳星座</dt><dd>出生时太阳所在的星座，就是平常说的"星座"，代表核心性格。</dd>
       <dt>月亮星座</dt><dd>出生时月亮所在的星座，代表情绪和内心需求。月亮两三天换一个星座。</dd>
       <dt>上升星座</dt><dd>出生那一刻东方地平线上升起的星座，代表外在形象和给人的第一印象，大约两小时换一个，需要准确的出生时间。</dd>
-      <dt>相位</dt><dd>两个星体之间的角度关系。三分相最和谐，六分相顺畅，对分相互相吸引又拉扯，四分相有张力。</dd>
+      <dt>金星星座</dt><dd>出生时金星所在的星座，代表你在感情里喜欢什么、怎么表达爱。</dd>
+      <dt>火星星座</dt><dd>出生时火星所在的星座，代表你的行动力、追求喜欢的人的方式。</dd>
+      <dt>相位</dt><dd>两颗星在黄道上相差的角度。合相约 0°、六分相 60°、四分相 90°、三分相 120°、对分相 180°，相差几度以内都算（叫容许度），越接近越强。三分相最和谐，六分相顺畅，对分相互相吸引又拉扯，四分相有张力。</dd>
     </dl></details>
     </div>
 
@@ -366,6 +380,7 @@ details.dict dd{margin:0;color:var(--ink2)}
   </div>
 
   <div id="viewPair" class="stack view" hidden>
+    <section class="guide" id="inviteBox" hidden><b id="inviteTitle"></b><p id="inviteText" style="margin:0"></p></section>
     <div class="pair">
       <section class="card pm">
         <h2><span class="dot"></span>男方<span class="tag">乾造</span></h2>
@@ -410,7 +425,7 @@ details.dict dd{margin:0;color:var(--ink2)}
     <section class="blk"><h3>趣味彩蛋</h3><ul class="items" id="fun"></ul></section>
     <section class="blk"><h3>清醒建议</h3><ul class="tips" id="tips"></ul></section>
     <button type="button" class="alt" id="sharePair">生成上头卡</button>
-    <p class="note" id="noteP">八字按真太阳时排盘（按出生城市经度和均时差校正），节气按太阳实际黄经划分，23点后算次日（晚子时归次日）。太阳、月亮位置和上升点用简化天文公式计算，误差很小，但出生时间不准时上升星座可能不对；不知道时间时，月亮按中午估算，没有时柱和上升。中国1986–1991年夏令时期间出生的，请把夏天的出生时间减1小时再填。传统民俗与占星，仅供娱乐。命再合也要好好经营，命不合也别急着分手，脑子要自己带。</p>
+    <p class="note" id="noteP">八字按真太阳时排盘（按出生城市经度和均时差校正），节气按太阳实际黄经划分，23点后算次日（晚子时归次日）。太阳、月亮、金星、火星的位置和上升点用简化天文公式计算，误差很小，但出生时间不准时上升星座可能不对；不知道时间时，月亮按中午估算，没有时柱和上升。中国1986–1991年夏令时期间出生的，请把夏天的出生时间减1小时再填。传统民俗与占星，仅供娱乐。命再合也要好好经营，命不合也别急着分手，脑子要自己带。</p>
   </div>
 
   <footer class="ft"><b>对盘</b><br>八字 × 星座 · 传统民俗与占星，仅供娱乐</footer>
@@ -646,6 +661,25 @@ function ascLon(jd,lon,lat){
   const th=rad(nrm(280.46061837+360.98564736629*(jd-2451545)+lon)), e=rad(23.4393);
   return nrm(Math.atan2(Math.cos(th),-(Math.sin(th)*Math.cos(e)+Math.tan(rad(lat))*Math.sin(e)))*180/Math.PI);}
 function eot(doy){const B=rad(360/365*(doy-81));return 9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B);}
+// 金星、火星的位置：用 JPL 公布的近似轨道根数（E. M. Standish，1800–2050 年适用，前后几十年误差仍很小），
+// 先算日心坐标，再换成地心黄经，最后加上岁差换到当天的春分点（和太阳、月亮用的是同一种黄经）
+const ORBIT={ // 半长轴、偏心率、倾角、平黄经、近日点黄经、升交点黄经（J2000 黄道），以及每世纪的变化量
+  venus:[[0.72333566,0.00677672,3.39467605,181.97909950,131.60246718,76.67984255],[0.00000390,-0.00004107,-0.00078890,58517.81538729,0.00268329,-0.27769418]],
+  earth:[[1.00000261,0.01671123,-0.00001531,100.46457166,102.93768193,0],[0.00000562,-0.00004392,-0.01294668,35999.37244981,0.32327364,0]],
+  mars:[[1.52371034,0.09339410,1.84969142,-4.55343205,-23.94362959,49.55953891],[0.00001847,0.00007882,-0.00813131,19140.30268499,0.44441088,-0.29257343]]};
+function helio(p,T){
+  const [base,rate]=ORBIT[p], [a,e,I,L,w,O]=base.map((v,i)=>v+rate[i]*T);
+  const M=rad(((L-w)%360+540)%360-180);
+  let E=M+e*Math.sin(M);
+  for(let i=0;i<8;i++) E-=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E)); // 解开普勒方程
+  const x=a*(Math.cos(E)-e), y=a*Math.sqrt(1-e*e)*Math.sin(E);
+  const cw=Math.cos(rad(w-O)), sw=Math.sin(rad(w-O)), cO=Math.cos(rad(O)), sO=Math.sin(rad(O)), cI=Math.cos(rad(I));
+  return [(cw*cO-sw*sO*cI)*x+(-sw*cO-cw*sO*cI)*y, (cw*sO+sw*cO*cI)*x+(-sw*sO+cw*cO*cI)*y];
+}
+function planetLon(p,T){
+  const P=helio(p,T), G=helio("earth",T);
+  return nrm(Math.atan2(P[1]-G[1],P[0]-G[0])*180/Math.PI+1.396971*T);
+}
 const jzIdx=(s,b)=>((6*s-5*b)%60+60)%60;
 function chart(y,m,d,hh,mm,timeKnown,city){
   const [,lon,lat,tz]=city;
@@ -665,9 +699,9 @@ function chart(y,m,d,hh,mm,timeKnown,city){
   const di=((Math.round((dayMs-Date.UTC(1949,9,1))/864e5)%60)+60)%60, ds=di%10, db=di%12;
   const P=[[ys,yb],[ms,mb],[ds,db]];
   if(timeKnown){const hb=Math.floor((tH+1)/2)%12;P.push([((ds%5)*2+hb)%10,hb]);} else P.push(null);
-  const ml=moonLon(T);
+  const ml=moonLon(T), vl=planetLon("venus",T), ma=planetLon("mars",T);
   const asc=timeKnown?ascLon(jd,lon,lat):null;
-  return {P,jd,k,sun:sl,moon:ml,asc,trueSolar:timeKnown?`${String(ts.getUTCHours()).padStart(2,"0")}:${String(ts.getUTCMinutes()).padStart(2,"0")}`:null,corr};
+  return {P,jd,k,sun:sl,moon:ml,venus:vl,mars:ma,asc,trueSolar:timeKnown?`${String(ts.getUTCHours()).padStart(2,"0")}:${String(ts.getUTCMinutes()).padStart(2,"0")}`:null,corr};
 }
 const el=s=>Math.floor(s/2);
 function shishen(dm,s){const d=(el(s)-el(dm)+5)%5;return SHISHEN[d][(s%2===dm%2)?0:1];}
@@ -719,6 +753,8 @@ function dayun(c,gender,birthYear){
   return {fwd,ay,am,list};
 }
 const $=id=>document.getElementById(id);
+// 称呼会被放进页面里显示：先去掉可能被当成网页代码的符号，并限制长度
+const clean=s=>String(s==null?"":s).replace(/[<>&"'`\\]/g,"").trim().slice(0,20);
 // 吉祥物：页面顶部和上头卡共用这一份
 const MASCOT=`<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M78 62 C92 70 96 84 112 80 C104 72 108 64 116 66" fill="none" stroke="var(--m-tail,var(--seal))" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="52" r="34" fill="var(--m-body,var(--paper))" stroke="var(--m-ink,var(--ink))" stroke-width="3"/><path d="M24 40 C40 30 62 30 78 42 M20 56 C38 46 64 46 82 58 M30 74 C44 64 62 66 74 76" fill="none" stroke="var(--seal)" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="39" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><circle cx="61" cy="50" r="3.6" fill="var(--m-ink,var(--ink))"/><path d="M45 58 Q50 63 55 58" fill="none" stroke="var(--m-ink,var(--ink))" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="32" cy="60" rx="5" ry="3" fill="#ff9db0" opacity=".75"/><ellipse cx="68" cy="60" rx="5" ry="3" fill="#ff9db0" opacity=".75"/><path d="M50 18 C46 10 38 10 38 16 C38 22 50 26 50 26 C50 26 62 22 62 16 C62 10 54 10 50 18Z" fill="var(--m-heart,var(--b))"/></svg>`;
 $("mascot").innerHTML=MASCOT;
@@ -741,12 +777,12 @@ function cards(html,tail){
 function read(s){
   const dv=$("date"+s).value; if(!dv) return null;
   const [y,m,d]=dv.split("-").map(Number);
-  const unk=$("unk"+s).checked, tv=$("time"+s).value||"12:00";
-  $("time"+s).disabled=unk;
+  const unkBox=$("unk"+s).checked; $("time"+s).disabled=unkBox;
+  const unk=unkBox||!$("time"+s).value, tv=$("time"+s).value||"12:00"; // 时间没填也按「不知道」算
   const [hh,mm]=tv.split(":").map(Number);
   const city=CITIES[Number($("city"+s).value)];
   const c=chart(y,m,d,hh,mm,!unk,city), a=analyze(c);
-  const name=$("name"+s).value.trim()||(s==="M"?"男方":"女方");
+  const name=clean($("name"+s).value)||(s==="M"?"男方":"女方");
   return {...c,...a,name,city,unk,y};
 }
 function render(s,o){
@@ -758,7 +794,7 @@ function render(s,o){
   const mx=Math.max(...o.cnt,1);
   h+=`<div class="wxbars">`+o.cnt.map((n,i)=>`<div class="el-${i}"><span>${WX[i]}</span><span class="trk"><i style="width:${n/mx*100}%"></i></span><span>${n}</span></div>`).join("")+`</div>`;
   const sun=XZ[signOf(o.sun)], moon=XZ[signOf(o.moon)], asc=o.asc==null?"未知":XZ[signOf(o.asc)];
-  h+=`<div class="facts"><span>属${SX[o.P[0][1]]}</span><span>日主 ${GAN[dm]}${WX[el(dm)]}</span><span>${o.strength}</span><span>喜用 ${o.xi.map(i=>WX[i]).join("、")}</span><span>☉ 太阳${sun}</span><span>☽ 月亮${moon}</span><span>↑ 上升${asc}</span></div>`;
+  h+=`<div class="facts"><span>属${SX[o.P[0][1]]}</span><span>日主 ${GAN[dm]}${WX[el(dm)]}</span><span>${o.strength}</span><span>喜用 ${o.xi.map(i=>WX[i]).join("、")}</span><span>☉ 太阳${sun}</span><span>☽ 月亮${moon}</span><span>♀ 金星${XZ[signOf(o.venus)]}</span><span>♂ 火星${XZ[signOf(o.mars)]}</span><span>↑ 上升${asc}</span></div>`;
   h+=`<p class="meta">${o.unk?"未填时间：无时柱，无上升星座，月亮按中午估算。":`真太阳时 ${o.trueSolar}（比钟表${o.corr>=0?"快":"慢"} ${Math.abs(Math.round(o.corr))} 分钟）。`}年命 ${nayin(o.P[0])}。</p>`;
   $("out"+s).innerHTML=h;
 }
@@ -815,17 +851,36 @@ function bazi(M,F){
   add("其他柱",on.length?on.join("；")+"。":"月柱、时柱之间没有明显的合冲。",op);
   return {s:Math.max(30,Math.min(98,s)),items};
 }
+// 星盘配对：看两颗星实际相差多少度，落在哪个主要相位的容许度里；越接近准确角度，影响越大
+const ASPECTS=[ // 名称、角度、容许度、一般组合的分数、金星火星组合的分数、说明
+  {n:"合相",a:0,orb:8,s:76,sa:90,tx:"能量合在一起，强烈共鸣",txa:"一见就来电，吸引力很强"},
+  {n:"六分相",a:60,orb:6,s:82,sa:82,tx:"互相欣赏，配合轻松",txa:"互相有好感，相处轻松愉快"},
+  {n:"四分相",a:90,orb:8,s:52,sa:70,tx:"有张力，容易摩擦也有火花",txa:"吸引很强但容易吵，热得快也冷得快"},
+  {n:"三分相",a:120,orb:8,s:90,sa:86,tx:"最和谐的角度，舒服自在",txa:"吸引自然又和谐，越处越有感觉"},
+  {n:"对分相",a:180,orb:8,s:72,sa:80,tx:"互相吸引又互相拉扯，互补性强",txa:"互相吸引又互相较劲，激情和摩擦都多"}];
+const NOASP=64; // 没有形成主要相位时的分数
+function aspectOf(a,b,attract){
+  let d=Math.abs(a-b)%360; if(d>180) d=360-d;
+  let best=null;
+  ASPECTS.forEach(x=>{const dev=Math.abs(d-x.a); if(dev<=x.orb&&(!best||dev<best.dev)) best={...x,dev};});
+  return {best,score:best?NOASP+((attract?best.sa:best.s)-NOASP)*(1-best.dev/best.orb):NOASP};
+}
+const dg=l=>`${XZ[signOf(l)]} ${Math.floor(l%30)}°`;
 function stars(M,F){
-  const pairs=[["太阳×太阳","性格和人生方向",M.sun,F.sun,.2],["月亮×月亮","情绪和生活需求",M.moon,F.moon,.25],
-    ["男日×女月","他的理想与她的情感",M.sun,F.moon,.2],["女日×男月","她的理想与他的情感",F.sun,M.moon,.15]];
-  if(M.asc!=null&&F.asc!=null) pairs.push(["上升×上升","第一印象和相处方式",M.asc,F.asc,.2]);
-  const TX={0:"同在一个星座，强烈共鸣",1:"差异较大，需要时间适应",2:"互相欣赏，配合轻松",3:"有张力，容易摩擦也有火花",4:"最和谐的角度，舒服自在",5:"频率不同，需要多理解",6:"互相吸引又互相拉扯，互补性强"};
-  let sum=0,wt=0; const items=pairs.map(([k,what,a,b,w])=>{
-    const d=aspect(a,b), [sc,nm]=ASP[d]; sum+=sc*w; wt+=w;
-    return {k,t:`${XZ[signOf(a)]} × ${XZ[signOf(b)]}，${nm}。${what}上${TX[d]}。`,p:sc,d};
+  const pairs=[["太阳×太阳","性格和人生方向",M.sun,F.sun,.15],["月亮×月亮","情绪和生活需求",M.moon,F.moon,.2],
+    ["男日×女月","他的理想与她的情感",M.sun,F.moon,.15],["女日×男月","她的理想与他的情感",F.sun,M.moon,.15],
+    ["金星×金星","爱的方式和审美",M.venus,F.venus,.1],
+    ["男金×女火","他的爱意与她的吸引力",M.venus,F.mars,.125,true],["女金×男火","她的爱意与他的吸引力",F.venus,M.mars,.125,true]];
+  if(M.asc!=null&&F.asc!=null) pairs.push(["上升×上升","第一印象和相处方式",M.asc,F.asc,.15]);
+  // 和八字一样按「基准分加减分」算：星盘分从 64 起，每项按相位和权重加分或扣分，没形成相位的记 0 分
+  const wt=pairs.reduce((s,x)=>s+x[4],0);
+  const items=pairs.map(([k,what,a,b,w,attract])=>{
+    const {best,score}=aspectOf(a,b,attract);
+    return {k,t:`${dg(a)} × ${dg(b)}，${best?`${best.n}（容许度${best.dev<1?"不到 1":" "+Math.round(best.dev)}°）`:"没有形成主要相位"}。${what}上${best?(attract?best.txa:best.tx):"互相影响不明显"}。`,p:Math.round(3*w*(score-NOASP)/wt),asp:best?best.n:null};
   });
+  const s=Math.max(40,Math.min(98,NOASP+items.reduce((t,i)=>t+i.p,0)));
   if(M.asc==null||F.asc==null) items.push({k:"上升",t:"有一方没填出生时间，算不出上升星座，这项不计分。",p:null});
-  return {s:Math.round(sum/wt),items};
+  return {s,items};
 }
 function verdict(s){
   if(s>=86) return ["天作之合","八字和星盘都很合，可以放心上头。"];
@@ -842,8 +897,11 @@ function tips(M,F,B,X){
   if(find("日主").p>=7) t.push("日主夫妻星对位：彼此天然有吸引力，记得把感激说出口，别把好当成理所当然。");
   if(find("喜用神").p>0) t.push("喜用互补：遇到大事一起商量、一起做决定，往往比各自做更顺。");
   const mm=X.items[1];
-  if(mm&&[3,5,1].includes(mm.d)) t.push("月亮不和：两人表达情绪的方式不同，难过时直接说「我需要什么」，不要让对方猜。");
-  if(mm&&[0,2,4].includes(mm.d)) t.push("月亮和谐：生活节奏相似，适合一起培养共同的习惯，比如固定的约会日。");
+  if(mm&&mm.asp==="四分相") t.push("月亮不和：两人表达情绪的方式不同，难过时直接说「我需要什么」，不要让对方猜。");
+  if(mm&&["合相","六分相","三分相"].includes(mm.asp)) t.push("月亮和谐：生活节奏相似，适合一起培养共同的习惯，比如固定的约会日。");
+  const vm=X.items.filter(i=>i.k==="男金×女火"||i.k==="女金×男火").map(i=>i.asp);
+  if(vm.some(a=>["合相","六分相","三分相"].includes(a))) t.push("金星火星和谐：彼此有自然的吸引力，多安排两个人独处的时间，感情升温很快。");
+  else if(vm.some(a=>a==="四分相"||a==="对分相")) t.push("金星火星有张力：吸引力强也容易起冲突，吵架时先处理情绪，再讲道理。");
   if(M.strength==="身强"&&F.strength==="身强") t.push("两人都身强、有主见：分好各自做主的领域，减少争夺控制权。");
   if(M.strength==="身弱"&&F.strength==="身弱") t.push("两人都偏身弱：都需要被支持，多肯定对方，遇事别互相埋怨。");
   if(!t.length) t.push("八字和星盘没有明显的冲突，保持沟通和新鲜感就好。");
@@ -859,7 +917,7 @@ function run(){
   $("summary").textContent=`${M.name} 与 ${F.name}：${t}`;
   const li=i=>{const cls=i.p==null?"zero":(i.p>0?"pos":i.p<0?"neg":"zero");return `<li><span class="k">${i.k}</span><span>${i.t}</span><span class="pts ${cls}">${i.p==null?"—":(i.p>0?"+":"")+i.p}</span></li>`;};
   $("itemsB").innerHTML=B.items.map(li).join("");
-  $("itemsX").innerHTML=X.items.map(i=>`<li><span class="k">${i.k}</span><span>${i.t}</span><span class="pts zero">${i.p==null?"—":i.p}</span></li>`).join("");
+  $("itemsX").innerHTML=X.items.map(li).join("");
   $("tips").innerHTML=tips(M,F,B,X).map(x=>`<li>${x}</li>`).join("");
   const nm=x=>x.name.replace(/（示例）/,"");
   const softer=M.ratio<=F.ratio?M:F, clingy=["水象","土象","火象","风象"].indexOf(XEL[signOf(M.moon)%4])<=["水象","土象","火象","风象"].indexOf(XEL[signOf(F.moon)%4])?M:F;
@@ -880,6 +938,36 @@ const LUCKC=["#3f7d4e","#c0432f","#c79a3c","#e8e8e8","#1f3550"];
 const SUNTXT="冲劲十足、直率，做事快，耐心稍差|稳重踏实，重享受和安全感，有点固执|聪明好奇、口才好，兴趣多变|顾家重感情，保护欲强，情绪起伏大|自信大方，有领导气质，需要被欣赏|细心认真，追求完美，容易挑剔|优雅随和，重公平和美感，有选择困难|专一深沉，洞察力强，占有欲也强|乐观自由，爱冒险旅行，怕被束缚|务实上进，有耐力，外冷内热|独立有想法，重友情，有时显得疏离|浪漫敏感，同理心强，容易心软".split("|");
 const MOONTXT="情绪来得快去得快，需要对方直接回应|需要稳定和安全感，美食和舒适能治愈你|需要聊天交流，说出来心情就好了|很需要家和被照顾的感觉，情绪细腻|需要被重视和赞美，喜欢被宠着|用忙碌缓解焦虑，需要别人认可你的付出|需要关系和谐，很讨厌冲突|情感深沉，需要百分百的信任和忠诚|需要空间和自由，乐观能自我疗愈|不轻易表露情绪，希望努力被理解|需要独处空间，习惯理性处理情绪|情绪敏感，需要温柔和包容".split("|");
 const ASCTXT="有活力、直爽|温和稳重、有亲和力|年轻灵活、健谈|温柔亲切、好相处|气场强、存在感高|干净整洁、认真靠谱|有气质、礼貌得体|神秘有距离感、眼神有力|开朗爽快、有幽默感|成熟稳重、略显严肃|个性独特、与众不同|温柔梦幻、让人想保护".split("|");
+const VENUSTXT="爱得直接主动，喜欢追求的感觉，热情来得快|重视稳定和陪伴，用实际行动和照顾表达爱，偏爱有品质的生活|喜欢有趣、聊得来的人，需要新鲜感和交流|温柔顾家，需要安全感，喜欢被照顾也爱照顾人|浪漫大方，喜欢被重视和赞美，爱得高调|细心体贴，用小事表达爱，对感情认真也容易挑剔|重视和谐和仪式感，喜欢有品味、讲礼貌的人|爱得深而专一，需要全心投入，占有欲也强|需要自由和共同成长，喜欢一起冒险、旅行|慢热务实，把感情当长期承诺，看重对方是否可靠|先做朋友再做恋人，需要精神契合和个人空间|浪漫温柔，愿意为爱付出，容易把对方理想化".split("|");
+const MARSTXT="行动快、直来直去，喜欢就会马上表白|慢但有耐心，认定了就坚持到底|靠聊天和幽默打动人，点子多但容易分心|用照顾和关心靠近对方，情绪上来容易冷战|追得高调大方，喜欢在对方面前表现自己|默默付出、注重细节，行动前会想很多|讲究分寸和气氛，不喜欢正面冲突|认定目标就全力以赴，执着又有魅力|热情爽快，喜欢一起做新鲜事，不爱被约束|有计划、有耐力，用实际成果证明心意|方式与众不同，喜欢先做朋友，讨厌被套路|温柔含蓄，靠感觉和浪漫打动人，容易犹豫".split("|");
+const WEEKDAY=["周日","周一","周二","周三","周四","周五","周六"];
+// 每日运势的文案库，按当天和日主的十神关系分五类：比劫、食伤、财星、官杀、印星
+const DAYTIP=[
+  ["适合和TA一起做件有挑战的小事","朋友局里容易遇到有意思的人，大方一点","适合约TA一起运动或打游戏，赢了别太得意","今天有点想争输赢，吵架时先让一步"],
+  ["适合表达心意，嘴甜一点准没错","灵感多、话也多，发条有趣的朋友圈吸引TA注意","适合一起看展、拍照、做手工这类有创意的事","说话容易太直，开玩笑注意分寸"],
+  ["适合一起规划个小目标，今晚约饭你请","适合给TA准备一个小惊喜，不用贵，用心就好","一起逛街容易开心，但别冲动消费","适合聊聊未来的打算，比如一起存钱去旅行"],
+  ["TA可能比较忙，多体谅，少查岗","今天责任感在线，适合认真回应TA的需要","压力有点大，别把工作情绪带给TA","适合把拖着没说清的事情讲清楚、定下来"],
+  ["适合安静陪伴，煲个电话粥","适合一起看书、看电影，享受慢节奏","容易想太多，有疑问就直接问，别自己脑补","适合见见长辈或朋友，听听别人的建议"]];
+const DAYYI=[["约朋友","运动","团队合作","一起打游戏","参加聚会","互相打气"],["表白","拍照","发朋友圈","创作","唱歌","写小纸条"],["购物","谈事","做计划","准备惊喜","一起做饭","记账理财"],["工作","学习","处理正事","兑现承诺","早睡","整理房间"],["看书","休息","见长辈","听音乐","泡澡","写日记"]];
+const DAYJI=[["借钱","争输赢","冲动表态","翻旧账"],["口不择言","抬杠","乱开玩笑","熬夜刷手机"],["冲动消费","攀比","炫耀","借钱给人"],["熬夜","硬刚","查岗","拖延"],["想太多","内耗","冷战","生闷气"]];
+const DAYREL={he:"今天和你的夫妻宫六合，桃花运旺，适合约会、表白",san:"今天和你的夫妻宫三合，相处默契，适合一起做决定",same:"今天和你的夫妻宫同气，容易想到一块儿去",chong:"今天冲你的夫妻宫，容易为小事拌嘴，说话留三分",hai:"今天和你的夫妻宫相害，容易误会对方，有话直说"};
+const COLORHEX={绿色:"#3f7d4e",青色:"#2a8c8c",红色:"#c0432f",紫色:"#7b4fb0",黄色:"#d9a520",咖啡色:"#7a5230",白色:"#e8e8e8",金色:"#c9a227",黑色:"#1f1f1f",蓝色:"#1f4f9a"};
+const HETU=[[3,8],[2,7],[5,10],[4,9],[1,6]]; // 河图数：木 3、8，火 2、7，土 5、10，金 4、9，水 1、6
+function dayFortune(o,date){
+  const tc=chart(date.getFullYear(),date.getMonth()+1,date.getDate(),12,0,false,o.city), td=tc.P[2], de=el(o.P[2][0]);
+  const tcat=(el(td[0])-de+5)%5, tr=rel(td[1],o.P[2][1]);
+  let love=62+(tr==="he"?20:tr==="san"?14:tr==="chong"?-16:tr==="hai"?-8:0)+(o.xi.includes(el(td[0]))?10:0)+(o.xi.includes(ZEL[td[1]])?6:0)+((td[0]*7+td[1]*3)%9);
+  love=Math.max(35,Math.min(99,love));
+  // 每个人每天一个固定的种子
+  const day=Math.floor(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/864e5);
+  let seed=(day*131+o.P[2][0]*17+o.P[2][1]*29+o.P[0][1]*7)>>>0;
+  const pick=n=>{seed=(Math.imul(seed,1103515245)+12345)>>>0; return (seed>>>8)%n;};
+  const take=(arr,k)=>{const a=arr.slice(),out=[]; while(out.length<k&&a.length) out.push(a.splice(pick(a.length),1)[0]); return out;};
+  const tip=DAYTIP[tcat][pick(DAYTIP[tcat].length)], yi=take(DAYYI[tcat],3).join("、"), ji=take(DAYJI[tcat],2).join("、");
+  const colors=o.xi.flatMap(i=>LUCK[i][0].split("、")), color=colors[pick(colors.length)];
+  const nums=o.xi.flatMap(i=>HETU[i]), num=nums[pick(nums.length)];
+  return {love,tcat,tip,yi,ji,color,colorHex:COLORHEX[color]||"#888",num,rel:DAYREL[tr]||"",label:`${date.getMonth()+1}月${date.getDate()}日 · ${GAN[td[0]]}${ZHI[td[1]]}日`};
+}
 function selfReading(o,gender){
   const dm=o.P[2][0], de=el(dm);
   const cat=[0,0,0,0,0];
@@ -892,14 +980,14 @@ function selfReading(o,gender){
   const starTxt=sc===0?`命中${sn}属${WX[star]}，盘里没有出现，感情上比较慢热，缘分可能来得晚，但来了会很珍惜。`:sc<=2?`命中${sn}属${WX[star]}，有${sc}个，感情运平稳，适合细水长流。`:`命中${sn}属${WX[star]}，有${sc}个，异性缘旺，桃花多，更要专一。`;
   const db=ZEL[o.P[2][1]], r=(db-de+5)%5;
   const palTxt=["夫妻宫和日主同五行：另一半更像朋友和伙伴，平等相处。","你生夫妻宫：你在感情里愿意付出，很会照顾另一半。","你克夫妻宫：你在感情里比较主导，记得多听对方的想法。","夫妻宫克你：另一半对你要求高，也能督促你进步。","夫妻宫生你：另一半对你帮助很大，是你的依靠。"][r];
-  const sun=signOf(o.sun), moon=signOf(o.moon), asc=o.asc==null?null:signOf(o.asc);
+  const sun=signOf(o.sun), moon=signOf(o.moon), venus=signOf(o.venus), mars=signOf(o.mars), asc=o.asc==null?null:signOf(o.asc);
   const yb=o.P[0][1];
-  const D=dayun(o,gender,o.y), thisY=2026, nowAge=thisY-o.y;
+  const D=dayun(o,gender,o.y), thisY=new Date().getFullYear(), nowAge=thisY-o.y;
   const yun=`<p>${D.fwd?"顺":"逆"}排大运，${D.ay}岁${D.am?D.am+"个月":""}起运，每十年换一步。标着「当前」的是你现在走的运。</p><div class="yun">`+D.list.map(x=>{
     const ss=shishen(dm,x.s), good=o.xi.includes(el(x.s))||o.xi.includes(ZEL[x.b]);
     const now=nowAge>=x.age&&nowAge<x.age+10;
     return `<div class="${now?"now":""}"><small>${x.age}–${x.age+9}岁 · ${x.year}年起</small><b><span class="el-${el(x.s)}">${GAN[x.s]}</span><span class="el-${ZEL[x.b]}">${ZHI[x.b]}</span></b><em>${ss}运 · <span class="${good?"good":"zero"}">${good?"喜用到位，较顺":"平稳，靠努力"}</span></em></div>`;}).join("")+`</div>`;
-  const ln=[2026,2027].map(Y=>{
+  const ln=[thisY,thisY+1].map(Y=>{
     const s=((Y-4)%10+10)%10, b=((Y-4)%12+12)%12, cat=(el(s)-de+5)%5;
     const notes=[];
     const ry=rel(b,yb), rd=rel(b,o.P[2][1]);
@@ -913,11 +1001,13 @@ function selfReading(o,gender){
     return `<dt>${Y} ${GAN[s]}${ZHI[b]}</dt><dd><span class="${good?"good":"zero"}">${good?"流年带喜用，整体偏顺。":"流年五行不是喜用，整体平稳，稳中求进。"}</span>${YEARTXT[cat]}${notes.length?"另外，"+notes.join("；")+"。":""}</dd>`;}).join("");
   const luck=o.xi.map(i=>`<span class="swatch" style="background:${LUCKC[i]}"></span>${WX[i]}：${LUCK[i][0]}，${LUCK[i][1]}`).join("<br>");
   const jobs=[...new Set(o.xi.map(i=>LUCK[i][2]))].join("；");
-  const now=new Date(), tc=chart(now.getFullYear(),now.getMonth()+1,now.getDate(),12,0,false,o.city), td=tc.P[2];
-  const tcat=(el(td[0])-de+5)%5, tr=rel(td[1],o.P[2][1]);
-  let love=62+(tr==="he"?20:tr==="san"?14:tr==="chong"?-16:tr==="hai"?-8:0)+(o.xi.includes(el(td[0]))?10:0)+(o.xi.includes(ZEL[td[1]])?6:0)+((td[0]*7+td[1]*3)%9);
-  love=Math.max(35,Math.min(99,love));
-  const today=`<div class="today"><div class="ring" style="--v:${love}"><span>${love}</span></div><div><b>今日恋爱指数</b> <small>${now.getMonth()+1}月${now.getDate()}日 · ${GAN[td[0]]}${ZHI[td[1]]}日</small><br>${DAILY[tcat][2]}。</div><div class="yj"><span><b class="good">宜</b>${DAILY[tcat][0]}</span><span><b class="bad">忌</b>${DAILY[tcat][1]}</span><span><b>幸运色</b><i class="swatch" style="background:${LUCKC[o.xi[0]]}"></i>${LUCK[o.xi[0]][0].split("、")[0]}</span></div></div>`;
+  // 今日运势：同一天反复打开内容不变，换一天、换一个人就不一样
+  const fort=dayFortune(o,new Date());
+  const week=[0,1,2,3,4,5,6].map(i=>{const t=new Date(); t.setDate(t.getDate()+i); return {t,f:i?dayFortune(o,t):fort};});
+  const bestDay=week.reduce((a,b)=>b.f.love>a.f.love?b:a);
+  const today=`<div class="today"><div class="ring" style="--v:${fort.love}"><span>${fort.love}</span></div><div><b>今日恋爱指数</b> <small>${fort.label}</small><br>${fort.tip}。${fort.rel?`<br><small>${fort.rel}。</small>`:""}</div><div class="yj"><span><b class="good">宜</b>${fort.yi}</span><span><b class="bad">忌</b>${fort.ji}</span><span><b>幸运色</b><i class="swatch" style="background:${fort.colorHex}"></i>${fort.color}</span><span><b>幸运数字</b>${fort.num}</span></div></div>
+  <div class="week" role="img" aria-label="接下来 7 天的恋爱指数">${week.map((x,i)=>`<div class="${x===bestDay?"best":""}"><span>${x.f.love}</span><i style="height:${8+x.f.love-35}px"></i><small>${i?WEEKDAY[x.t.getDay()]:"今天"}</small></div>`).join("")}</div>
+  <p class="note">接下来 7 天里恋爱指数最高的是${bestDay===week[0]?"今天":`${WEEKDAY[bestDay.t.getDay()]}（${bestDay.t.getMonth()+1}月${bestDay.t.getDate()}日）`}，适合约会或表白。</p>`;
   const hero=`<div class="hero"><small class="meta">你的恋爱人格</small><div class="lbl">${persona(o)}</div><div class="one">${GAN[dm]}${WX[de]}日主，${o.strength}，喜${o.xi.map(i=>WX[i]).join("")}；太阳${XZ[sun]}、月亮${XZ[moon]}。${MINE[sun%4]}。</div><q>${LOVELINE[dm]}</q></div>`;
   return hero+`<h3>今日运势</h3>`+today+`<h3>性格</h3><dl>
     <dt>日主</dt><dd>${GAN[dm]}${WX[de]}，${DAYMASTER[dm]}<br>优点：${DMPLUS[dm][0]}；短板：${DMPLUS[dm][1]}。<br>建议：${DMPLUS[dm][2]}。</dd>
@@ -936,6 +1026,8 @@ function selfReading(o,gender){
   <h3>星座</h3><dl>
     <dt>☉ 太阳</dt><dd>${XZ[sun]}座（${XEL[sun%4]}）：${SUNTXT[sun]}。这是你的核心性格。<br>优点：${SUNPLUS[sun][0]}；短板：${SUNPLUS[sun][1]}。<br>恋爱：${SUNPLUS[sun][2]}。</dd>
     <dt>☽ 月亮</dt><dd>${XZ[moon]}座：${MOONTXT[moon]}。这是你内心的情绪需求。</dd>
+    <dt>♀ 金星</dt><dd>${XZ[venus]}座：${VENUSTXT[venus]}。这是你在感情里喜欢的相处方式。</dd>
+    <dt>♂ 火星</dt><dd>${XZ[mars]}座：${MARSTXT[mars]}。这是你追求喜欢的人的方式，也是你的行动力。</dd>
     <dt>↑ 上升</dt><dd>${asc==null?"没填出生时间，算不出上升星座。":`${XZ[asc]}座：给人${ASCTXT[asc]}的第一印象。`}</dd></dl>
   <p class="note">传统命理与占星，仅供娱乐和自我了解。看清自己比算准对方更重要。</p>`;
 }
@@ -1007,11 +1099,11 @@ $("overlay").addEventListener("click",e=>{ if(!e.target.closest(".sc-card")) $("
 const cardTop=(kind,title)=>`<div class="sc-top"><div class="brand"><span class="wm">${WORDMARK}<i>${kind}</i></span><span class="mascot">${MASCOT}</span></div><h4>${title}</h4></div>`;
 $("shareSelf").addEventListener("click",()=>{
   const o=read("S"); if(!o) return; const dm=o.P[2][0], sun=signOf(o.sun), moon=signOf(o.moon);
-  const nm=($("nameS").value.trim()||"我").replace(/（示例）/,"");
+  const nm=(clean($("nameS").value)||"我").replace(/（示例）/,"");
   scoreCard(cardTop("我的命盘",nm)+`
    <div class="gz4">${o.P.map((p,i)=>`<div><small>${"年月日时"[i]}</small>${p?`<b class="el-${el(p[0])}">${GAN[p[0]]}</b><b class="el-${ZEL[p[1]]}">${ZHI[p[1]]}</b>`:"<b>？</b><b>？</b>"}</div>`).join("")}</div>
    <div class="mid">${persona(o)}</div>
-   <div class="chips"><span>☉ ${XZ[sun]}</span><span>☽ ${XZ[moon]}</span><span>↑ ${o.asc==null?"未知":XZ[signOf(o.asc)]}</span><span>属${SX[o.P[0][1]]}</span><span>喜${o.xi.map(i=>WX[i]).join("")}</span></div>
+   <div class="chips"><span>☉ ${XZ[sun]}</span><span>☽ ${XZ[moon]}</span><span>♀ ${XZ[signOf(o.venus)]}</span><span>♂ ${XZ[signOf(o.mars)]}</span><span>↑ ${o.asc==null?"未知":XZ[signOf(o.asc)]}</span><span>属${SX[o.P[0][1]]}</span><span>喜${o.xi.map(i=>WX[i]).join("")}</span></div>
    <ul><li>「${LOVELINE[dm]}」</li><li>${DMPLUS[dm][0]}</li><li>恋爱：${SUNPLUS[sun][2]}</li>${lastMatch?`<li>最配：${lastMatch.signs.join("、")}座，${lastMatch.year.k}年属${lastMatch.year.lab}</li>`:`<li>情绪需求：${MOONTXT[moon]}</li>`}</ul>`);
 });
 $("sharePair").addEventListener("click",()=>{
@@ -1051,13 +1143,13 @@ function toast(t){const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout
 let PEOPLE=[]; try{PEOPLE=JSON.parse(localStorage.getItem("people")||"[]");}catch(e){PEOPLE=[];}
 function savePeople(){try{localStorage.setItem("people",JSON.stringify(PEOPLE));}catch(e){}}
 function fillSaved(){
-  const opts=PEOPLE.map((p,i)=>`<option value="${i}">${p.name}（${p.g==="M"?"男":"女"}，${p.date}）</option>`).join("");
+  const opts=PEOPLE.map((p,i)=>`<option value="${i}">${clean(p.name)}（${p.g==="M"?"男":"女"}，${p.date}）</option>`).join("");
   $("savedS").innerHTML=`<option value="">${PEOPLE.length?"— 选一个人填进来 —":"— 还没有保存的人 —"}</option>`+opts;
-  ["M","F"].forEach(s=>{$("saved"+s).innerHTML=`<option value="">— 不选，手动填 —</option>`+PEOPLE.map((p,i)=>p.g===s?`<option value="${i}">${p.name}（${p.date}）</option>`:"").join("");});
+  ["M","F"].forEach(s=>{$("saved"+s).innerHTML=`<option value="">— 不选，手动填 —</option>`+PEOPLE.map((p,i)=>p.g===s?`<option value="${i}">${clean(p.name)}（${p.date}）</option>`:"").join("");});
 }
 function loadInto(sfx,p){$("name"+sfx).value=p.name;$("date"+sfx).value=p.date;$("time"+sfx).value=p.time;$("city"+sfx).value=p.city;$("unk"+sfx).checked=p.unk;if(sfx==="S")$("genS").value=p.g;}
 $("saveS").addEventListener("click",()=>{
-  const p={name:($("nameS").value.trim()||"未命名").replace(/（示例）/,""),g:$("genS").value,date:$("dateS").value,time:$("timeS").value,city:$("cityS").value,unk:$("unkS").checked};
+  const p={name:(clean($("nameS").value)||"未命名").replace(/（示例）/,""),g:$("genS").value,date:$("dateS").value,time:$("timeS").value,city:$("cityS").value,unk:$("unkS").checked};
   if(!p.date){toast("先填生日再保存");return;}
   const i=PEOPLE.findIndex(x=>x.name===p.name); if(i>=0) PEOPLE[i]=p; else PEOPLE.push(p);
   savePeople(); fillSaved(); toast("已保存："+p.name);
@@ -1074,7 +1166,43 @@ function setView(v){ view=(v==="match"||v==="pair")?v:"self"; route(); }
 function openTab(v){ setView(v); try{ if(location.hash!=="#"+view) location.hash="#"+view; }catch(e){} }
 [["tabSelf","self"],["tabMatch","match"],["tabPair","pair"]].forEach(([id,v])=>$(id).addEventListener("click",e=>{ e.preventDefault(); openTab(v); }));
 window.addEventListener("hashchange",()=>{ const v=location.hash.slice(1), n=(v==="match"||v==="pair")?v:"self"; if(n!==view) setView(n); });
-setView(location.hash.slice(1));
+// ---------- 邀请 TA 来配对：把我的生辰放进链接，对方打开后只要填自己的 ----------
+const SITE="https://chenbenzhuo5-ops.github.io/my-first-page/";
+function inviteLink(){
+  const q=new URLSearchParams();
+  q.set("n",clean($("nameS").value).replace(/（示例）/,"")||"TA");
+  q.set("g",$("genS").value);
+  q.set("d",$("dateS").value);
+  q.set("t",$("unkS").checked||!$("timeS").value?"?":$("timeS").value);
+  q.set("c",CITIES[Number($("cityS").value)][0]);
+  const base=/^https?:$/.test(location.protocol)?location.origin+location.pathname:SITE;
+  return base+"?"+q.toString()+"#pair";
+}
+$("invite").addEventListener("click",async()=>{
+  if(!$("dateS").value){ toast("先填好你的生日"); return; }
+  const url=inviteLink(), text="我在「对盘」测了八字和星盘，你也来填一下生日，看看我们对不对盘：";
+  $("inviteUrl").value=url;
+  if(navigator.share){ try{ await navigator.share({title:"对盘 · 邀请你来配对",text,url}); return; }catch(e){ if(e&&e.name==="AbortError") return; } }
+  try{ await navigator.clipboard.writeText(text+url); toast("邀请链接已复制，发给 TA 吧"); }
+  catch(e){ $("inviteUrl").hidden=false; $("inviteUrl").focus(); $("inviteUrl").select(); toast("长按下面的链接复制"); }
+});
+function readInvite(){
+  let q; try{ q=new URLSearchParams(location.search); }catch(e){ return false; }
+  const d=q.get("d")||"", g=q.get("g"), t=q.get("t")||"";
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||(g!=="M"&&g!=="F")) return false;
+  const y=+d.slice(0,4); if(y<1901||y>2099) return false;
+  $("date"+g).value=d; if($("date"+g).value!==d) return false; // 不存在的日期（比如 2 月 30 日）浏览器会拒收
+  const name=clean(q.get("n")).slice(0,12)||"TA", me=g==="M"?"F":"M", ci=CITIES.findIndex(c=>c[0]===q.get("c"));
+  const known=/^([01]\d|2[0-3]):[0-5]\d$/.test(t);
+  $("name"+g).value=name; $("city"+g).value=String(ci>=0?ci:0); $("unk"+g).checked=!known; if(known) $("time"+g).value=t;
+  $("name"+me).value=""; $("name"+me).placeholder="你的称呼"; $("date"+me).value=""; $("time"+me).value=""; $("unk"+me).checked=false;
+  $("inviteTitle").textContent=name+" 邀请你来测合婚";
+  $("inviteText").textContent=`${g==="M"?"男方":"女方"}一栏已经填好 ${name} 的生日，你只要在${me==="M"?"男方":"女方"}一栏填上自己的，再点「测测能不能上头」。`;
+  $("inviteBox").hidden=false;
+  try{ history.replaceState(null,"",location.pathname+"#pair"); }catch(e){} // 链接里的生日用过就从地址栏去掉，免得被转发出去
+  return true;
+}
+if(readInvite()) setView("pair"); else setView(location.hash.slice(1));
 </script>
 </body>
 </html>
